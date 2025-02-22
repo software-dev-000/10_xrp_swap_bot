@@ -1,0 +1,22 @@
+{
+    "name": "xrpl-swap-bot",
+    "version": "1.0.0",
+    "main": "src/index.ts",
+    "license": "MIT",
+    "scripts": {
+        "start": "ts-node src/index.ts",
+        "server": "nodemon src/index.ts"
+    },
+    "dependencies": {
+        "axios": "^1.7.9",
+        "dotenv": "^16.4.7",
+        "mongoose": "^8.9.3",
+        "node-telegram-bot-api": "^0.66.0",
+        "nodemon": "^3.1.9",
+        "xrpl": "^4.1.0"
+    },
+    "devDependencies": {
+        "@types/node": "^22.10.5",
+        "@types/node-telegram-bot-api": "^0.64.7"
+    }
+}

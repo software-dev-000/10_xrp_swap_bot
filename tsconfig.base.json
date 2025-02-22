@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "esModuleInterop": true,
+    "noEmitOnError": true,
+    "resolveJsonModule": true,
+    "stripInternal": true,
+    "rootDir": "src",
+    "lib": ["dom"],
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true
+  },
+  "include": ["src"],
+  "ts-node": {
+    "files": true,
+    "compilerOptions": {
+      "module": "CommonJS",
+      "lib": ["dom"]
+    }
+  }
+}

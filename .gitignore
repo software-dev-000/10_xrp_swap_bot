@@ -1,0 +1,13 @@
+node_modules
+.env
+package-lock.json
+programs
+programs/sui
+contract/build
+contract/build/*
+contract/sources
+contract/sources/*
+Move.lock
+.env.extra
+
+wallets/*.txt
