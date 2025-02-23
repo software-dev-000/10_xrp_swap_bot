@@ -323,7 +323,7 @@ export const estimateTokenAmountToBuy = async (xrpAmount: number, addr: string) 
         }
     });
 
-    console.log(response)
+    // console.log(response)
 
     // Calculate the token amount
     let remainingXrp = xrpAmount;
@@ -494,14 +494,15 @@ export const buyToken = async (
             "Flags": 131072
         }, { autofill: true, wallet: wallet })
         console.log(`Sent transaction for buying token with ${sendMaxXRP} XRP from wallet ${wallet.address} ===> `, tx.result.meta.TransactionResult)
+
         if (tx.result.meta?.TransactionResult == "tesSUCCESS")
-            return true;
+            return {status: true, tokenAmount: tokenAmount, XRPAmount: sendMaxXRP, txHash: tx.result.hash};
         else
-            return false;
+            return {status: false};
     } catch (error) {
         console.log(`Failed to buy token with ${sendMaxXRP} XRP from wallet ${wallet.address}`)
         console.log(error);
-        return false;
+        return {status: false};
     }
 };
 
@@ -527,13 +528,13 @@ export const sellToken = async (
         }, { autofill: true, wallet: wallet })
         console.log(`Sent transaction for sell ${tokenAmount} tokens from wallet ${wallet.address} ===> `, tx.result.meta.TransactionResult)
         if (tx.result.meta?.TransactionResult == "tesSUCCESS")
-            return true;
+            return {status: true, tokenAmount: tokenAmount, txHash: tx.result.hash};
         else
-            return false;
+            return {status: false};
     } catch (error) {
         console.log(`Failed to sell ${tokenAmount} tokens from wallet ${wallet.address}`)
         console.log(error)
-        return false;
+            return {status: false};
     }
 };
 

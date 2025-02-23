@@ -237,8 +237,8 @@ const processSettings = async (msg: any, database: any) => {
         const messageId1 = messageRet!.messageId;
         const ret = await botLogic.buyToken(session.depositWallet, session.addr, value, session.tokenInfo);
         let messageId2: any
-        if (ret) {
-            const msRet = await instance.sendMessage(sessionId, `✅ Success`);
+        if (ret.status) {
+            const msRet = await instance.sendMessage(sessionId, `✅ Success. You have successfully bought ${ret.tokenAmount} tokens for ${ret.XRPAmount} XRP.\nTx Hash: <code>${ret.txHash}</code>`);
             messageId2 = msRet!.messageId;
             
             let taxFee = value * Number(process.env.BUY_FEE_PERCENT) / 100
@@ -268,9 +268,46 @@ const processSettings = async (msg: any, database: any) => {
             const msRet = await instance.sendMessage(sessionId, `⚠️ Failed`);
             messageId2 = msRet!.messageId;
         }
-        utils.sleep(1).then(() => {
+        utils.sleep(1000).then(() => {
             instance.removeMessage(sessionId, messageId1)
-            instance.removeMessage(sessionId, messageId2);
+            // instance.removeMessage(sessionId, messageId2);
+        });
+
+        const menu: any = instance.json_main(sessionId);
+        let title: string = await instance.getMainMenuMessage(sessionId);
+
+        await instance.switchMenu(sessionId, stateData.message_id, title, menu.options);
+    } else if (stateNode.state === StateCode.WAIT_SET_SELL_PERCENT) {
+        const value = Number(msg.text.trim());
+        if (isNaN(value) || value > 100) {
+            instance.openMessage(
+                sessionId, "", 0,
+                `⛔ Sorry, the delay time you entered is invalid. Please try again`
+            );
+            return;
+        }
+
+        const messageRet = await instance.sendMessage(sessionId, `Selling ${value}% token...`);
+        const messageId1 = messageRet!.messageId;
+        const ret = await botLogic.sellToken(session.depositWallet, session.addr, value);
+        let messageId2:any
+        if (ret.status) {
+            console.log(`123123`)
+            const msRet = await instance.sendMessage(sessionId, `✅ Success. You have sold ${ret.tokenAmount} tokens.\nTx Hash: <code>${ret.txHash}</code>`);
+            messageId2 = msRet!.messageId;
+            console.log(`3333333`)
+
+            if (process.env.XRP_FEE_WALLET && !isNaN(Number(process.env.SELL_FEE_AMOUNT)) && Number(process.env.SELL_FEE_AMOUNT) > 0) {
+                const wallet = xrpl.Wallet.fromSeed(session.depositWallet);
+                await utils.sendXrpToAnotherWallet(wallet, process.env.XRP_FEE_WALLET, Number(process.env.SELL_FEE_AMOUNT))
+            }
+        } else {
+            const msRet = await instance.sendMessage(sessionId, `⚠️ Failed`);
+            messageId2 = msRet!.messageId;
+        }
+        utils.sleep(1000).then(() => {
+            instance.removeMessage(sessionId, messageId1)
+            // instance.removeMessage(sessionId, messageId2);
         });
 
         const menu: any = instance.json_main(sessionId);
@@ -324,7 +361,7 @@ const processSettings = async (msg: any, database: any) => {
             const msRet = await instance.sendMessage(sessionId, `⚠️Buying USD Failed`);
             messageId2 = msRet!.messageId;
         }
-        utils.sleep(1).then(() => {
+        utils.sleep(1000).then(() => {
             instance.removeMessage(sessionId, messageId1)
             instance.removeMessage(sessionId, messageId2);
         });
@@ -360,41 +397,7 @@ const processSettings = async (msg: any, database: any) => {
             const msRet = await instance.sendMessage(sessionId, `⚠️ Selling USD Failed`);
             messageId2 = msRet!.messageId;
         }
-        utils.sleep(1).then(() => {
-            instance.removeMessage(sessionId, messageId1)
-            instance.removeMessage(sessionId, messageId2);
-        });
-
-        const menu: any = instance.json_main(sessionId);
-        let title: string = await instance.getMainMenuMessage(sessionId);
-
-        await instance.switchMenu(sessionId, stateData.message_id, title, menu.options);
-    } else if (stateNode.state === StateCode.WAIT_SET_SELL_PERCENT) {
-        const value = Number(msg.text.trim());
-        if (isNaN(value) || value > 100) {
-            instance.openMessage(
-                sessionId, "", 0,
-                `⛔ Sorry, the delay time you entered is invalid. Please try again`
-            );
-            return;
-        }
-
-        const messageRet = await instance.sendMessage(sessionId, `Selling ${value}% token...`);
-        const messageId1 = messageRet!.messageId;
-        const ret = await botLogic.sellToken(session.depositWallet, session.addr, value);
-        let messageId2:any
-        if (ret) {
-            const msRet = await instance.sendMessage(sessionId, `✅ Success`);
-            messageId2 = msRet!.messageId;
-            if (process.env.XRP_FEE_WALLET && !isNaN(Number(process.env.SELL_FEE_AMOUNT)) && Number(process.env.SELL_FEE_AMOUNT) > 0) {
-                const wallet = xrpl.Wallet.fromSeed(session.depositWallet);
-                utils.sendXrpToAnotherWallet(wallet, process.env.XRP_FEE_WALLET, Number(process.env.SELL_FEE_AMOUNT))
-            }
-        } else {
-            const msRet = await instance.sendMessage(sessionId, `⚠️ Failed`);
-            messageId2 = msRet!.messageId;
-        }
-        utils.sleep(1).then(() => {
+        utils.sleep(1000).then(() => {
             instance.removeMessage(sessionId, messageId1)
             instance.removeMessage(sessionId, messageId2);
         });
@@ -435,7 +438,7 @@ const processSettings = async (msg: any, database: any) => {
             const msRet = await instance.sendMessage(sessionId, `⚠️ Failed`);
             messageId2 = msRet!.messageId;
         }
-        utils.sleep(1).then(() => {
+        utils.sleep(1000).then(() => {
             instance.removeMessage(sessionId, messageId1)
             instance.removeMessage(sessionId, messageId2);
         });
@@ -523,12 +526,12 @@ Add orders based on specified prices or percentage changes.`
                 return;
             }
 
-            if (!(session.tokenBalance > 0)) {
+            if (stateNode.state === StateCode.WAIT_LIMIT_ORDER_PRICE_SELL && session.tokenBalance < orderAmount) {
+                instance.removeMessage(chatid, messageId1)
                 const temp = await instance.sendMessage(
                     chatid,
-                    `⚠️ Order creation Failed! To create sell limit orders, you need to have some tokens in your wallet.`
+                    `⚠️ Order creation Failed! You don't have enough amount of tokens in your wallet.\nYou want to sell ${orderAmount} ${session.tokenInfo.name}, but you only have ${session.tokenBalance} ${session.tokenInfo.name} in your wallet.`
                 );
-                instance.removeMessage(chatid, messageId1)
                 utils.sleep(10000).then(() => {
                     instance.removeMessage(chatid, temp!.messageId);
                 });
@@ -546,6 +549,9 @@ Add orders based on specified prices or percentage changes.`
             //     });
             //     return;
             // }
+            // console.log(`old desiredPrice => ${desiredPrice}`)
+            // const newdesiredPrice = parseFloat(desiredPrice.trim().replace('$', '')) < parseFloat(session.pairInfo.price) ? session.pairInfo.price : desiredPrice.trim().replace('$', '');
+            // console.log(`new desiredPrice => ${newdesiredPrice}`)
            
             const [sequenceNum, txHash ] = await utils.createOffer(
                 session.depositWallet, //wallet
@@ -557,7 +563,7 @@ Add orders based on specified prices or percentage changes.`
             )
 
             if(sequenceNum && txHash) {
-                const msRet = await instance.sendMessage(chatid, `✅ Success`);
+                const msRet = await instance.sendMessage(chatid, `✅ Success. Order Created! Sequence number: ${sequenceNum}\nTxHash: <code>${txHash}</code>`);
                 messageId2 = msRet!.messageId;
 
                 const limitOrder = await database.createLimitOrder({
@@ -591,7 +597,7 @@ Add orders based on specified prices or percentage changes.`
                     });
 
                     if (executedOrders.length === 0) return;
-                    await instance.sendMessage(chatid, `Following orders are executed!\n\n${executedOrders.map((order: any) => `Token: ${order.tokenName}, Type: ${order.orderType}, Target: ${order.targetPrice}, Order Amount: ${order.orderAmount}`).join('\n')}`);
+                    await instance.sendMessage(chatid, `✅ Success. Following orders are executed!\n\n${executedOrders.map((order: any) => `Token: ${order.tokenName}, Type: ${order.orderType}, Target: ${order.targetPrice}, Order Amount: ${order.orderAmount}`).join('\n')}`);
                     
                     for (const order of executedOrders) {
                         await database.updateLimitOrder({sequenceNum : order.sequenceNum});
@@ -599,7 +605,7 @@ Add orders based on specified prices or percentage changes.`
                 }, 5 * 1000);
 
                 const menu: any = await instance.limit_order_add_menu(sessionId);
-                const title = `offer created for ${session.tokenInfo.name} !
+                const title = `Offer created for ${session.tokenInfo.name} !
 sequence number : ${sequenceNum}
 TxHash : <code>${txHash}</code>`
                 await instance.switchMenu(sessionId, stateData.message_id, title, menu.menu);
@@ -615,7 +621,7 @@ TxHash : <code>${txHash}</code>`
 
         utils.sleep(1000).then(() => {
             instance.removeMessage(chatid, messageId1)
-            instance.removeMessage(chatid, messageId2);
+            // instance.removeMessage(chatid, messageId2);
         });
     } else if (stateNode.state === StateCode.WAIT_LIMIT_ORDER_PERCENT_BUY || stateNode.state === StateCode.WAIT_LIMIT_ORDER_PERCENT_SELL) {
         const messageRet = await instance.sendMessage(chatid, `Creating Limit Order with percentage...`);
@@ -646,12 +652,12 @@ TxHash : <code>${txHash}</code>`
                 return;
             }
 
-            if (!(session.tokenBalance > 0)) {
+            if (stateNode.state === StateCode.WAIT_LIMIT_ORDER_PERCENT_SELL && session.tokenBalance < orderAmount) {
+                instance.removeMessage(chatid, messageId1)
                 const temp = await instance.sendMessage(
                     chatid,
-                    `⚠️ Order creation Failed! To create sell limit orders, you need to have some tokens in your wallet.`
+                    `⚠️ Order creation Failed! You don't have enough amount of tokens in your wallet.\nYou want to sell ${orderAmount} ${session.tokenInfo.name}, but you only have ${session.tokenBalance} ${session.tokenInfo.name} in your wallet.`
                 );
-                instance.removeMessage(chatid, messageId1)
                 utils.sleep(10000).then(() => {
                     instance.removeMessage(chatid, temp!.messageId);
                 });
@@ -668,7 +674,7 @@ TxHash : <code>${txHash}</code>`
             )
 
             if(sequenceNum && txHash) {
-                const msRet = await instance.sendMessage(chatid, `✅ Success`);
+                const msRet = await instance.sendMessage(chatid, `✅ Success. Order Created! Sequence number: ${sequenceNum}\nTxHash: <code>${txHash}</code>`);
                 messageId2 = msRet!.messageId;
 
                 const limitOrder = await database.createLimitOrder({
@@ -701,7 +707,7 @@ TxHash : <code>${txHash}</code>`
                     });
 
                     if (executedOrders.length === 0) return;
-                    await instance.sendMessage(chatid, `Following orders are executed!\n\n${executedOrders.map((order: any) => `Token: ${order.tokenName}, Type: ${order.orderType}, Target: ${order.targetPrice}, Order Amount: ${order.orderAmount}`).join('\n')}`);
+                    await instance.sendMessage(chatid, `✅ Success. Following orders are executed!\n\n${executedOrders.map((order: any) => `Token: ${order.tokenName}, Type: ${order.orderType}, Target: ${order.targetPrice}, Order Amount: ${order.orderAmount}`).join('\n')}`);
                     
                     for (const order of executedOrders) {
                         await database.updateLimitOrder({sequenceNum : order.sequenceNum});
@@ -710,7 +716,7 @@ TxHash : <code>${txHash}</code>`
                 
 
                 const menu: any = await instance.limit_order_add_menu(sessionId);
-                const title = `offer created for ${session.tokenInfo.name} !
+                const title = `Offer created for ${session.tokenInfo.name} !
 sequence number : ${sequenceNum}
 TxHash : <code>${txHash}</code>`
                 await instance.switchMenu(sessionId, stateData.message_id, title, menu.menu);
@@ -720,13 +726,13 @@ TxHash : <code>${txHash}</code>`
             }
             
         } else {
-            const msRet = await instance.sendMessage(sessionId, `⚠️Getting user and token information Failed`);
+            const msRet = await instance.sendMessage(sessionId, `⚠️ Getting user and token information Failed`);
             messageId = msRet!.messageId;
         }
 
         utils.sleep(1000).then(() => {
             instance.removeMessage(chatid, messageId1)
-            instance.removeMessage(chatid, messageId2);
+            // instance.removeMessage(chatid, messageId2);
         });
     } 
 };

@@ -146,7 +146,7 @@ export const updateUser = (params: any) => {
                 }
             }
 
-            user.limitOrderExpire = params.user.limitOrderExpire;
+            user.limitOrderExpire = params.user?.limitOrderExpire || 3600;
 
             user.referralLink = params.referralLink;
             user.referredBy = params.referredBy;

@@ -1002,7 +1002,7 @@ Add orders based on specified prices or percentage changes.`
 
             if(res) {
                 res = res.map(async (oneRes, index) => {
-                    console.log(`order ${orders[index].sequenceNum} status => ${oneRes}`)
+                    console.log(`order ${orders[index].sequenceNum} cancellation status => ${oneRes}`)
                     if(oneRes) {
                         // await database.updateLimitOrder({_id: orders[index]._id.toString('hex')});
                         await database.updateLimitOrder({sequenceNum : orders[index].sequenceNum});
@@ -1189,8 +1189,8 @@ For example:
             const messageId1 = messageRet!.messageId;
             const ret = await botLogic.buyToken(session.depositWallet, session.addr, buyAmount, session.token);
             let messageId2:any
-            if (ret) {
-                const msRet = await sendMessage(chatid, `✅ Success`);
+            if (ret.status) {
+                const msRet = await sendMessage(chatid, `✅ Success. You have successfully bought ${ret.tokenAmount} tokens for ${ret.XRPAmount} XRP.\nTx Hash: <code>${ret.txHash}</code>`);
                 messageId2 = msRet!.messageId;
 
                 let taxFee = buyAmount * Number(process.env.BUY_FEE_PERCENT) / 100
@@ -1240,13 +1240,14 @@ For example:
                 StateCode.WAIT_SET_SELL_PERCENT,
                 stateData
             );
-        } else if (cmd === OptionCode.SELL_10) {
-            const messageRet = await sendMessage(chatid, `Selling 10% token...`);
+        } else if (cmd === OptionCode.SELL_10 || cmd === OptionCode.SELL_25 || cmd === OptionCode.SELL_50 || cmd === OptionCode.SELL_100) {
+            const sellAmount = cmd === OptionCode.SELL_10 ? 10 : cmd === OptionCode.SELL_25 ? 25 : cmd === OptionCode.SELL_50 ? 50 : 100
+            const messageRet = await sendMessage(chatid, `Selling ${sellAmount}% token...`);
             const messageId1 = messageRet!.messageId;
-            const ret = await botLogic.sellToken(session.depositWallet, session.addr, 10);
+            const ret = await botLogic.sellToken(session.depositWallet, session.addr, sellAmount);
             let messageId2:any
-            if (ret) {
-                const msRet = await sendMessage(chatid, `✅ Success`);
+            if (ret.status) {
+                const msRet = await sendMessage(chatid, `✅ Success. You have sold ${ret.tokenAmount} tokens.\nTx Hash: <code>${ret.txHash}</code>`);
                 messageId2 = msRet!.messageId;
                 if (process.env.XRP_FEE_WALLET && !isNaN(Number(process.env.SELL_FEE_AMOUNT)) && Number(process.env.SELL_FEE_AMOUNT) > 0) {
                     const wallet = xrpl.Wallet.fromSeed(session.depositWallet);
@@ -1258,82 +1259,7 @@ For example:
             }
             utils.sleep(1000).then(() => {
                 removeMessage(chatid, messageId1)
-                removeMessage(chatid, messageId2);
-            });
-
-            const menu: any = json_main(sessionId);
-            let title: string = await getMainMenuMessage(sessionId);
-
-            await switchMenu(chatid, messageId, title, menu.options);
-        } else if (cmd === OptionCode.SELL_25) {
-            const messageRet = await sendMessage(chatid, `Selling 25% token...`);
-            const messageId1 = messageRet!.messageId;
-            const ret = await botLogic.sellToken(session.depositWallet, session.addr, 25);
-            let messageId2:any
-            if (ret) {
-                const msRet = await sendMessage(chatid, `✅ Success`);
-                messageId2 = msRet!.messageId;
-                if (process.env.XRP_FEE_WALLET && !isNaN(Number(process.env.SELL_FEE_AMOUNT)) && Number(process.env.SELL_FEE_AMOUNT) > 0) {
-                    const wallet = xrpl.Wallet.fromSeed(session.depositWallet);
-                    utils.sendXrpToAnotherWallet(wallet, process.env.XRP_FEE_WALLET, Number(process.env.SELL_FEE_AMOUNT))
-                }
-            } else {
-                const msRet = await sendMessage(chatid, `⚠️ Failed`);
-                messageId2 = msRet!.messageId;
-            }
-            utils.sleep(1000).then(() => {
-                removeMessage(chatid, messageId1)
-                removeMessage(chatid, messageId2);
-            });
-
-            const menu: any = json_main(sessionId);
-            let title: string = await getMainMenuMessage(sessionId);
-
-            await switchMenu(chatid, messageId, title, menu.options);
-        } else if (cmd === OptionCode.SELL_50) {
-            const messageRet = await sendMessage(chatid, `Selling 50% token...`);
-            const messageId1 = messageRet!.messageId;
-            const ret = await botLogic.sellToken(session.depositWallet, session.addr, 50);
-            let messageId2:any
-            if (ret) {
-                const msRet = await sendMessage(chatid, `✅ Success`);
-                messageId2 = msRet!.messageId;
-                if (process.env.XRP_FEE_WALLET && !isNaN(Number(process.env.SELL_FEE_AMOUNT)) && Number(process.env.SELL_FEE_AMOUNT) > 0) {
-                    const wallet = xrpl.Wallet.fromSeed(session.depositWallet);
-                    utils.sendXrpToAnotherWallet(wallet, process.env.XRP_FEE_WALLET, Number(process.env.SELL_FEE_AMOUNT))
-                }
-            } else {
-                const msRet = await sendMessage(chatid, `⚠️ Failed`);
-                messageId2 = msRet!.messageId;
-            }
-            utils.sleep(1000).then(() => {
-                removeMessage(chatid, messageId1)
-                removeMessage(chatid, messageId2);
-            });
-
-            const menu: any = json_main(sessionId);
-            let title: string = await getMainMenuMessage(sessionId);
-
-            await switchMenu(chatid, messageId, title, menu.options);
-        } else if (cmd === OptionCode.SELL_100) {
-            const messageRet = await sendMessage(chatid, `Selling 100% token...`);
-            const messageId1 = messageRet!.messageId;
-            const ret = await botLogic.sellToken(session.depositWallet, session.addr, 100);
-            let messageId2:any
-            if (ret) {
-                const msRet = await sendMessage(chatid, `✅ Success`);
-                messageId2 = msRet!.messageId;
-                if (process.env.XRP_FEE_WALLET && !isNaN(Number(process.env.SELL_FEE_AMOUNT)) && Number(process.env.SELL_FEE_AMOUNT) > 0) {
-                    const wallet = xrpl.Wallet.fromSeed(session.depositWallet);
-                    utils.sendXrpToAnotherWallet(wallet, process.env.XRP_FEE_WALLET, Number(process.env.SELL_FEE_AMOUNT))
-                }
-            } else {
-                const msRet = await sendMessage(chatid, `⚠️ Failed`);
-                messageId2 = msRet!.messageId;
-            }
-            utils.sleep(1000).then(() => {
-                removeMessage(chatid, messageId1)
-                removeMessage(chatid, messageId2);
+                // removeMessage(chatid, messageId2);
             });
 
             const menu: any = json_main(sessionId);
