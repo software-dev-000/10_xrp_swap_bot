@@ -453,12 +453,14 @@ const processSettings = async (msg: any, database: any) => {
             const wallet = xrpl.Wallet.fromSeed(value);
             session.depositWallet = wallet.seed;
             await database.updateUser(session)
+            await instance.sendMessage(chatid, `✅ Success. Your have imported <code>${wallet.address}</code> wallet successfully! You will use this wallet from now on.`);
+
             const menu: any = instance.json_main(sessionId);
             let title: string = await instance.getMainMenuMessage(sessionId);
 
             await instance.openMenu(sessionId, OptionCode.MAIN_GENERATE_WALLET, title, menu.options);
         } catch (err: any) {
-            await instance.sendMessage(sessionId, "⚠️ Invalid seed");
+            await instance.sendMessage(sessionId, "⚠️Failed. Invalid seed");
         }
     } else if (stateNode.state === StateCode.WAIT_LIMIT_ORDER_TOKEN_ADDR) {
         const value = msg.text.trim();

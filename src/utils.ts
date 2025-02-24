@@ -444,8 +444,8 @@ export const removeTrustline = async (
             TransactionType: "TrustSet",
             Account: wallet.classicAddress,
             LimitAmount: {
-                currency: "USD",
-                issuer: "rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq",
+                currency: currency,
+                issuer: issuer,
                 value: "0", // Trustline limit amount
             },
             Flags: xrpl.TrustSetFlags.tfSetNoRipple | xrpl.TrustSetFlags.tfClearFreeze

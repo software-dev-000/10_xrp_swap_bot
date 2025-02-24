@@ -1290,28 +1290,54 @@ For example:
                 stateData
             );
         } else if (cmd === OptionCode.MAIN_GENERATE_WALLET) {
-            const wallet = utils.generateNewWallet()
-            session.depositWallet = wallet.seed;
-            await database.updateUser(session);
-            const menu: any = json_main(chatid);
-            let title: string = await getMainMenuMessage(chatid);
+            if (session.user.wallets.length >= 5) {
+                await sendMessage(
+                    chatid,
+                    `⚠️ Failed. You can create up to 5 wallets.`
+                );
+                return;
+            }
+            try {
+                const wallet = utils.generateNewWallet()
+                session.depositWallet = wallet.seed;
+                await database.updateUser(session);
+                const menu: any = json_main(chatid);
 
-            await await openMenu(chatid, cmd, title, menu.options);
+                await sendMessage(chatid, `✅ Success. Your new wallet <code>${wallet.address}</code> has been created! You will use this wallet from now on.`);
+
+                let title: string = await getMainMenuMessage(chatid);
+                await openMenu(chatid, cmd, title, menu.options);
+            } catch (error) {
+                await sendMessage(chatid, `⚠️ Failed. There was an error in creating the wallet.`);
+                console.error(error);
+            }
+
         } else if (cmd === OptionCode.MAIN_EXPORT_WALLET) {
             if (session.depositWallet)
                 try {
-                    openMessage(chatid, "", 0, "⌛ Waiting for wallet seed txt.")
+                    const messageRet = await sendMessage(chatid, `⌛ Waiting for wallet seed txt...`);
+                    const messageId1 = messageRet!.messageId;
+        
                     const wallet = xrpl.Wallet.fromSeed(session.depositWallet);
                     await botLogic.saveWalletSeedAsFile(session.depositWallet)
-
+                    console.log(`wallet address => ${wallet.address}`)
+                    let messageId2:any
                     bot.sendDocument(sessionId, createReadStream(`./wallets/${wallet.address}.txt`))
-                        .then(() => {
-                            bot.sendMessage(sessionId, 'This document has got your wallet seed!');
+                        .then(async() => {
+                            const msRet = await sendMessage(chatid, `✅ Success. This document has got your wallet seed!`);
+                            messageId2 = msRet!.messageId;
+                            // bot.sendMessage(sessionId, 'This document has got your wallet seed!');
                         })
-                        .catch((error) => {
+                        .catch(async(error) => {
                             console.error('Error sending document:', error);
-                            bot.sendMessage(sessionId, 'Sorry, there was an error sending the file.');
+                            const msRet = await sendMessage(chatid, `⚠️ Failed. Sorry, there was an error sending the file.`);
+                            messageId2 = msRet!.messageId;
+                            // bot.sendMessage(sessionId, 'Sorry, there was an error sending the file.');
                         });
+                    utils.sleep(1000).then(() => {
+                        removeMessage(chatid, messageId1)
+                        // removeMessage(chatid, messageId2);
+                    });
                 } catch (error: any) {
                     sendMessage(chatid, error && error.message ? error.message : "Something went wrong! Try again later.");
                 }
