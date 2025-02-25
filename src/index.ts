@@ -1,7 +1,31 @@
+import fs from "fs";
+import path from "path";
 import dotenv from 'dotenv';
 dotenv.config()
 
 import * as bot from './bot';
+
+const logFilePath = path.join(process.cwd(), 'logs', 'log.txt');
+const maxFileSize = 5 * 1024 * 1024; // 5MB
+
+const checkLogFileSize = () => {
+	const stats = fs.statSync(logFilePath);
+	const fileSizeInMegabytes = stats.size / (1024 * 1024); // Convert bytes to MB
+  
+	if (fileSizeInMegabytes > 2) {
+		const newLogFilePath = path.join(__dirname, `./logs/log_${Date.now()}.txt`);
+		fs.renameSync(logFilePath, newLogFilePath); // Rename the old log file
+		console.log(`Log file size exceeded 2 MB. Created new log file: ${newLogFilePath}`);
+	}
+}
+  
+const logFile = fs.createWriteStream(logFilePath, { flags: 'a' });
+console.log = function (...args) {
+	checkLogFileSize(); // Check log file size before writing
+	const timestamp = new Date().toISOString();
+	logFile.write(`${timestamp} - ${args.join(' ')}\n`); // Write to log file
+	process.stdout.write(`${timestamp} - ${args.join(' ')}\n`); // Optional: also log to console
+};
 
 const main = async () => {
 	await bot.init()

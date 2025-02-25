@@ -1,0 +1,591 @@
+2025-02-24T18:06:28.626Z Connected to MongoDB "xrpl-swap-bot"...
+2025-02-24T18:06:28.627Z [BOT STARTING] Getting Reserved Value...
+2025-02-24T18:06:31.994Z [BOT STARTING] Connected to XRP Ledger.
+2025-02-24T18:06:32.338Z [BOT LAUNCHED] Got Reserved Value Successfully!
+2025-02-24T18:06:32.355Z 4 users, 0 logged in
+2025-02-24T18:08:51.490Z Connected to MongoDB "xrpl-swap-bot"...
+2025-02-24T18:08:51.490Z [BOT STARTING] Getting Reserved Value...
+2025-02-24T18:08:56.168Z [BOT STARTING] Connected to XRP Ledger.
+2025-02-24T18:08:58.361Z [BOT LAUNCHED] Got Reserved Value Successfully!
+2025-02-24T18:08:58.377Z 4 users, 0 logged in
+2025-02-24T18:09:21.425Z Connected to MongoDB "xrpl-swap-bot"...
+2025-02-24T18:09:21.425Z [BOT STARTING] Getting Reserved Value...
+2025-02-24T18:09:26.427Z [NotConnectedError(Error: connect() timed out after 5000 ms. If your internet connection is working, the rippled server may be blocked or inaccessible. You can also try setting the 'connectionTimeout' option in the Client constructor., {"name":"ConnectionError"})]
+2025-02-24T18:09:43.360Z Connected to MongoDB "xrpl-swap-bot"...
+2025-02-24T18:09:43.360Z [BOT STARTING] Getting Reserved Value...
+2025-02-24T18:09:47.465Z [BOT STARTING] Connected to XRP Ledger.
+2025-02-24T18:09:47.808Z [BOT LAUNCHED] Got Reserved Value Successfully!
+2025-02-24T18:09:47.823Z 4 users, 0 logged in
+2025-02-24T18:09:56.082Z TypeError: Cannot read properties of undefined (reading 'wallets')
+2025-02-24T18:13:39.981Z - Connected to MongoDB "xrpl-swap-bot"...
+2025-02-24T18:13:39.981Z - [BOT STARTING] Getting Reserved Value...
+2025-02-24T18:13:45.157Z - [BOT STARTING] Connected to XRP Ledger.
+2025-02-24T18:13:59.103Z - [BOT LAUNCHED] Got Reserved Value Successfully! 1 0.2
+2025-02-24T18:13:59.128Z - 4 users, 0 logged in
+2025-02-24T18:14:22.389Z - update User => {
+  "tokens": [
+    "50484E4958000000000000000000000000000000.rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN",
+    "5445535400000000000000000000000000000000.raYqPJfQYXPD3VnYUxwo6CRA9XBtXH5beZ",
+    "XOX.rGJbFqiLdh23e9WigQ5sxTfFqTENveLX21"
+  ],
+  "wallets": [
+    "sEdVr4zpebZcRt7arU9AX1Znd1e19pc",
+    "sEdS6dp55sSxpKAYbW1cFQdVVJssVtj",
+    "sEd7N5yxRxVjHsGct5z8LyXA331KZ4Z",
+    "sEdSjvqPsCB6T2chH2kVDG2PMPZoKC3",
+    "sEdT96BvC1A9i297LJ6xWPJpecTYd28"
+  ],
+  "chatid": "7400701379",
+  "username": "FMN271227",
+  "depositWallet": "sEdS6dp55sSxpKAYbW1cFQdVVJssVtj",
+  "addr": "5445535400000000000000000000000000000000.raYqPJfQYXPD3VnYUxwo6CRA9XBtXH5beZ",
+  "referralLink": "https://t.me/XRP_test124_volume_bot?start=ref_84qaVH",
+  "limitOrderExpire": 3600,
+  "USD_addr": "USD.rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq",
+  "pairInfo": {
+    "dex": "",
+    "pair": "",
+    "price": "",
+    "priceInXrp": "",
+    "lp": "",
+    "mc": ""
+  },
+  "tokenInfo": {
+    "address": "5445535400000000000000000000000000000000.raYqPJfQYXPD3VnYUxwo6CRA9XBtXH5beZ",
+    "id": "5445535400000000000000000000000000000000.raYqPJfQYXPD3VnYUxwo6CRA9XBtXH5beZ",
+    "name": "TEST",
+    "symbol": "TEST",
+    "totalSupply": 1000000000,
+    "decimals": 0,
+    "description": null,
+    "iconUrl": null
+  },
+  "user": {
+    "_id": "67b4a05d607f0290e3a95b6f",
+    "tokens": [
+      "50484E4958000000000000000000000000000000.rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN",
+      "5445535400000000000000000000000000000000.raYqPJfQYXPD3VnYUxwo6CRA9XBtXH5beZ",
+      "XOX.rGJbFqiLdh23e9WigQ5sxTfFqTENveLX21"
+    ],
+    "wallets": [
+      "sEdVr4zpebZcRt7arU9AX1Znd1e19pc",
+      "sEdS6dp55sSxpKAYbW1cFQdVVJssVtj",
+      "sEd7N5yxRxVjHsGct5z8LyXA331KZ4Z",
+      "sEdSjvqPsCB6T2chH2kVDG2PMPZoKC3",
+      "sEdT96BvC1A9i297LJ6xWPJpecTYd28"
+    ],
+    "chatid": "7400701379",
+    "username": "FMN271227",
+    "depositWallet": "sEdS6dp55sSxpKAYbW1cFQdVVJssVtj",
+    "addr": "5445535400000000000000000000000000000000.raYqPJfQYXPD3VnYUxwo6CRA9XBtXH5beZ",
+    "referralLink": "https://t.me/XRP_test124_volume_bot?start=ref_84qaVH",
+    "__v": 15,
+    "limitOrderExpire": 3600
+  },
+  "tokenBalance": 0,
+  "walletBalance": 0.5621700000000001
+}
+2025-02-24T18:16:16.196Z - wallet address => rss2cwdWSUkGZQ5JABjbaHqdDyPhs7TLMr
+2025-02-24T18:16:16.201Z - File "rss2cwdWSUkGZQ5JABjbaHqdDyPhs7TLMr" has been saved successfully!
+2025-02-24T18:17:17.708Z - [ORDER CANCELLATION STARTED...]
+2025-02-24T18:17:17.708Z - order 94251736 cancellation tx txHash => 17006CDC95B63F07DE6B69FFB56D731F63965028621E43AD739C525F7F3AD559, result => tesSUCCESS
+2025-02-24T18:17:17.708Z - order 94251736 cancelled successfully!
+2025-02-24T18:17:17.708Z - [ORDER CANCELLATION ENDED]
+2025-02-24T18:17:17.708Z - order 94251736 cancellation status => true
+2025-02-24T18:19:25.520Z - Connected to MongoDB "xrpl-swap-bot"...
+2025-02-24T18:19:25.521Z - [BOT STARTING] Getting Reserved Value...
+2025-02-24T18:19:28.723Z - [BOT STARTING] Connected to XRP Ledger.
+2025-02-24T18:19:29.732Z - [BOT LAUNCHED] Got Reserved Value Successfully! 1 0.2
+2025-02-24T18:19:29.745Z - 4 users, 0 logged in
+2025-02-24T18:19:50.139Z - update User => {
+  "tokens": [
+    "50484E4958000000000000000000000000000000.rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN",
+    "5445535400000000000000000000000000000000.raYqPJfQYXPD3VnYUxwo6CRA9XBtXH5beZ",
+    "XOX.rGJbFqiLdh23e9WigQ5sxTfFqTENveLX21"
+  ],
+  "wallets": [
+    "sEdVr4zpebZcRt7arU9AX1Znd1e19pc",
+    "sEdS6dp55sSxpKAYbW1cFQdVVJssVtj",
+    "sEd7N5yxRxVjHsGct5z8LyXA331KZ4Z",
+    "sEdSjvqPsCB6T2chH2kVDG2PMPZoKC3",
+    "sEdT96BvC1A9i297LJ6xWPJpecTYd28"
+  ],
+  "chatid": "7400701379",
+  "username": "FMN271227",
+  "depositWallet": "sEdS6dp55sSxpKAYbW1cFQdVVJssVtj",
+  "addr": "50484E4958000000000000000000000000000000.rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN",
+  "referralLink": "https://t.me/XRP_test124_volume_bot?start=ref_84qaVH",
+  "limitOrderExpire": 3600,
+  "USD_addr": "USD.rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq",
+  "pairInfo": {
+    "dex": "",
+    "pair": "",
+    "price": "",
+    "priceInXrp": "",
+    "lp": "",
+    "mc": ""
+  },
+  "tokenInfo": {
+    "address": "5445535400000000000000000000000000000000.raYqPJfQYXPD3VnYUxwo6CRA9XBtXH5beZ",
+    "id": "5445535400000000000000000000000000000000.raYqPJfQYXPD3VnYUxwo6CRA9XBtXH5beZ",
+    "name": "TEST",
+    "symbol": "TEST",
+    "totalSupply": 1000000000,
+    "decimals": 0,
+    "description": null,
+    "iconUrl": null
+  },
+  "user": {
+    "_id": "67b4a05d607f0290e3a95b6f",
+    "tokens": [
+      "50484E4958000000000000000000000000000000.rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN",
+      "5445535400000000000000000000000000000000.raYqPJfQYXPD3VnYUxwo6CRA9XBtXH5beZ",
+      "XOX.rGJbFqiLdh23e9WigQ5sxTfFqTENveLX21"
+    ],
+    "wallets": [
+      "sEdVr4zpebZcRt7arU9AX1Znd1e19pc",
+      "sEdS6dp55sSxpKAYbW1cFQdVVJssVtj",
+      "sEd7N5yxRxVjHsGct5z8LyXA331KZ4Z",
+      "sEdSjvqPsCB6T2chH2kVDG2PMPZoKC3",
+      "sEdT96BvC1A9i297LJ6xWPJpecTYd28"
+    ],
+    "chatid": "7400701379",
+    "username": "FMN271227",
+    "depositWallet": "sEdS6dp55sSxpKAYbW1cFQdVVJssVtj",
+    "addr": "5445535400000000000000000000000000000000.raYqPJfQYXPD3VnYUxwo6CRA9XBtXH5beZ",
+    "referralLink": "https://t.me/XRP_test124_volume_bot?start=ref_84qaVH",
+    "__v": 15,
+    "limitOrderExpire": 3600
+  },
+  "tokenBalance": 0,
+  "walletBalance": 0.5621580000000002,
+  "limitOrders": []
+}
+2025-02-24T18:21:24.472Z - Connected to MongoDB "xrpl-swap-bot"...
+2025-02-24T18:21:24.472Z - [BOT STARTING] Getting Reserved Value...
+2025-02-24T18:21:25.383Z - [BOT STARTING] Connected to XRP Ledger.
+2025-02-24T18:21:25.555Z - [BOT LAUNCHED] Got Reserved Value Successfully! 1 0.2
+2025-02-24T18:21:25.571Z - 4 users, 0 logged in
+2025-02-24T18:21:30.002Z - update User => {
+  "tokens": [
+    "50484E4958000000000000000000000000000000.rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN",
+    "5445535400000000000000000000000000000000.raYqPJfQYXPD3VnYUxwo6CRA9XBtXH5beZ",
+    "XOX.rGJbFqiLdh23e9WigQ5sxTfFqTENveLX21"
+  ],
+  "wallets": [
+    "sEdVr4zpebZcRt7arU9AX1Znd1e19pc",
+    "sEdS6dp55sSxpKAYbW1cFQdVVJssVtj",
+    "sEd7N5yxRxVjHsGct5z8LyXA331KZ4Z",
+    "sEdSjvqPsCB6T2chH2kVDG2PMPZoKC3",
+    "sEdT96BvC1A9i297LJ6xWPJpecTYd28"
+  ],
+  "chatid": "7400701379",
+  "username": "FMN271227",
+  "depositWallet": "sEdS6dp55sSxpKAYbW1cFQdVVJssVtj",
+  "addr": "5445535400000000000000000000000000000000.raYqPJfQYXPD3VnYUxwo6CRA9XBtXH5beZ",
+  "referralLink": "https://t.me/XRP_test124_volume_bot?start=ref_84qaVH",
+  "limitOrderExpire": 3600
+}
+2025-02-24T18:21:35.193Z - update User => {
+  "tokens": [
+    "50484E4958000000000000000000000000000000.rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN",
+    "5445535400000000000000000000000000000000.raYqPJfQYXPD3VnYUxwo6CRA9XBtXH5beZ",
+    "XOX.rGJbFqiLdh23e9WigQ5sxTfFqTENveLX21"
+  ],
+  "wallets": [
+    "sEdVr4zpebZcRt7arU9AX1Znd1e19pc",
+    "sEdS6dp55sSxpKAYbW1cFQdVVJssVtj",
+    "sEd7N5yxRxVjHsGct5z8LyXA331KZ4Z",
+    "sEdSjvqPsCB6T2chH2kVDG2PMPZoKC3",
+    "sEdT96BvC1A9i297LJ6xWPJpecTYd28"
+  ],
+  "chatid": "7400701379",
+  "username": "FMN271227",
+  "depositWallet": "sEdS6dp55sSxpKAYbW1cFQdVVJssVtj",
+  "addr": "50484E4958000000000000000000000000000000.rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN",
+  "referralLink": "https://t.me/XRP_test124_volume_bot?start=ref_84qaVH",
+  "limitOrderExpire": 3600,
+  "USD_addr": "USD.rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq",
+  "pairInfo": {
+    "dex": "",
+    "pair": "",
+    "price": "",
+    "priceInXrp": "",
+    "lp": "",
+    "mc": ""
+  },
+  "tokenInfo": {
+    "address": "5445535400000000000000000000000000000000.raYqPJfQYXPD3VnYUxwo6CRA9XBtXH5beZ",
+    "id": "5445535400000000000000000000000000000000.raYqPJfQYXPD3VnYUxwo6CRA9XBtXH5beZ",
+    "name": "TEST",
+    "symbol": "TEST",
+    "totalSupply": 1000000000,
+    "decimals": 0,
+    "description": null,
+    "iconUrl": null
+  },
+  "user": {
+    "_id": "67b4a05d607f0290e3a95b6f",
+    "tokens": [
+      "50484E4958000000000000000000000000000000.rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN",
+      "5445535400000000000000000000000000000000.raYqPJfQYXPD3VnYUxwo6CRA9XBtXH5beZ",
+      "XOX.rGJbFqiLdh23e9WigQ5sxTfFqTENveLX21"
+    ],
+    "wallets": [
+      "sEdVr4zpebZcRt7arU9AX1Znd1e19pc",
+      "sEdS6dp55sSxpKAYbW1cFQdVVJssVtj",
+      "sEd7N5yxRxVjHsGct5z8LyXA331KZ4Z",
+      "sEdSjvqPsCB6T2chH2kVDG2PMPZoKC3",
+      "sEdT96BvC1A9i297LJ6xWPJpecTYd28"
+    ],
+    "chatid": "7400701379",
+    "username": "FMN271227",
+    "depositWallet": "sEdS6dp55sSxpKAYbW1cFQdVVJssVtj",
+    "addr": "5445535400000000000000000000000000000000.raYqPJfQYXPD3VnYUxwo6CRA9XBtXH5beZ",
+    "referralLink": "https://t.me/XRP_test124_volume_bot?start=ref_84qaVH",
+    "__v": 15,
+    "limitOrderExpire": 3600
+  },
+  "tokenBalance": 0,
+  "walletBalance": 0.5621580000000002
+}
+2025-02-24T18:21:40.070Z - update User => {
+  "tokens": [
+    "50484E4958000000000000000000000000000000.rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN",
+    "5445535400000000000000000000000000000000.raYqPJfQYXPD3VnYUxwo6CRA9XBtXH5beZ",
+    "XOX.rGJbFqiLdh23e9WigQ5sxTfFqTENveLX21"
+  ],
+  "wallets": [
+    "sEdVr4zpebZcRt7arU9AX1Znd1e19pc",
+    "sEdS6dp55sSxpKAYbW1cFQdVVJssVtj",
+    "sEd7N5yxRxVjHsGct5z8LyXA331KZ4Z",
+    "sEdSjvqPsCB6T2chH2kVDG2PMPZoKC3",
+    "sEdT96BvC1A9i297LJ6xWPJpecTYd28"
+  ],
+  "chatid": "7400701379",
+  "username": "FMN271227",
+  "depositWallet": "sEdSjvqPsCB6T2chH2kVDG2PMPZoKC3",
+  "addr": "50484E4958000000000000000000000000000000.rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN",
+  "referralLink": "https://t.me/XRP_test124_volume_bot?start=ref_84qaVH",
+  "limitOrderExpire": 3600,
+  "USD_addr": "USD.rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq",
+  "pairInfo": {
+    "dex": "xrpl",
+    "pair": "PHNIX / XRP",
+    "price": "0.00001215",
+    "priceInXrp": "0.000004923",
+    "lp": "700.62 K",
+    "mc": "7.16 M"
+  },
+  "tokenInfo": {
+    "address": "50484E4958000000000000000000000000000000.rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN",
+    "id": "50484E4958000000000000000000000000000000.rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN",
+    "name": "PHNIX",
+    "symbol": "PHNIX",
+    "totalSupply": 588990185890.2172,
+    "decimals": 0,
+    "description": null,
+    "iconUrl": null
+  },
+  "user": {
+    "_id": "67b4a05d607f0290e3a95b6f",
+    "tokens": [
+      "50484E4958000000000000000000000000000000.rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN",
+      "5445535400000000000000000000000000000000.raYqPJfQYXPD3VnYUxwo6CRA9XBtXH5beZ",
+      "XOX.rGJbFqiLdh23e9WigQ5sxTfFqTENveLX21"
+    ],
+    "wallets": [
+      "sEdVr4zpebZcRt7arU9AX1Znd1e19pc",
+      "sEdS6dp55sSxpKAYbW1cFQdVVJssVtj",
+      "sEd7N5yxRxVjHsGct5z8LyXA331KZ4Z",
+      "sEdSjvqPsCB6T2chH2kVDG2PMPZoKC3",
+      "sEdT96BvC1A9i297LJ6xWPJpecTYd28"
+    ],
+    "chatid": "7400701379",
+    "username": "FMN271227",
+    "depositWallet": "sEdS6dp55sSxpKAYbW1cFQdVVJssVtj",
+    "addr": "50484E4958000000000000000000000000000000.rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN",
+    "referralLink": "https://t.me/XRP_test124_volume_bot?start=ref_84qaVH",
+    "__v": 15,
+    "limitOrderExpire": 3600
+  },
+  "tokenBalance": 4.0609e-7,
+  "walletBalance": 0.5621580000000002
+}
+2025-02-24T18:21:44.215Z - update User => {
+  "tokens": [
+    "50484E4958000000000000000000000000000000.rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN",
+    "5445535400000000000000000000000000000000.raYqPJfQYXPD3VnYUxwo6CRA9XBtXH5beZ",
+    "XOX.rGJbFqiLdh23e9WigQ5sxTfFqTENveLX21"
+  ],
+  "wallets": [
+    "sEdVr4zpebZcRt7arU9AX1Znd1e19pc",
+    "sEdS6dp55sSxpKAYbW1cFQdVVJssVtj",
+    "sEd7N5yxRxVjHsGct5z8LyXA331KZ4Z",
+    "sEdSjvqPsCB6T2chH2kVDG2PMPZoKC3",
+    "sEdT96BvC1A9i297LJ6xWPJpecTYd28"
+  ],
+  "chatid": "7400701379",
+  "username": "FMN271227",
+  "depositWallet": "sEdS6dp55sSxpKAYbW1cFQdVVJssVtj",
+  "addr": "50484E4958000000000000000000000000000000.rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN",
+  "referralLink": "https://t.me/XRP_test124_volume_bot?start=ref_84qaVH",
+  "limitOrderExpire": 3600,
+  "USD_addr": "USD.rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq",
+  "pairInfo": {
+    "dex": "xrpl",
+    "pair": "PHNIX / XRP",
+    "price": "0.00001215",
+    "priceInXrp": "0.000004923",
+    "lp": "700.62 K",
+    "mc": "7.16 M"
+  },
+  "tokenInfo": {
+    "address": "50484E4958000000000000000000000000000000.rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN",
+    "id": "50484E4958000000000000000000000000000000.rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN",
+    "name": "PHNIX",
+    "symbol": "PHNIX",
+    "totalSupply": 588990185890.2172,
+    "decimals": 0,
+    "description": null,
+    "iconUrl": null
+  },
+  "user": {
+    "_id": "67b4a05d607f0290e3a95b6f",
+    "tokens": [
+      "50484E4958000000000000000000000000000000.rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN",
+      "5445535400000000000000000000000000000000.raYqPJfQYXPD3VnYUxwo6CRA9XBtXH5beZ",
+      "XOX.rGJbFqiLdh23e9WigQ5sxTfFqTENveLX21"
+    ],
+    "wallets": [
+      "sEdVr4zpebZcRt7arU9AX1Znd1e19pc",
+      "sEdS6dp55sSxpKAYbW1cFQdVVJssVtj",
+      "sEd7N5yxRxVjHsGct5z8LyXA331KZ4Z",
+      "sEdSjvqPsCB6T2chH2kVDG2PMPZoKC3",
+      "sEdT96BvC1A9i297LJ6xWPJpecTYd28"
+    ],
+    "chatid": "7400701379",
+    "username": "FMN271227",
+    "depositWallet": "sEdSjvqPsCB6T2chH2kVDG2PMPZoKC3",
+    "addr": "50484E4958000000000000000000000000000000.rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN",
+    "referralLink": "https://t.me/XRP_test124_volume_bot?start=ref_84qaVH",
+    "__v": 15,
+    "limitOrderExpire": 3600
+  },
+  "tokenBalance": 0,
+  "walletBalance": -1
+}
+2025-02-24T18:23:13.322Z - update User => {
+  "tokens": [
+    "50484E4958000000000000000000000000000000.rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN",
+    "5445535400000000000000000000000000000000.raYqPJfQYXPD3VnYUxwo6CRA9XBtXH5beZ",
+    "XOX.rGJbFqiLdh23e9WigQ5sxTfFqTENveLX21"
+  ],
+  "wallets": [
+    "sEdVr4zpebZcRt7arU9AX1Znd1e19pc",
+    "sEdS6dp55sSxpKAYbW1cFQdVVJssVtj",
+    "sEd7N5yxRxVjHsGct5z8LyXA331KZ4Z",
+    "sEdSjvqPsCB6T2chH2kVDG2PMPZoKC3",
+    "sEdT96BvC1A9i297LJ6xWPJpecTYd28"
+  ],
+  "chatid": "7400701379",
+  "username": "FMN271227",
+  "depositWallet": "sEdS6dp55sSxpKAYbW1cFQdVVJssVtj",
+  "addr": "5445535400000000000000000000000000000000.raYqPJfQYXPD3VnYUxwo6CRA9XBtXH5beZ",
+  "referralLink": "https://t.me/XRP_test124_volume_bot?start=ref_84qaVH",
+  "limitOrderExpire": 3600,
+  "USD_addr": "USD.rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq",
+  "pairInfo": {
+    "dex": "xrpl",
+    "pair": "PHNIX / XRP",
+    "price": "0.00001215",
+    "priceInXrp": "0.000004923",
+    "lp": "700.62 K",
+    "mc": "7.16 M"
+  },
+  "tokenInfo": {
+    "address": "50484E4958000000000000000000000000000000.rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN",
+    "id": "50484E4958000000000000000000000000000000.rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN",
+    "name": "PHNIX",
+    "symbol": "PHNIX",
+    "totalSupply": 588990185890.2172,
+    "decimals": 0,
+    "description": null,
+    "iconUrl": null
+  },
+  "user": {
+    "_id": "67b4a05d607f0290e3a95b6f",
+    "tokens": [
+      "50484E4958000000000000000000000000000000.rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN",
+      "5445535400000000000000000000000000000000.raYqPJfQYXPD3VnYUxwo6CRA9XBtXH5beZ",
+      "XOX.rGJbFqiLdh23e9WigQ5sxTfFqTENveLX21"
+    ],
+    "wallets": [
+      "sEdVr4zpebZcRt7arU9AX1Znd1e19pc",
+      "sEdS6dp55sSxpKAYbW1cFQdVVJssVtj",
+      "sEd7N5yxRxVjHsGct5z8LyXA331KZ4Z",
+      "sEdSjvqPsCB6T2chH2kVDG2PMPZoKC3",
+      "sEdT96BvC1A9i297LJ6xWPJpecTYd28"
+    ],
+    "chatid": "7400701379",
+    "username": "FMN271227",
+    "depositWallet": "sEdS6dp55sSxpKAYbW1cFQdVVJssVtj",
+    "addr": "50484E4958000000000000000000000000000000.rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN",
+    "referralLink": "https://t.me/XRP_test124_volume_bot?start=ref_84qaVH",
+    "__v": 15,
+    "limitOrderExpire": 3600
+  },
+  "tokenBalance": 4.0609e-7,
+  "walletBalance": 0.5621580000000002,
+  "limitOrders": []
+}
+2025-02-24T18:23:18.886Z - update User => {
+  "tokens": [
+    "50484E4958000000000000000000000000000000.rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN",
+    "5445535400000000000000000000000000000000.raYqPJfQYXPD3VnYUxwo6CRA9XBtXH5beZ",
+    "XOX.rGJbFqiLdh23e9WigQ5sxTfFqTENveLX21"
+  ],
+  "wallets": [
+    "sEdVr4zpebZcRt7arU9AX1Znd1e19pc",
+    "sEdS6dp55sSxpKAYbW1cFQdVVJssVtj",
+    "sEd7N5yxRxVjHsGct5z8LyXA331KZ4Z",
+    "sEdSjvqPsCB6T2chH2kVDG2PMPZoKC3",
+    "sEdT96BvC1A9i297LJ6xWPJpecTYd28"
+  ],
+  "chatid": "7400701379",
+  "username": "FMN271227",
+  "depositWallet": "sEdS6dp55sSxpKAYbW1cFQdVVJssVtj",
+  "addr": "50484E4958000000000000000000000000000000.rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN",
+  "referralLink": "https://t.me/XRP_test124_volume_bot?start=ref_84qaVH",
+  "limitOrderExpire": 3600,
+  "USD_addr": "USD.rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq",
+  "pairInfo": {
+    "dex": "",
+    "pair": "",
+    "price": "",
+    "priceInXrp": "",
+    "lp": "",
+    "mc": ""
+  },
+  "tokenInfo": {
+    "address": "5445535400000000000000000000000000000000.raYqPJfQYXPD3VnYUxwo6CRA9XBtXH5beZ",
+    "id": "5445535400000000000000000000000000000000.raYqPJfQYXPD3VnYUxwo6CRA9XBtXH5beZ",
+    "name": "TEST",
+    "symbol": "TEST",
+    "totalSupply": 1000000000,
+    "decimals": 0,
+    "description": null,
+    "iconUrl": null
+  },
+  "user": {
+    "_id": "67b4a05d607f0290e3a95b6f",
+    "tokens": [
+      "50484E4958000000000000000000000000000000.rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN",
+      "5445535400000000000000000000000000000000.raYqPJfQYXPD3VnYUxwo6CRA9XBtXH5beZ",
+      "XOX.rGJbFqiLdh23e9WigQ5sxTfFqTENveLX21"
+    ],
+    "wallets": [
+      "sEdVr4zpebZcRt7arU9AX1Znd1e19pc",
+      "sEdS6dp55sSxpKAYbW1cFQdVVJssVtj",
+      "sEd7N5yxRxVjHsGct5z8LyXA331KZ4Z",
+      "sEdSjvqPsCB6T2chH2kVDG2PMPZoKC3",
+      "sEdT96BvC1A9i297LJ6xWPJpecTYd28"
+    ],
+    "chatid": "7400701379",
+    "username": "FMN271227",
+    "depositWallet": "sEdS6dp55sSxpKAYbW1cFQdVVJssVtj",
+    "addr": "5445535400000000000000000000000000000000.raYqPJfQYXPD3VnYUxwo6CRA9XBtXH5beZ",
+    "referralLink": "https://t.me/XRP_test124_volume_bot?start=ref_84qaVH",
+    "__v": 15,
+    "limitOrderExpire": 3600
+  },
+  "tokenBalance": 0,
+  "walletBalance": 0.5621580000000002,
+  "limitOrders": []
+}
+2025-02-24T18:33:10.050Z - Pending transaction for sending 0.5621080000000002 from rss2cwdWSUkGZQ5JABjbaHqdDyPhs7TLMr to rPZP4jmTWZYbMErwCtsrtadmqwqh6BLnut
+2025-02-24T18:33:16.994Z - Sent transaction for sending 0.5621080000000002 from rss2cwdWSUkGZQ5JABjbaHqdDyPhs7TLMr to rPZP4jmTWZYbMErwCtsrtadmqwqh6BLnut ===>  tesSUCCESS
+2025-02-24T18:34:27.342Z - Connected to MongoDB "xrpl-swap-bot"...
+2025-02-24T18:34:27.342Z - [BOT STARTING] Getting Reserved Value...
+2025-02-24T18:34:28.267Z - [BOT STARTING] Connected to XRP Ledger.
+2025-02-24T18:34:28.438Z - [BOT LAUNCHED] Got Reserved Value Successfully! 1 0.2
+2025-02-24T18:34:28.452Z - 4 users, 0 logged in
+2025-02-24T18:35:20.998Z - Connected to MongoDB "xrpl-swap-bot"...
+2025-02-24T18:35:20.999Z - [BOT STARTING] Getting Reserved Value...
+2025-02-24T18:35:21.887Z - [BOT STARTING] Connected to XRP Ledger.
+2025-02-24T18:35:22.069Z - [BOT LAUNCHED] Got Reserved Value Successfully! 1 0.2
+2025-02-24T18:35:22.085Z - 4 users, 0 logged in
+2025-02-24T19:35:07.349Z - Connected to MongoDB "xrpl-swap-bot"...
+2025-02-24T19:35:07.350Z - [BOT STARTING] Getting Reserved Value...
+2025-02-24T19:35:08.347Z - [BOT STARTING] Connected to XRP Ledger.
+2025-02-24T19:35:08.515Z - [BOT LAUNCHED] Got Reserved Value Successfully! 1 0.2
+2025-02-24T19:35:08.533Z - 4 users, 0 logged in
+2025-02-24T19:39:43.608Z - Connected to MongoDB "xrpl-swap-bot"...
+2025-02-24T19:39:43.609Z - [BOT STARTING] Getting Reserved Value...
+2025-02-24T19:39:44.520Z - [BOT STARTING] Connected to XRP Ledger.
+2025-02-24T19:39:44.704Z - [BOT LAUNCHED] Got Reserved Value Successfully! 1 0.2
+2025-02-24T19:39:44.726Z - 4 users, 0 logged in
+2025-02-24T19:40:36.224Z - Pending transaction for sending 4.999988 from rss2cwdWSUkGZQ5JABjbaHqdDyPhs7TLMr to rhF9Y1jj6t9898h4HobYiMUEdyYZwoKwHS
+2025-02-24T19:40:44.702Z - Sent transaction for sending 4.999988 from rss2cwdWSUkGZQ5JABjbaHqdDyPhs7TLMr to rhF9Y1jj6t9898h4HobYiMUEdyYZwoKwHS ===>  tesSUCCESS
+2025-02-24T19:42:10.539Z - rss2cwdWSUkGZQ5JABjbaHqdDyPhs7TLMr TrustLineExist: true
+2025-02-24T19:42:10.887Z - Estimated token amount: 204081.632653061
+2025-02-24T19:42:10.887Z - Restimated amount: 204081.632653061
+2025-02-24T19:42:10.887Z - Pending transactions for buying token with 1 xrp from wallet rss2cwdWSUkGZQ5JABjbaHqdDyPhs7TLMr
+2025-02-24T19:42:16.842Z - Sent transaction for buying token with 1 XRP from wallet rss2cwdWSUkGZQ5JABjbaHqdDyPhs7TLMr ===>  tecPATH_DRY
+2025-02-24T19:43:56.913Z - currency: 50484E4958000000000000000000000000000000, issuer: rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN, limit: 588990185890.2174
+2025-02-24T19:44:02.836Z - Trustline created successfully!
+2025-02-24T19:44:07.627Z - rss2cwdWSUkGZQ5JABjbaHqdDyPhs7TLMr TrustLineExist: true
+2025-02-24T19:44:07.976Z - Estimated token amount: 204081.632653061
+2025-02-24T19:44:07.976Z - Restimated amount: 204081.632653061
+2025-02-24T19:44:07.976Z - Pending transactions for buying token with 1 xrp from wallet rss2cwdWSUkGZQ5JABjbaHqdDyPhs7TLMr
+2025-02-24T19:44:15.463Z - Sent transaction for buying token with 1 XRP from wallet rss2cwdWSUkGZQ5JABjbaHqdDyPhs7TLMr ===>  tesSUCCESS
+2025-02-24T19:44:15.876Z - Pending transaction for sending 0.01 from rss2cwdWSUkGZQ5JABjbaHqdDyPhs7TLMr to sEdVr4zpebZcRt7arU9AX1Znd1e19pc
+2025-02-24T19:44:15.876Z - Failed in sending 0.01 XRP from rss2cwdWSUkGZQ5JABjbaHqdDyPhs7TLMr to sEdVr4zpebZcRt7arU9AX1Znd1e19pc
+2025-02-24T19:47:24.446Z - Connected to MongoDB "xrpl-swap-bot"...
+2025-02-24T19:47:24.447Z - [BOT STARTING] Getting Reserved Value...
+2025-02-24T19:47:25.362Z - [BOT STARTING] Connected to XRP Ledger.
+2025-02-24T19:47:25.547Z - [BOT LAUNCHED] Got Reserved Value Successfully! 1 0.2
+2025-02-24T19:47:25.564Z - 4 users, 0 logged in
+2025-02-24T19:47:49.406Z - Connected to MongoDB "xrpl-swap-bot"...
+2025-02-24T19:47:49.407Z - [BOT STARTING] Getting Reserved Value...
+2025-02-24T19:47:50.332Z - [BOT STARTING] Connected to XRP Ledger.
+2025-02-24T19:47:50.501Z - [BOT LAUNCHED] Got Reserved Value Successfully! 1 0.2
+2025-02-24T19:47:50.515Z - 4 users, 0 logged in
+2025-02-24T19:48:07.109Z - Pending transactions for selling 200171.9453804061 tokens from wallet rss2cwdWSUkGZQ5JABjbaHqdDyPhs7TLMr
+2025-02-24T19:48:14.561Z - Sent transaction for sell 200171.9453804061 tokens from wallet rss2cwdWSUkGZQ5JABjbaHqdDyPhs7TLMr ===>  tesSUCCESS
+2025-02-24T19:48:14.615Z - Sell taxFee: 1, referFee: 0
+2025-02-24T19:48:14.967Z - Pending transaction for sending 1 from rss2cwdWSUkGZQ5JABjbaHqdDyPhs7TLMr to sEdVr4zpebZcRt7arU9AX1Znd1e19pc
+2025-02-24T19:48:14.967Z - Failed in sending 1 XRP from rss2cwdWSUkGZQ5JABjbaHqdDyPhs7TLMr to sEdVr4zpebZcRt7arU9AX1Znd1e19pc
+2025-02-24T20:00:29.407Z - Connected to MongoDB "xrpl-swap-bot"...
+2025-02-24T20:00:29.408Z - [BOT STARTING] Getting Reserved Value...
+2025-02-24T20:00:30.335Z - [BOT STARTING] Connected to XRP Ledger.
+2025-02-24T20:00:30.510Z - [BOT LAUNCHED] Got Reserved Value Successfully! 1 0.2
+2025-02-24T20:00:30.525Z - 4 users, 0 logged in
+2025-02-24T20:02:33.489Z - rss2cwdWSUkGZQ5JABjbaHqdDyPhs7TLMr TrustLineExist: true
+2025-02-24T20:02:33.843Z - Estimated token amount: 204081.632653061
+2025-02-24T20:02:33.844Z - Restimated amount: 204081.632653061
+2025-02-24T20:02:33.844Z - Pending transactions for buying token with 1 xrp from wallet rss2cwdWSUkGZQ5JABjbaHqdDyPhs7TLMr
+2025-02-24T20:02:40.097Z - Sent transaction for buying token with 1 XRP from wallet rss2cwdWSUkGZQ5JABjbaHqdDyPhs7TLMr ===>  tesSUCCESS
+2025-02-24T20:02:40.147Z - Buy taxFee: 0.01, referFee: 0
+2025-02-24T20:02:40.496Z - Pending transaction for sending 0.01 from rss2cwdWSUkGZQ5JABjbaHqdDyPhs7TLMr to rhF9Y1jj6t9898h4HobYiMUEdyYZwoKwHS
+2025-02-24T20:02:47.538Z - Sent transaction for sending 0.01 from rss2cwdWSUkGZQ5JABjbaHqdDyPhs7TLMr to rhF9Y1jj6t9898h4HobYiMUEdyYZwoKwHS ===>  tesSUCCESS
+2025-02-24T20:03:04.723Z - Pending transactions for selling 199288.80251040607 tokens from wallet rss2cwdWSUkGZQ5JABjbaHqdDyPhs7TLMr
+2025-02-24T20:03:10.731Z - Sent transaction for sell 199288.80251040607 tokens from wallet rss2cwdWSUkGZQ5JABjbaHqdDyPhs7TLMr ===>  tesSUCCESS
+2025-02-24T20:03:10.774Z - Sell taxFee: 1, referFee: 0
+2025-02-24T20:03:11.160Z - Pending transaction for sending 1 from rss2cwdWSUkGZQ5JABjbaHqdDyPhs7TLMr to rhF9Y1jj6t9898h4HobYiMUEdyYZwoKwHS
+2025-02-24T20:03:19.465Z - Sent transaction for sending 1 from rss2cwdWSUkGZQ5JABjbaHqdDyPhs7TLMr to rhF9Y1jj6t9898h4HobYiMUEdyYZwoKwHS ===>  tesSUCCESS
+2025-02-24T21:47:07.677Z - Connected to MongoDB "xrpl-swap-bot"...
+2025-02-24T21:47:07.686Z - [BOT STARTING] Getting Reserved Value...
+2025-02-24T21:47:08.629Z - [BOT STARTING] Connected to XRP Ledger.
+2025-02-24T21:47:08.802Z - [BOT LAUNCHED] Got Reserved Value Successfully! 1 0.2
+2025-02-24T21:47:08.833Z - 4 users, 0 logged in
+2025-02-24T21:47:37.391Z - Connected to MongoDB "xrpl-swap-bot"...
+2025-02-24T21:47:37.393Z - [BOT STARTING] Getting Reserved Value...
+2025-02-24T21:47:38.270Z - [BOT STARTING] Connected to XRP Ledger.
+2025-02-24T21:47:38.436Z - [BOT LAUNCHED] Got Reserved Value Successfully! 1 0.2
+2025-02-24T21:47:38.451Z - 4 users, 0 logged in
+2025-02-24T21:48:08.717Z - Connected to MongoDB "xrpl-swap-bot"...
+2025-02-24T21:48:08.718Z - [BOT STARTING] Getting Reserved Value...
+2025-02-24T21:48:09.710Z - [BOT STARTING] Connected to XRP Ledger.
+2025-02-24T21:48:09.884Z - [BOT LAUNCHED] Got Reserved Value Successfully! 1 0.2
+2025-02-24T21:48:09.898Z - 4 users, 0 logged in

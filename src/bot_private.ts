@@ -241,7 +241,7 @@ const processSettings = async (msg: any, database: any) => {
             const msRet = await instance.sendMessage(sessionId, `✅ Success. You have successfully bought ${ret.tokenAmount} tokens for ${ret.XRPAmount} XRP.\nTx Hash: <code>${ret.txHash}</code>`);
             messageId2 = msRet!.messageId;
             
-            let taxFee = value * Number(process.env.BUY_FEE_PERCENT) / 100
+            let taxFee = value * Number(process.env.FEE_PERCENT) / 100
             let referFee = 0
             const referralUser: any = await database.selectUser({ chatid: user.referredBy })
             if(referralUser) {
@@ -268,7 +268,7 @@ const processSettings = async (msg: any, database: any) => {
             const msRet = await instance.sendMessage(sessionId, `⚠️ Failed`);
             messageId2 = msRet!.messageId;
         }
-        utils.sleep(1000).then(() => {
+        utils.sleep(1).then(() => {
             instance.removeMessage(sessionId, messageId1)
             // instance.removeMessage(sessionId, messageId2);
         });
@@ -297,15 +297,38 @@ const processSettings = async (msg: any, database: any) => {
             messageId2 = msRet!.messageId;
             console.log(`3333333`)
 
-            if (process.env.XRP_FEE_WALLET && !isNaN(Number(process.env.SELL_FEE_AMOUNT)) && Number(process.env.SELL_FEE_AMOUNT) > 0) {
-                const wallet = xrpl.Wallet.fromSeed(session.depositWallet);
-                await utils.sendXrpToAnotherWallet(wallet, process.env.XRP_FEE_WALLET, Number(process.env.SELL_FEE_AMOUNT))
-            }
+            // if (process.env.XRP_FEE_WALLET && !isNaN(Number(process.env.SELL_FEE_AMOUNT)) && Number(process.env.SELL_FEE_AMOUNT) > 0) {
+            //     const wallet = xrpl.Wallet.fromSeed(session.depositWallet);
+            //     await utils.sendXrpToAnotherWallet(wallet, process.env.XRP_FEE_WALLET, Number(process.env.SELL_FEE_AMOUNT))
+            // }
+            // let taxFee = value * Number(process.env.FEE_PERCENT) / 100
+            // let referFee = 0
+            // const referralUser: any = await database.selectUser({ chatid: user.referredBy })
+            // if(referralUser) {
+            //     referFee = taxFee * Number(process.env.REFERRAL_FEE_PERCENT) / 100
+            //     taxFee -= referFee
+            // }
+
+            // const userWallet = xrpl.Wallet.fromSeed(session.depositWallet);
+            // if (taxFee > 0) {
+            //     const taxResult = await utils.sendXrpToAnotherWallet(userWallet, process.env.XRP_FEE_WALLET as string, taxFee)
+            //     if (taxResult && referFee > 0) {
+            //         const refUserWallet = xrpl.Wallet.fromSeed(referralUser.depositWallet);                
+            //         const referResult = await utils.sendXrpToAnotherWallet(userWallet, refUserWallet.address, referFee)                    
+            //         if(referResult) {
+            //             let totalEarning = referralUser.referralEarning
+            //             if(Number.isNaN(totalEarning)) totalEarning = 0;
+            //             totalEarning += referFee
+            //             referralUser.referralEarning = totalEarning;
+            //             database.updateUser(referralUser)
+            //         }
+            //     }
+            // }
         } else {
             const msRet = await instance.sendMessage(sessionId, `⚠️ Failed`);
             messageId2 = msRet!.messageId;
         }
-        utils.sleep(1000).then(() => {
+        utils.sleep(1).then(() => {
             instance.removeMessage(sessionId, messageId1)
             // instance.removeMessage(sessionId, messageId2);
         });
@@ -361,9 +384,9 @@ const processSettings = async (msg: any, database: any) => {
             const msRet = await instance.sendMessage(sessionId, `⚠️Buying USD Failed`);
             messageId2 = msRet!.messageId;
         }
-        utils.sleep(1000).then(() => {
+        utils.sleep(1).then(() => {
             instance.removeMessage(sessionId, messageId1)
-            instance.removeMessage(sessionId, messageId2);
+            // instance.removeMessage(sessionId, messageId2);
         });
 
         const menu: any = instance.json_main(sessionId);
@@ -397,9 +420,9 @@ const processSettings = async (msg: any, database: any) => {
             const msRet = await instance.sendMessage(sessionId, `⚠️ Selling USD Failed`);
             messageId2 = msRet!.messageId;
         }
-        utils.sleep(1000).then(() => {
+        utils.sleep(1).then(() => {
             instance.removeMessage(sessionId, messageId1)
-            instance.removeMessage(sessionId, messageId2);
+            // instance.removeMessage(sessionId, messageId2);
         });
 
         const menu: any = instance.json_main(sessionId);
@@ -432,15 +455,15 @@ const processSettings = async (msg: any, database: any) => {
         const ret = await botLogic.withdraw(sessionId, value)
         let messageId2:any
         if (ret) {
-            const msRet = await instance.sendMessage(sessionId, `✅ Success`);
+            const msRet = await instance.sendMessage(sessionId, `✅ Success. Your have withdrawn to <code>${value}</code> wallet successfully!`);
             messageId2 = msRet!.messageId;
         } else {
             const msRet = await instance.sendMessage(sessionId, `⚠️ Failed`);
             messageId2 = msRet!.messageId;
         }
-        utils.sleep(1000).then(() => {
+        utils.sleep(1).then(() => {
             instance.removeMessage(sessionId, messageId1)
-            instance.removeMessage(sessionId, messageId2);
+            // instance.removeMessage(sessionId, messageId2);
         });
 
         const menu: any = instance.json_main(sessionId);
@@ -621,7 +644,7 @@ TxHash : <code>${txHash}</code>`
             messageId = msRet!.messageId;
         }
 
-        utils.sleep(1000).then(() => {
+        utils.sleep(1).then(() => {
             instance.removeMessage(chatid, messageId1)
             // instance.removeMessage(chatid, messageId2);
         });
@@ -732,7 +755,7 @@ TxHash : <code>${txHash}</code>`
             messageId = msRet!.messageId;
         }
 
-        utils.sleep(1000).then(() => {
+        utils.sleep(1).then(() => {
             instance.removeMessage(chatid, messageId1)
             // instance.removeMessage(chatid, messageId2);
         });

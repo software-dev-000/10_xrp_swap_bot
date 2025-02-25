@@ -1025,10 +1025,10 @@ Add orders based on specified prices or percentage changes.`
                     const msRet = await sendMessage(chatid, `⚠️ Order Cancellation of following orders are Failed\n${title}`);
                     messageId2 = msRet!.messageId;
                 }
-                utils.sleep(1000).then(() => {
+                utils.sleep(1).then(() => {
                     removeMessage(chatid, messageId1)
-                    if (failedRes.length === 0)
-                        removeMessage(chatid, messageId2);
+                    // if (failedRes.length === 0)
+                    //     removeMessage(chatid, messageId2);
                 });
     
                 const updatedOrders: any = await database.selectLimitOrders({ userid: session.user._id,  tokenAddr: session.tokenInfo.address})
@@ -1111,9 +1111,9 @@ For example:
                 const msRet = await sendMessage(chatid, `⚠️ Failed`);
                 messageId2 = msRet!.messageId;
             }
-            utils.sleep(1000).then(() => {
+            utils.sleep(1).then(() => {
                 removeMessage(chatid, messageId1)
-                removeMessage(chatid, messageId2);
+                //removeMessage(chatid, messageId2);
             });
 
             const menu: any = json_main(sessionId);
@@ -1134,9 +1134,9 @@ For example:
                 const msRet = await sendMessage(chatid, `⚠️ Failed`);
                 messageId2 = msRet!.messageId;
             }
-            utils.sleep(1000).then(() => {
+            utils.sleep(1).then(() => {
                 removeMessage(chatid, messageId1)
-                removeMessage(chatid, messageId2);
+                //removeMessage(chatid, messageId2);
             });
 
             const menu: any = json_main(sessionId);
@@ -1193,36 +1193,37 @@ For example:
                 const msRet = await sendMessage(chatid, `✅ Success. You have successfully bought ${ret.tokenAmount} tokens for ${ret.XRPAmount} XRP.\nTx Hash: <code>${ret.txHash}</code>`);
                 messageId2 = msRet!.messageId;
 
-                let taxFee = buyAmount * Number(process.env.BUY_FEE_PERCENT) / 100
-                let referFee = 0
-                const referralUser: any = await database.selectUser({ chatid: user.referredBy })
-                if(referralUser) {
-                    referFee = taxFee * Number(process.env.REFERRAL_FEE_PERCENT) / 100
-                    taxFee -= referFee
-                }
+                // let taxFee = buyAmount * Number(process.env.FEE_PERCENT) / 100
+                // let referFee = 0
+                // const referralUser: any = await database.selectUser({ chatid: user.referredBy })
+                // if(referralUser) {
+                //     referFee = taxFee * Number(process.env.REFERRAL_FEE_PERCENT) / 100
+                //     taxFee -= referFee
+                // }
 
-                const userWallet = xrpl.Wallet.fromSeed(session.depositWallet);
-                if (taxFee > 0) {
-                    const taxResult = await utils.sendXrpToAnotherWallet(userWallet, process.env.XRP_FEE_WALLET as string, taxFee)
-                    if (taxResult && referFee > 0) {
-                        const refUserWallet = xrpl.Wallet.fromSeed(referralUser.depositWallet);                
-                        const referResult = await utils.sendXrpToAnotherWallet(userWallet, refUserWallet.address, referFee)                    
-                        if(referResult) {
-                            let totalEarning = referralUser.referralEarning
-                            if(Number.isNaN(totalEarning)) totalEarning = 0;
-                            totalEarning += referFee
-                            referralUser.referralEarning = totalEarning;
-                            database.updateUser(referralUser)
-                        }
-                    }
-                }
+                // const userWallet = xrpl.Wallet.fromSeed(session.depositWallet);
+                // if (taxFee > 0) {
+                //     console.log(`Buy taxFee: ${taxFee}, referFee: ${referFee}`)
+                //     const taxResult = await utils.sendXrpToAnotherWallet(userWallet, process.env.XRP_FEE_WALLET as string, taxFee)
+                //     if (taxResult && referFee > 0) {
+                //         const refUserWallet = xrpl.Wallet.fromSeed(referralUser.depositWallet);                
+                //         const referResult = await utils.sendXrpToAnotherWallet(userWallet, refUserWallet.address, referFee)                    
+                //         if(referResult) {
+                //             let totalEarning = referralUser.referralEarning
+                //             if(Number.isNaN(totalEarning)) totalEarning = 0;
+                //             totalEarning += referFee
+                //             referralUser.referralEarning = totalEarning;
+                //             database.updateUser(referralUser)
+                //         }
+                //     }
+                // }
             } else {
                 const msRet = await sendMessage(chatid, `⚠️ Failed`);
                 messageId2 = msRet!.messageId;
             }
-            utils.sleep(1000).then(() => {
+            utils.sleep(1).then(() => {
                 removeMessage(chatid, messageId1)
-                removeMessage(chatid, messageId2);
+                //removeMessage(chatid, messageId2);
             });
 
             const menu: any = json_main(sessionId);
@@ -1249,15 +1250,41 @@ For example:
             if (ret.status) {
                 const msRet = await sendMessage(chatid, `✅ Success. You have sold ${ret.tokenAmount} tokens.\nTx Hash: <code>${ret.txHash}</code>`);
                 messageId2 = msRet!.messageId;
-                if (process.env.XRP_FEE_WALLET && !isNaN(Number(process.env.SELL_FEE_AMOUNT)) && Number(process.env.SELL_FEE_AMOUNT) > 0) {
-                    const wallet = xrpl.Wallet.fromSeed(session.depositWallet);
-                    utils.sendXrpToAnotherWallet(wallet, process.env.XRP_FEE_WALLET, Number(process.env.SELL_FEE_AMOUNT))
-                }
+                // if (process.env.XRP_FEE_WALLET && !isNaN(Number(process.env.SELL_FEE_AMOUNT)) && Number(process.env.SELL_FEE_AMOUNT) > 0) {
+                //     const wallet = xrpl.Wallet.fromSeed(session.depositWallet);
+                //     utils.sendXrpToAnotherWallet(wallet, process.env.XRP_FEE_WALLET, Number(process.env.SELL_FEE_AMOUNT))
+                // }
+
+                // let taxFee = sellAmount * Number(process.env.FEE_PERCENT) / 100
+                // let referFee = 0
+                // const referralUser: any = await database.selectUser({ chatid: user.referredBy })
+                // if(referralUser) {
+                //     referFee = taxFee * Number(process.env.REFERRAL_FEE_PERCENT) / 100
+                //     taxFee -= referFee
+                // }
+
+                // const userWallet = xrpl.Wallet.fromSeed(session.depositWallet);
+                // if (taxFee > 0) {
+                //     console.log(`Sell taxFee: ${taxFee}, referFee: ${referFee}`)
+
+                //     const taxResult = await utils.sendXrpToAnotherWallet(userWallet, process.env.XRP_FEE_WALLET as string, taxFee)
+                //     if (taxResult && referFee > 0) {
+                //         const refUserWallet = xrpl.Wallet.fromSeed(referralUser.depositWallet);                
+                //         const referResult = await utils.sendXrpToAnotherWallet(userWallet, refUserWallet.address, referFee)                    
+                //         if(referResult) {
+                //             let totalEarning = referralUser.referralEarning
+                //             if(Number.isNaN(totalEarning)) totalEarning = 0;
+                //             totalEarning += referFee
+                //             referralUser.referralEarning = totalEarning;
+                //             database.updateUser(referralUser)
+                //         }
+                //     }
+                // }
             } else {
                 const msRet = await sendMessage(chatid, `⚠️ Failed`);
                 messageId2 = msRet!.messageId;
             }
-            utils.sleep(1000).then(() => {
+            utils.sleep(1).then(() => {
                 removeMessage(chatid, messageId1)
                 // removeMessage(chatid, messageId2);
             });
@@ -1334,7 +1361,7 @@ For example:
                             messageId2 = msRet!.messageId;
                             // bot.sendMessage(sessionId, 'Sorry, there was an error sending the file.');
                         });
-                    utils.sleep(1000).then(() => {
+                    utils.sleep(1).then(() => {
                         removeMessage(chatid, messageId1)
                         // removeMessage(chatid, messageId2);
                     });
