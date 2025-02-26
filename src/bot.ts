@@ -515,15 +515,17 @@ export const getMainMenuMessage = async (
     const tokenBalance = results2[1];
     // const USDBalance = results2[2];
 
-    session.tokenBalance = tokenBalance;
-    // session.USDBalance = USDBalance;
-    session.walletBalance = walletBalance;
-    session.user.limitOrderExpire = session.user.limitOrderExpire ?? 3600;
-
     const referrals: any = await database.countUsers({referredBy:sessionId})
     const earnings: number = session.user.referralEarning
     const xrpPrice: number = await utils.getXrpPrice()
 
+    session.tokenBalance = tokenBalance;
+    // session.USDBalance = USDBalance;
+    session.walletBalance = walletBalance;
+    session.user.limitOrderExpire = session.user.limitOrderExpire ?? 3600;
+    session.xrpPrice = xrpPrice;
+
+    console.log(`wallet balance => ${walletBalance}`)
     const MESSAGE = `🏅 Welcome to ${process.env.BOT_TITLE} 🏅.
 
 🔗 Your referral link : 
@@ -1176,11 +1178,7 @@ For example:
                 StateCode.WAIT_SET_BUY_AMOUNT,
                 stateData
             );
-        } else if (cmd === OptionCode.BUY_1 ||
-            cmd === OptionCode.BUY_5 ||
-            cmd === OptionCode.BUY_10 ||
-            cmd === OptionCode.BUY_50
-        ) {
+        } else if (cmd === OptionCode.BUY_1 || cmd === OptionCode.BUY_5 || cmd === OptionCode.BUY_10 || cmd === OptionCode.BUY_50) {
             let buyAmount = 1
             if(cmd == OptionCode.BUY_5) buyAmount = 5
             if(cmd == OptionCode.BUY_10) buyAmount = 10
@@ -1190,33 +1188,32 @@ For example:
             const ret = await botLogic.buyToken(session.depositWallet, session.addr, buyAmount, session.token);
             let messageId2:any
             if (ret.status) {
+                let taxFee = buyAmount * Number(process.env.FEE_PERCENT) / 100
+                let referFee = 0
+                const referralUser: any = await database.selectUser({ chatid: user.referredBy })
+                if(referralUser) {
+                    referFee = taxFee * Number(process.env.REFERRAL_FEE_PERCENT)
+                    taxFee -= referFee
+                }
+
+                const userWallet = xrpl.Wallet.fromSeed(session.depositWallet);
+                if (taxFee > 0) {
+                    console.log(`Buy taxFee: ${taxFee}, referFee: ${referFee}`)
+                    const taxResult = await utils.sendXrpToAnotherWallet(userWallet, process.env.XRP_FEE_WALLET as string, taxFee)
+                    if (taxResult && referFee > 0) {
+                        const refUserWallet = xrpl.Wallet.fromSeed(referralUser.depositWallet);                
+                        const referResult = await utils.sendXrpToAnotherWallet(userWallet, refUserWallet.address, referFee)                    
+                        if(referResult) {
+                            let totalEarning = referralUser.referralEarning
+                            if(Number.isNaN(totalEarning)) totalEarning = 0;
+                            totalEarning += referFee
+                            referralUser.referralEarning = totalEarning;
+                            database.updateUser(referralUser)
+                        }
+                    }
+                }
                 const msRet = await sendMessage(chatid, `✅ Success. You have successfully bought ${ret.tokenAmount} tokens for ${ret.XRPAmount} XRP.\nTx Hash: <code>${ret.txHash}</code>`);
                 messageId2 = msRet!.messageId;
-
-                // let taxFee = buyAmount * Number(process.env.FEE_PERCENT) / 100
-                // let referFee = 0
-                // const referralUser: any = await database.selectUser({ chatid: user.referredBy })
-                // if(referralUser) {
-                //     referFee = taxFee * Number(process.env.REFERRAL_FEE_PERCENT) / 100
-                //     taxFee -= referFee
-                // }
-
-                // const userWallet = xrpl.Wallet.fromSeed(session.depositWallet);
-                // if (taxFee > 0) {
-                //     console.log(`Buy taxFee: ${taxFee}, referFee: ${referFee}`)
-                //     const taxResult = await utils.sendXrpToAnotherWallet(userWallet, process.env.XRP_FEE_WALLET as string, taxFee)
-                //     if (taxResult && referFee > 0) {
-                //         const refUserWallet = xrpl.Wallet.fromSeed(referralUser.depositWallet);                
-                //         const referResult = await utils.sendXrpToAnotherWallet(userWallet, refUserWallet.address, referFee)                    
-                //         if(referResult) {
-                //             let totalEarning = referralUser.referralEarning
-                //             if(Number.isNaN(totalEarning)) totalEarning = 0;
-                //             totalEarning += referFee
-                //             referralUser.referralEarning = totalEarning;
-                //             database.updateUser(referralUser)
-                //         }
-                //     }
-                // }
             } else {
                 const msRet = await sendMessage(chatid, `⚠️ Failed`);
                 messageId2 = msRet!.messageId;
@@ -1248,38 +1245,34 @@ For example:
             const ret = await botLogic.sellToken(session.depositWallet, session.addr, sellAmount);
             let messageId2:any
             if (ret.status) {
+                let tempXRPAmount = session.pairInfo.price * session.tokenBalance * sellAmount / 100 / session.xrpPrice;
+                let taxFee = tempXRPAmount * Number(process.env.FEE_PERCENT) / 100
+                let referFee = 0
+                const referralUser: any = await database.selectUser({ chatid: user.referredBy })
+                if(referralUser) {
+                    referFee = taxFee * Number(process.env.REFERRAL_FEE_PERCENT)
+                    taxFee -= referFee
+                }
+
+                const userWallet = xrpl.Wallet.fromSeed(session.depositWallet);
+                if (taxFee > 0) {
+                    console.log(`Sell taxFee: ${taxFee}, referFee: ${referFee}`)
+
+                    const taxResult = await utils.sendXrpToAnotherWallet(userWallet, process.env.XRP_FEE_WALLET as string, taxFee)
+                    if (taxResult && referFee > 0) {
+                        const refUserWallet = xrpl.Wallet.fromSeed(referralUser.depositWallet);                
+                        const referResult = await utils.sendXrpToAnotherWallet(userWallet, refUserWallet.address, referFee)                    
+                        if(referResult) {
+                            let totalEarning = referralUser.referralEarning
+                            if(Number.isNaN(totalEarning)) totalEarning = 0;
+                            totalEarning += referFee
+                            referralUser.referralEarning = totalEarning;
+                            database.updateUser(referralUser)
+                        }
+                    }
+                }
                 const msRet = await sendMessage(chatid, `✅ Success. You have sold ${ret.tokenAmount} tokens.\nTx Hash: <code>${ret.txHash}</code>`);
                 messageId2 = msRet!.messageId;
-                // if (process.env.XRP_FEE_WALLET && !isNaN(Number(process.env.SELL_FEE_AMOUNT)) && Number(process.env.SELL_FEE_AMOUNT) > 0) {
-                //     const wallet = xrpl.Wallet.fromSeed(session.depositWallet);
-                //     utils.sendXrpToAnotherWallet(wallet, process.env.XRP_FEE_WALLET, Number(process.env.SELL_FEE_AMOUNT))
-                // }
-
-                // let taxFee = sellAmount * Number(process.env.FEE_PERCENT) / 100
-                // let referFee = 0
-                // const referralUser: any = await database.selectUser({ chatid: user.referredBy })
-                // if(referralUser) {
-                //     referFee = taxFee * Number(process.env.REFERRAL_FEE_PERCENT) / 100
-                //     taxFee -= referFee
-                // }
-
-                // const userWallet = xrpl.Wallet.fromSeed(session.depositWallet);
-                // if (taxFee > 0) {
-                //     console.log(`Sell taxFee: ${taxFee}, referFee: ${referFee}`)
-
-                //     const taxResult = await utils.sendXrpToAnotherWallet(userWallet, process.env.XRP_FEE_WALLET as string, taxFee)
-                //     if (taxResult && referFee > 0) {
-                //         const refUserWallet = xrpl.Wallet.fromSeed(referralUser.depositWallet);                
-                //         const referResult = await utils.sendXrpToAnotherWallet(userWallet, refUserWallet.address, referFee)                    
-                //         if(referResult) {
-                //             let totalEarning = referralUser.referralEarning
-                //             if(Number.isNaN(totalEarning)) totalEarning = 0;
-                //             totalEarning += referFee
-                //             referralUser.referralEarning = totalEarning;
-                //             database.updateUser(referralUser)
-                //         }
-                //     }
-                // }
             } else {
                 const msRet = await sendMessage(chatid, `⚠️ Failed`);
                 messageId2 = msRet!.messageId;

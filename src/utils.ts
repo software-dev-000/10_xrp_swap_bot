@@ -490,7 +490,7 @@ export const buyToken = async (
                 "value": tokenAmount > 10 ** 6 ? tokenAmount.toFixed(0) : tokenAmount.toFixed(6)
             },
             "Destination": wallet.classicAddress,
-            "SendMax": xrpl.xrpToDrops(sendMaxXRP.toFixed(6)),
+            "SendMax": xrpl.xrpToDrops((sendMaxXRP * 1.05 ).toFixed(6)),
             "Flags": 131072
         }, { autofill: true, wallet: wallet })
         console.log(`Sent transaction for buying token with ${sendMaxXRP} XRP from wallet ${wallet.address} ===> `, tx.result.meta.TransactionResult)

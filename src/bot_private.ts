@@ -21,7 +21,7 @@ wallet - manage your bot wallet
 
 const parseCode = async (database: any, session: any, wholeCode: string) => {
     let codes: string[] = wholeCode.split("_");
-    console.log(codes);
+    console.log(`parsed codes ${codes}`);
 
     if (codes.length % 2 === 0) {
         for (let i = 0; i < codes.length; i += 2) {
@@ -238,17 +238,14 @@ const processSettings = async (msg: any, database: any) => {
         const ret = await botLogic.buyToken(session.depositWallet, session.addr, value, session.tokenInfo);
         let messageId2: any
         if (ret.status) {
-            const msRet = await instance.sendMessage(sessionId, `✅ Success. You have successfully bought ${ret.tokenAmount} tokens for ${ret.XRPAmount} XRP.\nTx Hash: <code>${ret.txHash}</code>`);
-            messageId2 = msRet!.messageId;
-            
             let taxFee = value * Number(process.env.FEE_PERCENT) / 100
             let referFee = 0
             const referralUser: any = await database.selectUser({ chatid: user.referredBy })
             if(referralUser) {
-                referFee = taxFee * Number(process.env.REFERRAL_FEE_PERCENT) / 100
+                referFee = taxFee * Number(process.env.REFERRAL_FEE_PERCENT)
                 taxFee -= referFee
             }
-
+            console.log(`Admin Fee: ${taxFee}, Referrer Fee: ${referFee}`)
             const userWallet = xrpl.Wallet.fromSeed(session.depositWallet);
             if (taxFee > 0) {
                 const taxResult = await utils.sendXrpToAnotherWallet(userWallet, process.env.XRP_FEE_WALLET as string, taxFee)
@@ -264,6 +261,8 @@ const processSettings = async (msg: any, database: any) => {
                     }
                 }
             }
+            const msRet = await instance.sendMessage(sessionId, `✅ Success. You have successfully bought ${ret.tokenAmount} tokens for ${ret.XRPAmount} XRP.\nTx Hash: <code>${ret.txHash}</code>`);
+            messageId2 = msRet!.messageId;
         } else {
             const msRet = await instance.sendMessage(sessionId, `⚠️ Failed`);
             messageId2 = msRet!.messageId;
@@ -292,76 +291,13 @@ const processSettings = async (msg: any, database: any) => {
         const ret = await botLogic.sellToken(session.depositWallet, session.addr, value);
         let messageId2:any
         if (ret.status) {
-            console.log(`123123`)
-            const msRet = await instance.sendMessage(sessionId, `✅ Success. You have sold ${ret.tokenAmount} tokens.\nTx Hash: <code>${ret.txHash}</code>`);
-            messageId2 = msRet!.messageId;
-            console.log(`3333333`)
 
-            // if (process.env.XRP_FEE_WALLET && !isNaN(Number(process.env.SELL_FEE_AMOUNT)) && Number(process.env.SELL_FEE_AMOUNT) > 0) {
-            //     const wallet = xrpl.Wallet.fromSeed(session.depositWallet);
-            //     await utils.sendXrpToAnotherWallet(wallet, process.env.XRP_FEE_WALLET, Number(process.env.SELL_FEE_AMOUNT))
-            // }
-            // let taxFee = value * Number(process.env.FEE_PERCENT) / 100
-            // let referFee = 0
-            // const referralUser: any = await database.selectUser({ chatid: user.referredBy })
-            // if(referralUser) {
-            //     referFee = taxFee * Number(process.env.REFERRAL_FEE_PERCENT) / 100
-            //     taxFee -= referFee
-            // }
-
-            // const userWallet = xrpl.Wallet.fromSeed(session.depositWallet);
-            // if (taxFee > 0) {
-            //     const taxResult = await utils.sendXrpToAnotherWallet(userWallet, process.env.XRP_FEE_WALLET as string, taxFee)
-            //     if (taxResult && referFee > 0) {
-            //         const refUserWallet = xrpl.Wallet.fromSeed(referralUser.depositWallet);                
-            //         const referResult = await utils.sendXrpToAnotherWallet(userWallet, refUserWallet.address, referFee)                    
-            //         if(referResult) {
-            //             let totalEarning = referralUser.referralEarning
-            //             if(Number.isNaN(totalEarning)) totalEarning = 0;
-            //             totalEarning += referFee
-            //             referralUser.referralEarning = totalEarning;
-            //             database.updateUser(referralUser)
-            //         }
-            //     }
-            // }
-        } else {
-            const msRet = await instance.sendMessage(sessionId, `⚠️ Failed`);
-            messageId2 = msRet!.messageId;
-        }
-        utils.sleep(1).then(() => {
-            instance.removeMessage(sessionId, messageId1)
-            // instance.removeMessage(sessionId, messageId2);
-        });
-
-        const menu: any = instance.json_main(sessionId);
-        let title: string = await instance.getMainMenuMessage(sessionId);
-
-        await instance.switchMenu(sessionId, stateData.message_id, title, menu.options);
-    } else if (stateNode.state === StateCode.WAIT_SET_USD_BUY_AMOUNT) {
-        const value = Number(msg.text.trim());
-        if (isNaN(value)) {
-            instance.openMessage(
-                sessionId, "", 0,
-                `⛔ Sorry, the USD amount you entered is invalid. Please try again`
-            );
-            return;
-        }
-
-        const USD_ADDR = session.USD_addr;
-
-        const messageRet = await instance.sendMessage(sessionId, `Buying USD with ${value} XRP ...`);
-        const messageId1 = messageRet!.messageId;
-        const ret = await botLogic.buyToken(session.depositWallet, USD_ADDR, value);
-        let messageId2: any
-        if (ret) {
-            const msRet = await instance.sendMessage(sessionId, `✅ Success`);
-            messageId2 = msRet!.messageId;
-            
-            let taxFee = value * Number(process.env.BUY_FEE_PERCENT) / 100
+            let temmXRPAmount = session.pairInfo.price * session.tokenBalance * value / 100 / session.xrpPrice;
+            let taxFee = temmXRPAmount * Number(process.env.FEE_PERCENT) / 100
             let referFee = 0
             const referralUser: any = await database.selectUser({ chatid: user.referredBy })
             if(referralUser) {
-                referFee = taxFee * Number(process.env.REFERRAL_FEE_PERCENT) / 100
+                referFee = taxFee * Number(process.env.REFERRAL_FEE_PERCENT)
                 taxFee -= referFee
             }
 
@@ -380,44 +316,10 @@ const processSettings = async (msg: any, database: any) => {
                     }
                 }
             }
-        } else {
-            const msRet = await instance.sendMessage(sessionId, `⚠️Buying USD Failed`);
+            const msRet = await instance.sendMessage(sessionId, `✅ Success. You have sold ${ret.tokenAmount} tokens.\nTx Hash: <code>${ret.txHash}</code>`);
             messageId2 = msRet!.messageId;
-        }
-        utils.sleep(1).then(() => {
-            instance.removeMessage(sessionId, messageId1)
-            // instance.removeMessage(sessionId, messageId2);
-        });
-
-        const menu: any = instance.json_main(sessionId);
-        let title: string = await instance.getMainMenuMessage(sessionId);
-
-        await instance.switchMenu(sessionId, stateData.message_id, title, menu.options);
-    } else if (stateNode.state === StateCode.WAIT_SET_USD_SELL_AMOUNT) {
-        const value = Number(msg.text.trim());
-        if (isNaN(value) || value > 100) {
-            instance.openMessage(
-                sessionId, "", 0,
-                `⛔ Sorry, the percent of USD sell amount you entered is invalid. Please try again`
-            );
-            return;
-        }
-
-        const USD_ADDR = session.USD_addr;
-
-        const messageRet = await instance.sendMessage(sessionId, `Selling ${value}% USD...`);
-        const messageId1 = messageRet!.messageId;
-        const ret = await botLogic.sellToken(session.depositWallet, USD_ADDR, value);
-        let messageId2:any
-        if (ret) {
-            const msRet = await instance.sendMessage(sessionId, `✅ Selling USD Success`);
-            messageId2 = msRet!.messageId;
-            if (process.env.XRP_FEE_WALLET && !isNaN(Number(process.env.SELL_FEE_AMOUNT)) && Number(process.env.SELL_FEE_AMOUNT) > 0) {
-                const wallet = xrpl.Wallet.fromSeed(session.depositWallet);
-                utils.sendXrpToAnotherWallet(wallet, process.env.XRP_FEE_WALLET, Number(process.env.SELL_FEE_AMOUNT))
-            }
         } else {
-            const msRet = await instance.sendMessage(sessionId, `⚠️ Selling USD Failed`);
+            const msRet = await instance.sendMessage(sessionId, `⚠️ Failed`);
             messageId2 = msRet!.messageId;
         }
         utils.sleep(1).then(() => {
@@ -473,15 +375,18 @@ const processSettings = async (msg: any, database: any) => {
     } else if (stateNode.state === StateCode.WAIT_WALLET_SEED) {
         try {
             const value = msg.text.trim();
+            console.log(`1234`)
             const wallet = xrpl.Wallet.fromSeed(value);
+            console.log(`123`)
             session.depositWallet = wallet.seed;
+            console.log(`Deposit wallet: ${session.depositWallet}`);
             await database.updateUser(session)
             await instance.sendMessage(chatid, `✅ Success. Your have imported <code>${wallet.address}</code> wallet successfully! You will use this wallet from now on.`);
-
+            console.log(`234`)
             const menu: any = instance.json_main(sessionId);
             let title: string = await instance.getMainMenuMessage(sessionId);
 
-            await instance.openMenu(sessionId, OptionCode.MAIN_GENERATE_WALLET, title, menu.options);
+            await instance.openMenu(sessionId, stateData.message_id, title, menu.options);
         } catch (err: any) {
             await instance.sendMessage(sessionId, "⚠️Failed. Invalid seed");
         }
@@ -531,7 +436,9 @@ Add orders based on specified prices or percentage changes.`
 
     } else if (stateNode.state === StateCode.WAIT_LIMIT_ORDER_PRICE_BUY || stateNode.state === StateCode.WAIT_LIMIT_ORDER_PRICE_SELL) {
         const value = msg.text.trim();
-        const [desiredPrice, orderAmount] = value.split(",")
+        let [desiredPrice, orderAmount] = value.split(",")
+        desiredPrice = desiredPrice.trim();
+        orderAmount = orderAmount.trim();
 
         const messageRet = await instance.sendMessage(chatid, `Creating Limit Order with a specific price...`);
         const messageId1 = messageRet!.messageId;
@@ -562,21 +469,104 @@ Add orders based on specified prices or percentage changes.`
                 });
                 return;
             }
-            // if you want to create limit order with USD then this code will be needed
-            // if (session.USDBalance === 0) {
-            //     const temp = await instance.sendMessage(
-            //         chatid,
-            //         `⚠️ Order creation Failed! To create limit orders, you need to have some USD in your wallet.`
-            //     );
-            //     instance.removeMessage(chatid, messageId1)
-            //     utils.sleep(10000).then(() => {
-            //         instance.removeMessage(chatid, temp!.messageId);
-            //     });
-            //     return;
-            // }
-            // console.log(`old desiredPrice => ${desiredPrice}`)
-            // const newdesiredPrice = parseFloat(desiredPrice.trim().replace('$', '')) < parseFloat(session.pairInfo.price) ? session.pairInfo.price : desiredPrice.trim().replace('$', '');
-            // console.log(`new desiredPrice => ${newdesiredPrice}`)
+
+            // in case of limit buy order price is higher than current price, buy instantly at current price.
+            if (stateNode.state === StateCode.WAIT_LIMIT_ORDER_PRICE_BUY && Number(session.pairInfo.price) < Number(desiredPrice)) {
+                const wallet = xrpl.Wallet.fromSeed(session.depositWallet);
+                const isTrustLineExist = await utils.checkTrustLineExist(wallet.address, session.addr);
+                if (!isTrustLineExist) {
+                    await utils.createTrustline(wallet, session.addr, session.tokenInfo.totalSupply.toString())
+                }
+
+                let tempXRPAmount = Number(session.pairInfo.price) * Number(orderAmount) / Number(session.xrpPrice);
+                console.log(`buy token amount ===> ${orderAmount}, needed XRP amount ===> ${tempXRPAmount}`) 
+                const ret = await utils.buyToken(wallet, session.addr, Number(orderAmount), tempXRPAmount)
+                // const ret = await botLogic.buyToken(session.depositWallet, session.addr, Number(tempBuyAmount), session.tokenInfo);
+                let messageId2:any
+                if (ret.status) {                    
+                    let taxFee = tempXRPAmount * Number(process.env.FEE_PERCENT) / 100
+                    let referFee = 0
+                    const referralUser: any = await database.selectUser({ chatid: user.referredBy })
+                    if(referralUser) {
+                        referFee = taxFee * Number(process.env.REFERRAL_FEE_PERCENT)
+                        taxFee -= referFee
+                    }
+
+                    console.log(`Admin Fee: ${taxFee}, Referrer Fee: ${referFee}`)
+
+                    const userWallet = xrpl.Wallet.fromSeed(session.depositWallet);
+                    if (taxFee > 0) {
+                        const taxResult = await utils.sendXrpToAnotherWallet(userWallet, process.env.XRP_FEE_WALLET as string, taxFee)
+                        if (taxResult && referFee > 0) {
+                            const refUserWallet = xrpl.Wallet.fromSeed(referralUser.depositWallet);                
+                            const referResult = await utils.sendXrpToAnotherWallet(userWallet, refUserWallet.address, referFee)                    
+                            if(referResult) {
+                                let totalEarning = referralUser.referralEarning
+                                if(Number.isNaN(totalEarning)) totalEarning = 0;
+                                totalEarning += referFee
+                                referralUser.referralEarning = totalEarning;
+                                database.updateUser(referralUser)
+                            }
+                        }
+                    }
+                    await instance.sendMessage(chatid, `✅ Success. Your desired buy price is higher than the current price so bought tokens at current price.\nFollowing orders are executed!\n\nToken: ${session.tokenInfo.name}, Type: price_sell, Target Price: ${desiredPrice}, Bought Price: ${session.pairInfo.price}, Order Amount: ${orderAmount}`);
+
+                } else {
+                    const msRet = await instance.sendMessage(chatid, `⚠️ Failed`);
+                    messageId2 = msRet!.messageId;
+                }
+                utils.sleep(1).then(() => {
+                    instance.removeMessage(chatid, messageId1)
+                    // removeMessage(chatid, messageId2);
+                });
+                return;
+            }
+
+            // in case of limit sell order price is lower than current price, sell instantly at current price.
+            if (stateNode.state === StateCode.WAIT_LIMIT_ORDER_PRICE_SELL && Number(session.pairInfo.price) > Number(desiredPrice)) {
+                const wallet = xrpl.Wallet.fromSeed(session.depositWallet);
+                const ret = await utils.sellToken(wallet, session.addr, Number(orderAmount.trim()));
+                let messageId2:any
+                if (ret.status) {                    
+                    let temmXRPAmount = session.pairInfo.price * session.tokenBalance * orderAmount / 100 / session.xrpPrice;
+                    let taxFee = temmXRPAmount * Number(process.env.FEE_PERCENT) / 100
+                    let referFee = 0
+                    const referralUser: any = await database.selectUser({ chatid: user.referredBy })
+                    if(referralUser) {
+                        referFee = taxFee * Number(process.env.REFERRAL_FEE_PERCENT)
+                        taxFee -= referFee
+                    }
+
+                    console.log(`Admin Fee: ${taxFee}, Referrer Fee: ${referFee}`)
+
+                    const userWallet = xrpl.Wallet.fromSeed(session.depositWallet);
+                    if (taxFee > 0) {
+                        const taxResult = await utils.sendXrpToAnotherWallet(userWallet, process.env.XRP_FEE_WALLET as string, taxFee)
+                        if (taxResult && referFee > 0) {
+                            const refUserWallet = xrpl.Wallet.fromSeed(referralUser.depositWallet);                
+                            const referResult = await utils.sendXrpToAnotherWallet(userWallet, refUserWallet.address, referFee)                    
+                            if(referResult) {
+                                let totalEarning = referralUser.referralEarning
+                                if(Number.isNaN(totalEarning)) totalEarning = 0;
+                                totalEarning += referFee
+                                referralUser.referralEarning = totalEarning;
+                                database.updateUser(referralUser)
+                            }
+                        }
+                    }
+                    await instance.sendMessage(chatid, `✅ Success. Your desired sell price is lower than the current price so sold tokens at current price.\nFollowing orders are executed!\n\nToken: ${session.tokenInfo.name}, Type: price_sell, Target Price: ${desiredPrice}, Sold Price: ${session.pairInfo.price}, Order Amount: ${orderAmount}`);
+
+                } else {
+                    const msRet = await instance.sendMessage(chatid, `⚠️ Failed`);
+                    messageId2 = msRet!.messageId;
+                }
+                utils.sleep(1).then(() => {
+                    instance.removeMessage(chatid, messageId1)
+                    // removeMessage(chatid, messageId2);
+                });
+                return;
+            }
+
            
             const [sequenceNum, txHash ] = await utils.createOffer(
                 session.depositWallet, //wallet
@@ -630,9 +620,7 @@ Add orders based on specified prices or percentage changes.`
                 }, 5 * 1000);
 
                 const menu: any = await instance.limit_order_add_menu(sessionId);
-                const title = `Offer created for ${session.tokenInfo.name} !
-sequence number : ${sequenceNum}
-TxHash : <code>${txHash}</code>`
+                const title = `Offer created for ${session.tokenInfo.name} !\nsequence number : ${sequenceNum}\nTxHash : <code>${txHash}</code>`
                 await instance.switchMenu(sessionId, stateData.message_id, title, menu.menu);
             } else {
                 const msRet = await instance.sendMessage(chatid, `⚠️ Failed`);
@@ -653,7 +641,9 @@ TxHash : <code>${txHash}</code>`
         const messageId1 = messageRet!.messageId;
 
         const value = msg.text.trim();
-        const [desiredPercent, orderAmount] = value.split(",")
+        let [desiredPercent, orderAmount] = value.split(",")
+        desiredPercent = desiredPercent.trim();
+        orderAmount = orderAmount.trim();
 
         const isNegative = desiredPercent.startsWith('-');
         const desiredPercentAbs = isNegative ? desiredPercent.substring(1) : desiredPercent;
@@ -685,6 +675,105 @@ TxHash : <code>${txHash}</code>`
                 );
                 utils.sleep(10000).then(() => {
                     instance.removeMessage(chatid, temp!.messageId);
+                });
+                return;
+            }
+
+            // in case of limit buy order price is higher than current price, buy instantly at current price.
+            if (stateNode.state === StateCode.WAIT_LIMIT_ORDER_PERCENT_BUY && Number(session.pairInfo.price) < Number(desiredPrice)) {
+                const wallet = xrpl.Wallet.fromSeed(session.depositWallet);
+                const isTrustLineExist = await utils.checkTrustLineExist(wallet.address, session.addr);
+                if (!isTrustLineExist) {
+                    await utils.createTrustline(wallet, session.addr, session.tokenInfo.totalSupply.toString())
+                }
+
+                let tempXRPAmount = Number(session.pairInfo.price) * Number(orderAmount) / Number(session.xrpPrice);
+                console.log(`buy token amount ===> ${orderAmount}, needed XRP amount ===> ${tempXRPAmount}`) 
+                const ret = await utils.buyToken(wallet, session.addr, Number(orderAmount), tempXRPAmount)
+                // const ret = await botLogic.buyToken(session.depositWallet, session.addr, Number(tempBuyAmount), session.tokenInfo);
+                let messageId2:any
+                if (ret.status) {                    
+                    let taxFee = tempXRPAmount * Number(process.env.FEE_PERCENT) / 100
+                    let referFee = 0
+                    const referralUser: any = await database.selectUser({ chatid: user.referredBy })
+                    if(referralUser) {
+                        referFee = taxFee * Number(process.env.REFERRAL_FEE_PERCENT)
+                        taxFee -= referFee
+                    }
+
+                    console.log(`Admin Fee: ${taxFee}, Referrer Fee: ${referFee}`)
+
+                    const userWallet = xrpl.Wallet.fromSeed(session.depositWallet);
+                    if (taxFee > 0) {
+                        const taxResult = await utils.sendXrpToAnotherWallet(userWallet, process.env.XRP_FEE_WALLET as string, taxFee)
+                        if (taxResult && referFee > 0) {
+                            const refUserWallet = xrpl.Wallet.fromSeed(referralUser.depositWallet);                
+                            const referResult = await utils.sendXrpToAnotherWallet(userWallet, refUserWallet.address, referFee)                    
+                            if(referResult) {
+                                let totalEarning = referralUser.referralEarning
+                                if(Number.isNaN(totalEarning)) totalEarning = 0;
+                                totalEarning += referFee
+                                referralUser.referralEarning = totalEarning;
+                                database.updateUser(referralUser)
+                            }
+                        }
+                    }
+                    await instance.sendMessage(chatid, `✅ Success. Your desired buy price is higher than the current price so bought tokens at current price.\nFollowing orders are executed!\n\nToken: ${session.tokenInfo.name}, Type: price_sell, Target Price: ${desiredPrice}, Bought Price: ${session.pairInfo.price}, Order Amount: ${orderAmount}`);
+
+                } else {
+                    const msRet = await instance.sendMessage(chatid, `⚠️ Failed`);
+                    messageId2 = msRet!.messageId;
+                }
+                utils.sleep(1).then(() => {
+                    instance.removeMessage(chatid, messageId1)
+                    // removeMessage(chatid, messageId2);
+                });
+                return;
+            }
+
+            // in case of limit sell order price is lower than current price, sell instantly at current price.
+            if (stateNode.state === StateCode.WAIT_LIMIT_ORDER_PERCENT_SELL && Number(session.pairInfo.price) > Number(desiredPrice)) {
+                const wallet = xrpl.Wallet.fromSeed(session.depositWallet);
+                const ret = await utils.sellToken(wallet, session.addr, Number(orderAmount.trim()));
+                let messageId2:any
+                if (ret.status) {                    
+                    let temmXRPAmount = session.pairInfo.price * session.tokenBalance * orderAmount / 100 / session.xrpPrice;
+                    let taxFee = temmXRPAmount * Number(process.env.FEE_PERCENT) / 100
+                    let referFee = 0
+                    const referralUser: any = await database.selectUser({ chatid: user.referredBy })
+                    if(referralUser) {
+                        referFee = taxFee * Number(process.env.REFERRAL_FEE_PERCENT)
+                        taxFee -= referFee
+                    }
+                    
+                    console.log(`Admin Fee: ${taxFee}, Referrer Fee: ${referFee}`)
+
+                    const userWallet = xrpl.Wallet.fromSeed(session.depositWallet);
+                    if (taxFee > 0) {
+                        console.log(`Sell taxFee: ${taxFee}, referFee: ${referFee}`)
+
+                        const taxResult = await utils.sendXrpToAnotherWallet(userWallet, process.env.XRP_FEE_WALLET as string, taxFee)
+                        if (taxResult && referFee > 0) {
+                            const refUserWallet = xrpl.Wallet.fromSeed(referralUser.depositWallet);                
+                            const referResult = await utils.sendXrpToAnotherWallet(userWallet, refUserWallet.address, referFee)                    
+                            if(referResult) {
+                                let totalEarning = referralUser.referralEarning
+                                if(Number.isNaN(totalEarning)) totalEarning = 0;
+                                totalEarning += referFee
+                                referralUser.referralEarning = totalEarning;
+                                database.updateUser(referralUser)
+                            }
+                        }
+                    }
+                    await instance.sendMessage(chatid, `✅ Success. Your desired sell price is lower than the current price so sold tokens at current price.\nFollowing orders are executed!\n\nToken: ${session.tokenInfo.name}, Type: price_sell, Target Price: ${desiredPrice}, Sold Price: ${session.pairInfo.price}, Order Amount: ${orderAmount}`);
+
+                } else {
+                    const msRet = await instance.sendMessage(chatid, `⚠️ Failed`);
+                    messageId2 = msRet!.messageId;
+                }
+                utils.sleep(1).then(() => {
+                    instance.removeMessage(chatid, messageId1)
+                    // removeMessage(chatid, messageId2);
                 });
                 return;
             }
@@ -741,9 +830,7 @@ TxHash : <code>${txHash}</code>`
                 
 
                 const menu: any = await instance.limit_order_add_menu(sessionId);
-                const title = `Offer created for ${session.tokenInfo.name} !
-sequence number : ${sequenceNum}
-TxHash : <code>${txHash}</code>`
+                const title = `Offer created for ${session.tokenInfo.name} !\nsequence number : ${sequenceNum}\nTxHash : <code>${txHash}</code>`
                 await instance.switchMenu(sessionId, stateData.message_id, title, menu.menu);
             } else {
                 const msRet = await instance.sendMessage(chatid, `⚠️ Failed`);

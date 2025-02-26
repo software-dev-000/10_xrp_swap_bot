@@ -5,15 +5,15 @@ dotenv.config()
 
 import * as bot from './bot';
 
-const logFilePath = path.join(process.cwd(), 'logs', 'log.txt');
-const maxFileSize = 5 * 1024 * 1024; // 5MB
+const logFilePath = path.join(process.cwd(), 'logs', `log_${Date.now()}.txt`);
 
+console.log(`file path: ${logFilePath}`);
 const checkLogFileSize = () => {
 	const stats = fs.statSync(logFilePath);
 	const fileSizeInMegabytes = stats.size / (1024 * 1024); // Convert bytes to MB
   
 	if (fileSizeInMegabytes > 2) {
-		const newLogFilePath = path.join(__dirname, `./logs/log_${Date.now()}.txt`);
+		const newLogFilePath = path.join(process.cwd(), `/logs/log_${Date.now()}.txt`);
 		fs.renameSync(logFilePath, newLogFilePath); // Rename the old log file
 		console.log(`Log file size exceeded 2 MB. Created new log file: ${newLogFilePath}`);
 	}
