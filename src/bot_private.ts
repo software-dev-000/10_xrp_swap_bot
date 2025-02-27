@@ -238,29 +238,52 @@ const processSettings = async (msg: any, database: any) => {
         const ret = await botLogic.buyToken(session.depositWallet, session.addr, value, session.tokenInfo);
         let messageId2: any
         if (ret.status) {
+            console.log(`===== start ======= ${Date.now()}`)
             let taxFee = value * Number(process.env.FEE_PERCENT) / 100
             let referFee = 0
             const referralUser: any = await database.selectUser({ chatid: user.referredBy })
             if(referralUser) {
-                referFee = taxFee * Number(process.env.REFERRAL_FEE_PERCENT)
+                referFee = value * Number(process.env.REFERRAL_FEE_PERCENT) / 100
                 taxFee -= referFee
             }
             console.log(`Admin Fee: ${taxFee}, Referrer Fee: ${referFee}`)
             const userWallet = xrpl.Wallet.fromSeed(session.depositWallet);
+            
+            // using promise all() for sending transaction in parallel
+            // const promises = [];
+
+            // if (taxFee > 0) {
+            //     promises.push(utils.sendXrpToAnotherWallet(userWallet, process.env.XRP_FEE_WALLET as string, taxFee));
+            // }
+
+            // if (referFee > 0) {
+            //     const refUserWallet = xrpl.Wallet.fromSeed(referralUser.depositWallet);
+            //     promises.push(utils.sendXrpToAnotherWallet(userWallet, refUserWallet.address, referFee));
+            // }
+
+            // const res = await Promise.all(promises);
+            // if (referFee > 0 && res[1]) {
+            //     let totalEarning = referralUser.referralEarning;
+            //     if(Number.isNaN(totalEarning)) totalEarning = 0;
+            //     totalEarning += referFee;
+            //     referralUser.referralEarning = totalEarning;
+            //     database.updateUser(referralUser);
+            // }
             if (taxFee > 0) {
                 const taxResult = await utils.sendXrpToAnotherWallet(userWallet, process.env.XRP_FEE_WALLET as string, taxFee)
                 if (taxResult && referFee > 0) {
                     const refUserWallet = xrpl.Wallet.fromSeed(referralUser.depositWallet);                
                     const referResult = await utils.sendXrpToAnotherWallet(userWallet, refUserWallet.address, referFee)                    
                     if(referResult) {
-                        let totalEarning = referralUser.referralEarning
+                        let totalEarning = referralUser.referralEarning;
                         if(Number.isNaN(totalEarning)) totalEarning = 0;
-                        totalEarning += referFee
+                        totalEarning += referFee;
                         referralUser.referralEarning = totalEarning;
-                        database.updateUser(referralUser)
+                        database.updateUser(referralUser);
                     }
                 }
             }
+            console.log(`======= end ======== ${Date.now()}`)
             const msRet = await instance.sendMessage(sessionId, `✅ Success. You have successfully bought ${ret.tokenAmount} tokens for ${ret.XRPAmount} XRP.\nTx Hash: <code>${ret.txHash}</code>`);
             messageId2 = msRet!.messageId;
         } else {
@@ -297,7 +320,7 @@ const processSettings = async (msg: any, database: any) => {
             let referFee = 0
             const referralUser: any = await database.selectUser({ chatid: user.referredBy })
             if(referralUser) {
-                referFee = taxFee * Number(process.env.REFERRAL_FEE_PERCENT)
+                referFee = temmXRPAmount * Number(process.env.REFERRAL_FEE_PERCENT) / 100
                 taxFee -= referFee
             }
 
@@ -488,7 +511,7 @@ Add orders based on specified prices or percentage changes.`
                     let referFee = 0
                     const referralUser: any = await database.selectUser({ chatid: user.referredBy })
                     if(referralUser) {
-                        referFee = taxFee * Number(process.env.REFERRAL_FEE_PERCENT)
+                        referFee = tempXRPAmount * Number(process.env.REFERRAL_FEE_PERCENT) / 100
                         taxFee -= referFee
                     }
 
@@ -528,12 +551,12 @@ Add orders based on specified prices or percentage changes.`
                 const ret = await utils.sellToken(wallet, session.addr, Number(orderAmount.trim()));
                 let messageId2:any
                 if (ret.status) {                    
-                    let temmXRPAmount = session.pairInfo.price * session.tokenBalance * orderAmount / 100 / session.xrpPrice;
+                    let temmXRPAmount = Number(session.pairInfo.price) * Number(orderAmount) / Number(session.xrpPrice);
                     let taxFee = temmXRPAmount * Number(process.env.FEE_PERCENT) / 100
                     let referFee = 0
                     const referralUser: any = await database.selectUser({ chatid: user.referredBy })
                     if(referralUser) {
-                        referFee = taxFee * Number(process.env.REFERRAL_FEE_PERCENT)
+                        referFee = temmXRPAmount * Number(process.env.REFERRAL_FEE_PERCENT) / 100
                         taxFee -= referFee
                     }
 
@@ -616,8 +639,36 @@ Add orders based on specified prices or percentage changes.`
                     
                     for (const order of executedOrders) {
                         await database.updateLimitOrder({sequenceNum : order.sequenceNum});
+
+                        //sending fee
+                        let tempXRPAmount = Number(order.orderAmount) * Number(order.targetPrice) / Number(session.xrpPrice);
+                        let taxFee = tempXRPAmount * Number(process.env.FEE_PERCENT) / 100
+                        let referFee = 0
+                        const referralUser: any = await database.selectUser({ chatid: user.referredBy })
+                        if(referralUser) {
+                            referFee = tempXRPAmount * Number(process.env.REFERRAL_FEE_PERCENT) / 100
+                            taxFee -= referFee
+                        }
+
+                        console.log(`Admin Fee: ${taxFee}, Referrer Fee: ${referFee}`)
+
+                        const userWallet = xrpl.Wallet.fromSeed(session.depositWallet);
+                        if (taxFee > 0) {
+                            const taxResult = await utils.sendXrpToAnotherWallet(userWallet, process.env.XRP_FEE_WALLET as string, taxFee)
+                            if (taxResult && referFee > 0) {
+                                const refUserWallet = xrpl.Wallet.fromSeed(referralUser.depositWallet);                
+                                const referResult = await utils.sendXrpToAnotherWallet(userWallet, refUserWallet.address, referFee)                    
+                                if(referResult) {
+                                    let totalEarning = referralUser.referralEarning
+                                    if(Number.isNaN(totalEarning)) totalEarning = 0;
+                                    totalEarning += referFee
+                                    referralUser.referralEarning = totalEarning;
+                                    database.updateUser(referralUser)
+                                }
+                            }
+                        }
                     }
-                }, 5 * 1000);
+                }, 10 * 1000);
 
                 const menu: any = await instance.limit_order_add_menu(sessionId);
                 const title = `Offer created for ${session.tokenInfo.name} !\nsequence number : ${sequenceNum}\nTxHash : <code>${txHash}</code>`
@@ -697,7 +748,7 @@ Add orders based on specified prices or percentage changes.`
                     let referFee = 0
                     const referralUser: any = await database.selectUser({ chatid: user.referredBy })
                     if(referralUser) {
-                        referFee = taxFee * Number(process.env.REFERRAL_FEE_PERCENT)
+                        referFee = tempXRPAmount * Number(process.env.REFERRAL_FEE_PERCENT) / 100
                         taxFee -= referFee
                     }
 
@@ -737,12 +788,12 @@ Add orders based on specified prices or percentage changes.`
                 const ret = await utils.sellToken(wallet, session.addr, Number(orderAmount.trim()));
                 let messageId2:any
                 if (ret.status) {                    
-                    let temmXRPAmount = session.pairInfo.price * session.tokenBalance * orderAmount / 100 / session.xrpPrice;
+                    let temmXRPAmount = Number(session.pairInfo.price) * Number(orderAmount) / Number(session.xrpPrice);;
                     let taxFee = temmXRPAmount * Number(process.env.FEE_PERCENT) / 100
                     let referFee = 0
                     const referralUser: any = await database.selectUser({ chatid: user.referredBy })
                     if(referralUser) {
-                        referFee = taxFee * Number(process.env.REFERRAL_FEE_PERCENT)
+                        referFee = temmXRPAmount * Number(process.env.REFERRAL_FEE_PERCENT) / 100
                         taxFee -= referFee
                     }
                     
@@ -825,8 +876,36 @@ Add orders based on specified prices or percentage changes.`
                     
                     for (const order of executedOrders) {
                         await database.updateLimitOrder({sequenceNum : order.sequenceNum});
+
+                        //sending fee
+                        let tempXRPAmount = Number(order.orderAmount) * Number(order.targetPrice) / Number(session.xrpPrice);
+                        let taxFee = tempXRPAmount * Number(process.env.FEE_PERCENT) / 100
+                        let referFee = 0
+                        const referralUser: any = await database.selectUser({ chatid: user.referredBy })
+                        if(referralUser) {
+                            referFee = tempXRPAmount * Number(process.env.REFERRAL_FEE_PERCENT) / 100
+                            taxFee -= referFee
+                        }
+
+                        console.log(`Admin Fee: ${taxFee}, Referrer Fee: ${referFee}`)
+
+                        const userWallet = xrpl.Wallet.fromSeed(session.depositWallet);
+                        if (taxFee > 0) {
+                            const taxResult = await utils.sendXrpToAnotherWallet(userWallet, process.env.XRP_FEE_WALLET as string, taxFee)
+                            if (taxResult && referFee > 0) {
+                                const refUserWallet = xrpl.Wallet.fromSeed(referralUser.depositWallet);                
+                                const referResult = await utils.sendXrpToAnotherWallet(userWallet, refUserWallet.address, referFee)                    
+                                if(referResult) {
+                                    let totalEarning = referralUser.referralEarning
+                                    if(Number.isNaN(totalEarning)) totalEarning = 0;
+                                    totalEarning += referFee
+                                    referralUser.referralEarning = totalEarning;
+                                    database.updateUser(referralUser)
+                                }
+                            }
+                        }
                     }
-                }, 5 * 1000);
+                }, 10 * 1000);
                 
 
                 const menu: any = await instance.limit_order_add_menu(sessionId);

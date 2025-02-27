@@ -1192,7 +1192,7 @@ For example:
                 let referFee = 0
                 const referralUser: any = await database.selectUser({ chatid: user.referredBy })
                 if(referralUser) {
-                    referFee = taxFee * Number(process.env.REFERRAL_FEE_PERCENT)
+                    referFee = buyAmount * Number(process.env.REFERRAL_FEE_PERCENT) / 100
                     taxFee -= referFee
                 }
 
@@ -1243,6 +1243,7 @@ For example:
             const messageRet = await sendMessage(chatid, `Selling ${sellAmount}% token...`);
             const messageId1 = messageRet!.messageId;
             const ret = await botLogic.sellToken(session.depositWallet, session.addr, sellAmount);
+            console.log(`ret => ${JSON.stringify(ret)}`)
             let messageId2:any
             if (ret.status) {
                 let tempXRPAmount = session.pairInfo.price * session.tokenBalance * sellAmount / 100 / session.xrpPrice;
@@ -1250,13 +1251,14 @@ For example:
                 let referFee = 0
                 const referralUser: any = await database.selectUser({ chatid: user.referredBy })
                 if(referralUser) {
-                    referFee = taxFee * Number(process.env.REFERRAL_FEE_PERCENT)
+                    referFee = tempXRPAmount * Number(process.env.REFERRAL_FEE_PERCENT) / 100
                     taxFee -= referFee
                 }
+                console.log(`Sell taxFee: ${taxFee}, referFee: ${referFee}`)
+
 
                 const userWallet = xrpl.Wallet.fromSeed(session.depositWallet);
                 if (taxFee > 0) {
-                    console.log(`Sell taxFee: ${taxFee}, referFee: ${referFee}`)
 
                     const taxResult = await utils.sendXrpToAnotherWallet(userWallet, process.env.XRP_FEE_WALLET as string, taxFee)
                     if (taxResult && referFee > 0) {
