@@ -506,7 +506,7 @@ export const getMainMenuMessage = async (
     const depositWallet = xrpl.Wallet.fromSeed(session.user.depositWallet);
     // console.log(`sesison.parirInfo => ${JSON.stringify(session.pairInfo, null, 2)}`)
     // console.log(`sesison.tokenInfo => ${JSON.stringify(session.tokenInfo, null, 2)}`)
-    session.tokenInfo.symbol = session.pairInfo.pair.split("/")[0].trim();
+    session.tokenInfo.name = session.pairInfo.pair.split("/")[0].trim();
 
     pendings = []
     pendings.push(utils.getXrpBalance(depositWallet.classicAddress))
@@ -536,7 +536,7 @@ ${session.referralLink}
 👭 Referrals : ${referrals}
 💸 Total earnings : $ ${utils.roundDecimal(earnings * xrpPrice, 4)}
 
-📌 Token: ${session.tokenInfo.symbol}
+📌 Token: ${session.tokenInfo.name}
 <code>${session.tokenInfo.address}</code>
 💎 PRICE: ${session.pairInfo ? session.pairInfo.price +'$' : 'Unknown'}
 📊 LP: ${session.pairInfo ? session.pairInfo.lp : 'Unknown'}
@@ -967,7 +967,7 @@ export const executeCommand = async (
         } else if (cmd === OptionCode.LIMIT_ORDER_ADD) {
             if(session.addr) { 
                 const menu: any = await limit_order_add_menu(sessionId);
-                const title = `${session.tokenInfo.name}
+                const title = `📌 Token: ${session.tokenInfo.name}
 <code>${session.tokenInfo.address} </code>
 Current Price: <code>${session.pairInfo.price}</code>
 
@@ -1000,36 +1000,14 @@ Add orders based on specified prices or percentage changes.`
             
             let pending:any = []
             for (const order of orders) {
-                pending.push(await utils.cancelOffer(session.depositWallet, order.sequenceNum));
+                database.updateLimitOrder({_id : order._id});
             }
 
             let res = await Promise.all(pending)
 
             if(res) {
-                res = res.map(async (oneRes, index) => {
-                    console.log(`order ${orders[index].sequenceNum} cancellation status => ${oneRes}`)
-                    if(oneRes) {
-                        // await database.updateLimitOrder({_id: orders[index]._id.toString('hex')});
-                        await database.updateLimitOrder({sequenceNum : orders[index].sequenceNum});
-                    }
-                    return {
-                        orderid: orders[index]._id,
-                        seqenceNum: orders[index].sequenceNum,
-                        res: oneRes
-                    }
-                })
-    
-                let messageId2:any
-                let failedRes: any = res.filter((one:any) => one.res === false).map((one:any) => one.seqenceNum)
-                if (failedRes.length === 0) {
-                    const msRet = await sendMessage(chatid, `✅ Success`);
-                    messageId2 = msRet!.messageId;
-                    
-                } else {
-                    const title = failedRes.join('\n')
-                    const msRet = await sendMessage(chatid, `⚠️ Order Cancellation of following orders are Failed\n${title}`);
-                    messageId2 = msRet!.messageId;
-                }
+                const msRet = await sendMessage(chatid, `✅ Success`);
+                console.log(`[${user.username}] Success to close all limit orders`);
                 utils.sleep(1).then(() => {
                     removeMessage(chatid, messageId1)
                     // if (failedRes.length === 0)
@@ -1043,7 +1021,8 @@ Add orders based on specified prices or percentage changes.`
                 const menu: any = await limit_order_menu(title, sessionId);
                 
                 await switchMenu(chatid, messageId, title, menu.menu);
-            }
+            } else
+                await sendMessage(chatid, `⚠️ Order Cancellation of following orders are Failed.`);
 
             
 

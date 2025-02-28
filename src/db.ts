@@ -27,11 +27,11 @@ export const LimitOrder = mongoose.model(
         userid: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
         tokenName: String,
         tokenAddr: String,
+        depositWallet: String,
         orderType: String,
         txHash: String,
         targetPrice: String,
         orderAmount: String,
-        sequenceNum: Number,
         status: Number,
         createdAt: Number,
         updatedAt: Number,
@@ -61,11 +61,11 @@ export const createLimitOrder = (params: any) => {
         limitOrder.userid = params.userid;
         limitOrder.tokenAddr = params.tokenAddr;
         limitOrder.tokenName = params.tokenName;
+        limitOrder.depositWallet = params.depositWallet;
         limitOrder.orderType = params.orderType;
         limitOrder.txHash = params.txHash;
         limitOrder.targetPrice = params.targetPrice;
         limitOrder.orderAmount = params.orderAmount;
-        limitOrder.sequenceNum = params.sequenceNum;
         limitOrder.status = params.status;
         limitOrder.createdAt = Date.now();
         limitOrder.updatedAt = Date.now();
@@ -77,12 +77,12 @@ export const createLimitOrder = (params: any) => {
 
 export const updateLimitOrder = (params: any) => {
     return new Promise(async (resolve, reject) => {
-        const limitOrder = await LimitOrder.findOne(params);
+        const limitOrder = await LimitOrder.findOne({ _id: params._id});
         if (!limitOrder) {
             reject(new Error('Limit order not found'));
         } else {
         limitOrder.status = 0;
-        limitOrder.txHash = params.txHash;
+        limitOrder.txHash = params.txHash ?? "";
         limitOrder.updatedAt = Date.now();
 
         await limitOrder.save();
