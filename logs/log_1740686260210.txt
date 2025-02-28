@@ -1,0 +1,42 @@
+2025-02-27T19:57:40.462Z - Connected to MongoDB "xrpl-swap-bot"...
+2025-02-27T19:57:40.463Z - [BOT STARTING] Getting Reserved Value...
+2025-02-27T19:57:41.369Z - [BOT STARTING] Connected to XRP Ledger.
+2025-02-27T19:57:41.536Z - [BOT LAUNCHED] Got Reserved Value Successfully! 1 0.2
+2025-02-27T19:57:41.552Z - 10 users, 0 logged in
+2025-02-27T21:06:33.657Z - wallet balance => -1
+2025-02-27T21:07:25.147Z - rNyjxNm8w7MrDsrFBqeGXCiG5dW3u4bcVK
+2025-02-27T21:08:27.893Z - rNyjxNm8w7MrDsrFBqeGXCiG5dW3u4bcVK
+2025-02-27T21:08:44.801Z - 41524D5900000000000000000000000000000000.r319FqohpKLwjtcV2mosyC5sy125fDk4uH
+2025-02-27T21:08:44.802Z - getTokenInfo->error: [NotConnectedError({"command":"account_lines","account":"r319FqohpKLwjtcV2mosyC5sy125fDk4uH","ledger_index":"validated","api_version":2}, {"command":"account_lines","account":"r319FqohpKLwjtcV2mosyC5sy125fDk4uH","ledger_index":"validated","api_version":2})]
+2025-02-27T21:08:53.866Z - 41524D5900000000000000000000000000000000.r319FqohpKLwjtcV2mosyC5sy125fDk4uH
+2025-02-27T21:08:53.867Z - getTokenInfo->error: [NotConnectedError({"command":"account_lines","account":"r319FqohpKLwjtcV2mosyC5sy125fDk4uH","ledger_index":"validated","api_version":2}, {"command":"account_lines","account":"r319FqohpKLwjtcV2mosyC5sy125fDk4uH","ledger_index":"validated","api_version":2})]
+2025-02-27T21:09:04.484Z - r319FqohpKLwjtcV2mosyC5sy125fDk4uH
+2025-02-27T21:09:33.554Z - BMT.rE8dJChTgdF4GD84z8Ah5NoNbVvMTqRMLk
+2025-02-27T21:09:33.555Z - getTokenInfo->error: [NotConnectedError({"command":"account_lines","account":"rE8dJChTgdF4GD84z8Ah5NoNbVvMTqRMLk","ledger_index":"validated","api_version":2}, {"command":"account_lines","account":"rE8dJChTgdF4GD84z8Ah5NoNbVvMTqRMLk","ledger_index":"validated","api_version":2})]
+2025-02-27T21:09:37.844Z - wallet balance => -1
+2025-02-27T21:09:44.293Z - BMT.rE8dJChTgdF4GD84z8Ah5NoNbVvMTqRMLk
+2025-02-27T21:09:44.293Z - getTokenInfo->error: [NotConnectedError({"command":"account_lines","account":"rE8dJChTgdF4GD84z8Ah5NoNbVvMTqRMLk","ledger_index":"validated","api_version":2}, {"command":"account_lines","account":"rE8dJChTgdF4GD84z8Ah5NoNbVvMTqRMLk","ledger_index":"validated","api_version":2})]
+2025-02-27T21:10:38.499Z - getTokenInfo->error: [NotConnectedError({"command":"account_lines","account":"rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN","ledger_index":"validated","api_version":2}, {"command":"account_lines","account":"rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN","ledger_index":"validated","api_version":2})]
+2025-02-27T21:10:38.546Z - Error
+2025-02-27T21:10:45.955Z - getTokenInfo->error: [NotConnectedError({"command":"account_lines","account":"rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN","ledger_index":"validated","api_version":2}, {"command":"account_lines","account":"rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN","ledger_index":"validated","api_version":2})]
+2025-02-27T21:10:45.985Z - Error
+2025-02-27T21:11:09.748Z - 50484E4958000000000000000000000000000000.rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN
+2025-02-27T21:11:09.749Z - getTokenInfo->error: [NotConnectedError({"command":"account_lines","account":"rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN","ledger_index":"validated","api_version":2}, {"command":"account_lines","account":"rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN","ledger_index":"validated","api_version":2})]
+2025-02-27T21:12:09.901Z - https://firstledger.net/token/r3fg9QJvsGc9vKFqVZfHP1PVQBM1Cktatt/4255445A00000000000000000000000000000000
+2025-02-27T21:12:09.902Z - getTokenInfo->error: [NotConnectedError({"command":"account_lines","account":"r3fg9QJvsGc9vKFqVZfHP1PVQBM1Cktatt","ledger_index":"validated","api_version":2}, {"command":"account_lines","account":"r3fg9QJvsGc9vKFqVZfHP1PVQBM1Cktatt","ledger_index":"validated","api_version":2})]
+2025-02-27T21:12:18.821Z - https://firstledger.net/token/r3fg9QJvsGc9vKFqVZfHP1PVQBM1Cktatt/4255445A00000000000000000000000000000000
+2025-02-27T21:12:18.822Z - getTokenInfo->error: [NotConnectedError({"command":"account_lines","account":"r3fg9QJvsGc9vKFqVZfHP1PVQBM1Cktatt","ledger_index":"validated","api_version":2}, {"command":"account_lines","account":"r3fg9QJvsGc9vKFqVZfHP1PVQBM1Cktatt","ledger_index":"validated","api_version":2})]
+2025-02-27T21:12:40.666Z - getTokenInfo->error: [NotConnectedError({"command":"account_lines","account":"rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN","ledger_index":"validated","api_version":2}, {"command":"account_lines","account":"rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN","ledger_index":"validated","api_version":2})]
+2025-02-27T21:12:40.889Z - Error
+2025-02-27T21:12:42.705Z - https://firstledger.net/token/r3fg9QJvsGc9vKFqVZfHP1PVQBM1Cktatt/4255445A00000000000000000000000000000000
+2025-02-27T21:12:42.706Z - getTokenInfo->error: [NotConnectedError({"command":"account_lines","account":"r3fg9QJvsGc9vKFqVZfHP1PVQBM1Cktatt","ledger_index":"validated","api_version":2}, {"command":"account_lines","account":"r3fg9QJvsGc9vKFqVZfHP1PVQBM1Cktatt","ledger_index":"validated","api_version":2})]
+2025-02-27T21:12:54.856Z - https://firstledger.net/token/rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN/50484E4958000000000000000000000000000000
+2025-02-27T21:12:54.857Z - getTokenInfo->error: [NotConnectedError({"command":"account_lines","account":"rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN","ledger_index":"validated","api_version":2}, {"command":"account_lines","account":"rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN","ledger_index":"validated","api_version":2})]
+2025-02-27T21:14:04.735Z - 50484E4958000000000000000000000000000000.rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN
+2025-02-27T21:14:04.736Z - getTokenInfo->error: [NotConnectedError({"command":"account_lines","account":"rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN","ledger_index":"validated","api_version":2}, {"command":"account_lines","account":"rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN","ledger_index":"validated","api_version":2})]
+2025-02-27T21:17:43.305Z - 50484E4958000000000000000000000000000000.rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN
+2025-02-27T21:17:43.305Z - getTokenInfo->error: [NotConnectedError({"command":"account_lines","account":"rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN","ledger_index":"validated","api_version":2}, {"command":"account_lines","account":"rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN","ledger_index":"validated","api_version":2})]
+2025-02-27T21:17:55.553Z - https://firstledger.net/token/rNtHWQ3gS47KF8izJ5XDZHxwDi4hgwQSwH/5852504F50000000000000000000000000000000
+2025-02-27T21:17:55.553Z - getTokenInfo->error: [NotConnectedError({"command":"account_lines","account":"rNtHWQ3gS47KF8izJ5XDZHxwDi4hgwQSwH","ledger_index":"validated","api_version":2}, {"command":"account_lines","account":"rNtHWQ3gS47KF8izJ5XDZHxwDi4hgwQSwH","ledger_index":"validated","api_version":2})]
+2025-02-27T21:18:05.797Z - https://firstledger.net/token/r3fg9QJvsGc9vKFqVZfHP1PVQBM1Cktatt/4255445A00000000000000000000000000000000
+2025-02-27T21:18:05.798Z - getTokenInfo->error: [NotConnectedError({"command":"account_lines","account":"r3fg9QJvsGc9vKFqVZfHP1PVQBM1Cktatt","ledger_index":"validated","api_version":2}, {"command":"account_lines","account":"r3fg9QJvsGc9vKFqVZfHP1PVQBM1Cktatt","ledger_index":"validated","api_version":2})]

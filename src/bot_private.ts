@@ -365,6 +365,7 @@ const processSettings = async (msg: any, database: any) => {
         }
 
         session.addr = utils.validateAddressAndTransform(value);
+        console.log(`updated addr => ${session.addr}`)
         await database.updateUser(session);
         await instance.executeCommand(
             chatid,
@@ -642,6 +643,7 @@ Add orders based on specified prices or percentage changes.`
 
                         //sending fee
                         let tempXRPAmount = Number(order.orderAmount) * Number(order.targetPrice) / Number(session.xrpPrice);
+                        console.log(`specific limit order need tempXRPAmount: ${tempXRPAmount}`)
                         let taxFee = tempXRPAmount * Number(process.env.FEE_PERCENT) / 100
                         let referFee = 0
                         const referralUser: any = await database.selectUser({ chatid: user.referredBy })
@@ -878,12 +880,19 @@ Add orders based on specified prices or percentage changes.`
                         await database.updateLimitOrder({sequenceNum : order.sequenceNum});
 
                         //sending fee
-                        let tempXRPAmount = Number(order.orderAmount) * Number(order.targetPrice) / Number(session.xrpPrice);
-                        let taxFee = tempXRPAmount * Number(process.env.FEE_PERCENT) / 100
+                        let isNegative1 = order.targetPrice.startsWith('-');
+                        let desiredPercentAbs1 = isNegative1 ? order.targetPrice.substring(1) : order.targetPrice;
+
+                        let currentPrice1 = await utils.getPairInfo(session.addr);
+                        let desiredPrice1 = isNegative1 ? (Number(currentPrice1.price) * (1 - parseFloat(desiredPercentAbs1) / 100)) : Number(currentPrice1.price) * (1 + parseFloat(desiredPercentAbs1) / 100);
+                        
+                        let tempXRPAmount1 = Number(order.orderAmount) * Number(desiredPrice1) / Number(session.xrpPrice);
+                        console.log(`percent limit order need tempXRPAmount: ${tempXRPAmount1}`)
+                        let taxFee = tempXRPAmount1 * Number(process.env.FEE_PERCENT) / 100
                         let referFee = 0
                         const referralUser: any = await database.selectUser({ chatid: user.referredBy })
                         if(referralUser) {
-                            referFee = tempXRPAmount * Number(process.env.REFERRAL_FEE_PERCENT) / 100
+                            referFee = tempXRPAmount1 * Number(process.env.REFERRAL_FEE_PERCENT) / 100
                             taxFee -= referFee
                         }
 

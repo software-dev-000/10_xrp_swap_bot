@@ -1049,9 +1049,9 @@ Add orders based on specified prices or percentage changes.`
 
 📍For example, entering 0.1,0.05 means buying automatically when the price reaches $0.1, and auto-buying 0.05 .
 Current Price: <code>${session.pairInfo.price}</code> (Click to Copy)` : 
-`Please enter the expected price and auto-buy amount, separated by a comma. 
+`Please enter the expected price and auto-sell amount, separated by a comma. 
 
-📍For example, entering 0.1,0.05 means selling automatically when the price reaches $0.1, and auto-selling 0.05 .
+📍For example, entering 0.1,30 means selling automatically when the price reaches $0.1, and auto-selling 30 .
 Current Price: <code>${session.pairInfo.price}</code> (Click to Copy)`
             await sendReplyMessage(
                 chatid,
@@ -1070,11 +1070,11 @@ For example:
 📍20,0.05 means a 20% increase, buy 0.05
 📍-20,0.05 means a 20% decrease, buy 0.05` 
             :
-            `Please enter the price change percentage and the automatic sell amount, separated by a comma. 
-A positive number indicates an increase(take profit), while a negative number indicates a decrease(stop loss). 
+            `Please enter the price change percentage and the automatic sell-out amount, separated by a comma. 
+A positive number indicates an increase, while a negative number indicates a decrease. 
 For example:
-📍20,0.05 means a 20% increase, sell 0.05
-📍-20,0.05 means a 20% decrease, sell 0.05`;
+📍20,50 means a 20% increase, sell 50
+📍-20,50 means a 20% decrease, sell 50`;
 
             await sendReplyMessage(
                 chatid,

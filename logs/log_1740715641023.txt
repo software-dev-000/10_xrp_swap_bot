@@ -1,0 +1,74 @@
+2025-02-28T04:07:21.162Z - Connected to MongoDB "xrpl-swap-bot"...
+2025-02-28T04:07:21.163Z - [BOT STARTING] Getting Reserved Value...
+2025-02-28T04:07:22.089Z - [BOT STARTING] Connected to XRP Ledger.
+2025-02-28T04:07:22.262Z - [BOT LAUNCHED] Got Reserved Value Successfully! 1 0.2
+2025-02-28T04:07:22.289Z - 10 users, 0 logged in
+2025-02-28T04:09:40.733Z - wallet balance => 1.933585
+2025-02-28T04:10:05.853Z - rHSWvZQXb7a3LMo5FmXYtTuUaxurKUbzLQ TrustLineExist: true
+2025-02-28T04:10:06.206Z - Estimated token amount: 135498.6449864499
+2025-02-28T04:10:06.206Z - Restimated amount: 135498.6449864499
+2025-02-28T04:10:06.206Z - Pending transactions for buying token with 0.5 xrp from wallet rHSWvZQXb7a3LMo5FmXYtTuUaxurKUbzLQ
+2025-02-28T04:10:12.199Z - Sent transaction for buying token with 0.5 XRP from wallet rHSWvZQXb7a3LMo5FmXYtTuUaxurKUbzLQ ===>  tesSUCCESS
+2025-02-28T04:10:12.199Z - ===== start ======= 1740715812199
+2025-02-28T04:10:12.202Z - Admin Fee: 0.005000000000000001, Referrer Fee: 0.0015
+2025-02-28T04:10:12.595Z - Pending transaction for sending 0.005000000000000001 from rHSWvZQXb7a3LMo5FmXYtTuUaxurKUbzLQ to rGgu8gmgGJSkk3GEUXHbTF6KpsixupbQns
+2025-02-28T04:10:20.886Z - Sent transaction for sending 0.005000000000000001 from rHSWvZQXb7a3LMo5FmXYtTuUaxurKUbzLQ to rGgu8gmgGJSkk3GEUXHbTF6KpsixupbQns ===>  tesSUCCESS
+2025-02-28T04:10:21.246Z - Pending transaction for sending 0.0015 from rHSWvZQXb7a3LMo5FmXYtTuUaxurKUbzLQ to rss2cwdWSUkGZQ5JABjbaHqdDyPhs7TLMr
+2025-02-28T04:10:29.537Z - Sent transaction for sending 0.0015 from rHSWvZQXb7a3LMo5FmXYtTuUaxurKUbzLQ to rss2cwdWSUkGZQ5JABjbaHqdDyPhs7TLMr ===>  tesSUCCESS
+2025-02-28T04:10:29.538Z - update User => {
+  "_id": "67b4a05d607f0290e3a95b6f",
+  "tokens": [
+    "50484E4958000000000000000000000000000000.rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN",
+    "5445535400000000000000000000000000000000.raYqPJfQYXPD3VnYUxwo6CRA9XBtXH5beZ",
+    "XOX.rGJbFqiLdh23e9WigQ5sxTfFqTENveLX21",
+    "4255445A00000000000000000000000000000000.r3fg9QJvsGc9vKFqVZfHP1PVQBM1Cktatt"
+  ],
+  "wallets": [
+    "sEdVr4zpebZcRt7arU9AX1Znd1e19pc",
+    "sEdS6dp55sSxpKAYbW1cFQdVVJssVtj",
+    "sEd7N5yxRxVjHsGct5z8LyXA331KZ4Z",
+    "sEdSjvqPsCB6T2chH2kVDG2PMPZoKC3"
+  ],
+  "chatid": "7400701379",
+  "username": "FMN271227",
+  "depositWallet": "sEdS6dp55sSxpKAYbW1cFQdVVJssVtj",
+  "addr": "50484E4958000000000000000000000000000000.rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN",
+  "referralLink": "https://t.me/XRP_test124_volume_bot?start=ref_84qaVH",
+  "__v": 17,
+  "limitOrderExpire": 3600,
+  "referralEarning": 0.04196678967237861
+}
+2025-02-28T04:10:29.538Z - ======= end ======== 1740715829538
+2025-02-28T04:10:31.081Z - wallet balance => 1.402804
+2025-02-28T04:11:03.068Z - Pending transactions for selling 135498.644986 tokens from wallet rHSWvZQXb7a3LMo5FmXYtTuUaxurKUbzLQ
+2025-02-28T04:11:11.757Z - Sent transaction for sell 135498.644986 tokens from wallet rHSWvZQXb7a3LMo5FmXYtTuUaxurKUbzLQ ===>  tesSUCCESS
+2025-02-28T04:11:11.757Z - ret => {"status":true,"tokenAmount":135498.644986,"txHash":"915B4DBBD4D964A8E46B377602266774C211ED30A0CAE4AD45F0E7DEE3C14DDA"}
+2025-02-28T04:11:11.760Z - Sell taxFee: 0.005309936998560278, referFee: 0.0015929810995680832
+2025-02-28T04:11:12.125Z - Pending transaction for sending 0.005309936998560278 from rHSWvZQXb7a3LMo5FmXYtTuUaxurKUbzLQ to rGgu8gmgGJSkk3GEUXHbTF6KpsixupbQns
+2025-02-28T04:11:19.100Z - Sent transaction for sending 0.005309936998560278 from rHSWvZQXb7a3LMo5FmXYtTuUaxurKUbzLQ to rGgu8gmgGJSkk3GEUXHbTF6KpsixupbQns ===>  tesSUCCESS
+2025-02-28T04:11:19.485Z - Pending transaction for sending 0.0015929810995680832 from rHSWvZQXb7a3LMo5FmXYtTuUaxurKUbzLQ to rss2cwdWSUkGZQ5JABjbaHqdDyPhs7TLMr
+2025-02-28T04:11:27.841Z - Sent transaction for sending 0.0015929810995680832 from rHSWvZQXb7a3LMo5FmXYtTuUaxurKUbzLQ to rss2cwdWSUkGZQ5JABjbaHqdDyPhs7TLMr ===>  tesSUCCESS
+2025-02-28T04:11:27.842Z - update User => {
+  "_id": "67b4a05d607f0290e3a95b6f",
+  "tokens": [
+    "50484E4958000000000000000000000000000000.rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN",
+    "5445535400000000000000000000000000000000.raYqPJfQYXPD3VnYUxwo6CRA9XBtXH5beZ",
+    "XOX.rGJbFqiLdh23e9WigQ5sxTfFqTENveLX21",
+    "4255445A00000000000000000000000000000000.r3fg9QJvsGc9vKFqVZfHP1PVQBM1Cktatt"
+  ],
+  "wallets": [
+    "sEdVr4zpebZcRt7arU9AX1Znd1e19pc",
+    "sEdS6dp55sSxpKAYbW1cFQdVVJssVtj",
+    "sEd7N5yxRxVjHsGct5z8LyXA331KZ4Z",
+    "sEdSjvqPsCB6T2chH2kVDG2PMPZoKC3"
+  ],
+  "chatid": "7400701379",
+  "username": "FMN271227",
+  "depositWallet": "sEdS6dp55sSxpKAYbW1cFQdVVJssVtj",
+  "addr": "50484E4958000000000000000000000000000000.rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN",
+  "referralLink": "https://t.me/XRP_test124_volume_bot?start=ref_84qaVH",
+  "__v": 17,
+  "limitOrderExpire": 3600,
+  "referralEarning": 0.04355977077194669
+}
+2025-02-28T04:11:29.285Z - wallet balance => 1.916923

@@ -596,7 +596,7 @@ export const createOffer = async (
 
     try {
         const tx: any = await afx.client.submitAndWait(offer, { autofill: true, wallet: wallet })
-        console.log(`transaction result => ${JSON.stringify(tx, null, 2)}`)
+        // console.log(`transaction result => ${JSON.stringify(tx, null, 2)}`)
 
         if (tx.result.meta?.TransactionResult == "tesSUCCESS") {
             console.log(`Limit order created successfully!`)

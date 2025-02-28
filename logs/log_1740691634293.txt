@@ -1,0 +1,392 @@
+2025-02-27T21:27:14.421Z - Connected to MongoDB "xrpl-swap-bot"...
+2025-02-27T21:27:14.422Z - [BOT STARTING] Getting Reserved Value...
+2025-02-27T21:27:15.360Z - [BOT STARTING] Connected to XRP Ledger.
+2025-02-27T21:27:15.534Z - [BOT LAUNCHED] Got Reserved Value Successfully! 1 0.2
+2025-02-27T21:27:15.552Z - 10 users, 0 logged in
+2025-02-27T21:27:19.716Z - wallet balance => 0.052149
+2025-02-27T21:28:01.156Z - https://firstledger.net/token/r3fg9QJvsGc9vKFqVZfHP1PVQBM1Cktatt/4255445A00000000000000000000000000000000
+2025-02-27T21:28:01.860Z - https://firstledger.net/token/r3fg9QJvsGc9vKFqVZfHP1PVQBM1Cktatt/4255445A00000000000000000000000000000000
+2025-02-27T21:28:01.862Z - updated addr => 4255445A00000000000000000000000000000000.r3fg9QJvsGc9vKFqVZfHP1PVQBM1Cktatt
+2025-02-27T21:28:01.863Z - update User => {
+  "tokens": [
+    "50484E4958000000000000000000000000000000.rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN",
+    "5445535400000000000000000000000000000000.raYqPJfQYXPD3VnYUxwo6CRA9XBtXH5beZ",
+    "XOX.rGJbFqiLdh23e9WigQ5sxTfFqTENveLX21"
+  ],
+  "wallets": [
+    "sEdVr4zpebZcRt7arU9AX1Znd1e19pc",
+    "sEdS6dp55sSxpKAYbW1cFQdVVJssVtj",
+    "sEd7N5yxRxVjHsGct5z8LyXA331KZ4Z",
+    "sEdSjvqPsCB6T2chH2kVDG2PMPZoKC3"
+  ],
+  "chatid": "7400701379",
+  "username": "FMN271227",
+  "depositWallet": "sEdS6dp55sSxpKAYbW1cFQdVVJssVtj",
+  "addr": "4255445A00000000000000000000000000000000.r3fg9QJvsGc9vKFqVZfHP1PVQBM1Cktatt",
+  "referralLink": "https://t.me/XRP_test124_volume_bot?start=ref_84qaVH",
+  "limitOrderExpire": 3600,
+  "referralEarning": 0.03857771274204306,
+  "USD_addr": "USD.rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq",
+  "pairInfo": {
+    "dex": "xrpl",
+    "pair": "PHNIX / XRP",
+    "price": "0.000008191",
+    "priceInXrp": "0.000003771",
+    "lp": "539.82 K",
+    "mc": "4.82 M"
+  },
+  "tokenInfo": {
+    "address": "50484E4958000000000000000000000000000000.rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN",
+    "id": "50484E4958000000000000000000000000000000.rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN",
+    "name": "PHNIX",
+    "symbol": "PHNIX",
+    "totalSupply": 588990185828.8284,
+    "decimals": 0,
+    "description": null,
+    "iconUrl": null
+  },
+  "user": {
+    "_id": "67b4a05d607f0290e3a95b6f",
+    "tokens": [
+      "50484E4958000000000000000000000000000000.rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN",
+      "5445535400000000000000000000000000000000.raYqPJfQYXPD3VnYUxwo6CRA9XBtXH5beZ",
+      "XOX.rGJbFqiLdh23e9WigQ5sxTfFqTENveLX21"
+    ],
+    "wallets": [
+      "sEdVr4zpebZcRt7arU9AX1Znd1e19pc",
+      "sEdS6dp55sSxpKAYbW1cFQdVVJssVtj",
+      "sEd7N5yxRxVjHsGct5z8LyXA331KZ4Z",
+      "sEdSjvqPsCB6T2chH2kVDG2PMPZoKC3"
+    ],
+    "chatid": "7400701379",
+    "username": "FMN271227",
+    "depositWallet": "sEdS6dp55sSxpKAYbW1cFQdVVJssVtj",
+    "addr": "50484E4958000000000000000000000000000000.rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN",
+    "referralLink": "https://t.me/XRP_test124_volume_bot?start=ref_84qaVH",
+    "__v": 16,
+    "limitOrderExpire": 3600,
+    "referralEarning": 0.03857771274204306
+  },
+  "tokenBalance": 0,
+  "walletBalance": 0.052149,
+  "xrpPrice": 2.17
+}
+2025-02-27T21:28:03.016Z - wallet balance => 0.052149
+2025-02-27T21:28:28.115Z - https://firstledger.net/token/rNtHWQ3gS47KF8izJ5XDZHxwDi4hgwQSwH/5852504F50000000000000000000000000000000
+2025-02-27T21:28:28.643Z - https://firstledger.net/token/rNtHWQ3gS47KF8izJ5XDZHxwDi4hgwQSwH/5852504F50000000000000000000000000000000
+2025-02-27T21:28:28.643Z - updated addr => 5852504F50000000000000000000000000000000.rNtHWQ3gS47KF8izJ5XDZHxwDi4hgwQSwH
+2025-02-27T21:28:28.643Z - update User => {
+  "tokens": [],
+  "wallets": [
+    "sEdS1icoNRJ8dYs8DoRzduHwvG8eHmh"
+  ],
+  "chatid": "5521963424",
+  "username": "GallantKnight",
+  "depositWallet": "sEdS1icoNRJ8dYs8DoRzduHwvG8eHmh",
+  "addr": "5852504F50000000000000000000000000000000.rNtHWQ3gS47KF8izJ5XDZHxwDi4hgwQSwH",
+  "limitOrderExpire": 3600,
+  "referralLink": "https://t.me/XRP_test124_volume_bot?start=ref_61hawC",
+  "referredBy": "7416621274",
+  "referredTimestamp": 1740682248616
+}
+2025-02-27T21:28:29.610Z - wallet balance => -1
+2025-02-27T21:29:39.756Z - update User => {
+  "tokens": [
+    "50484E4958000000000000000000000000000000.rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN",
+    "5445535400000000000000000000000000000000.raYqPJfQYXPD3VnYUxwo6CRA9XBtXH5beZ",
+    "XOX.rGJbFqiLdh23e9WigQ5sxTfFqTENveLX21"
+  ],
+  "wallets": [
+    "sEdVr4zpebZcRt7arU9AX1Znd1e19pc",
+    "sEdS6dp55sSxpKAYbW1cFQdVVJssVtj",
+    "sEd7N5yxRxVjHsGct5z8LyXA331KZ4Z",
+    "sEdSjvqPsCB6T2chH2kVDG2PMPZoKC3"
+  ],
+  "chatid": "7400701379",
+  "username": "FMN271227",
+  "depositWallet": "sEdS6dp55sSxpKAYbW1cFQdVVJssVtj",
+  "addr": "4255445A00000000000000000000000000000000.r3fg9QJvsGc9vKFqVZfHP1PVQBM1Cktatt",
+  "referralLink": "https://t.me/XRP_test124_volume_bot?start=ref_84qaVH",
+  "limitOrderExpire": 3600,
+  "referralEarning": 0.03857771274204306,
+  "USD_addr": "USD.rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq",
+  "pairInfo": {
+    "dex": "xrpl",
+    "pair": "BUDZ / XRP",
+    "price": "0.007528",
+    "priceInXrp": "0.003446",
+    "lp": "2.7 K",
+    "mc": "1.88 K"
+  },
+  "tokenInfo": {
+    "address": "4255445A00000000000000000000000000000000.r3fg9QJvsGc9vKFqVZfHP1PVQBM1Cktatt",
+    "id": "4255445A00000000000000000000000000000000.r3fg9QJvsGc9vKFqVZfHP1PVQBM1Cktatt",
+    "name": "BUDZ",
+    "symbol": "BUDZ",
+    "totalSupply": 249939.9213845289,
+    "decimals": 0,
+    "description": null,
+    "iconUrl": null
+  },
+  "user": {
+    "_id": "67b4a05d607f0290e3a95b6f",
+    "tokens": [
+      "50484E4958000000000000000000000000000000.rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN",
+      "5445535400000000000000000000000000000000.raYqPJfQYXPD3VnYUxwo6CRA9XBtXH5beZ",
+      "XOX.rGJbFqiLdh23e9WigQ5sxTfFqTENveLX21",
+      "4255445A00000000000000000000000000000000.r3fg9QJvsGc9vKFqVZfHP1PVQBM1Cktatt"
+    ],
+    "wallets": [
+      "sEdVr4zpebZcRt7arU9AX1Znd1e19pc",
+      "sEdS6dp55sSxpKAYbW1cFQdVVJssVtj",
+      "sEd7N5yxRxVjHsGct5z8LyXA331KZ4Z",
+      "sEdSjvqPsCB6T2chH2kVDG2PMPZoKC3"
+    ],
+    "chatid": "7400701379",
+    "username": "FMN271227",
+    "depositWallet": "sEdS6dp55sSxpKAYbW1cFQdVVJssVtj",
+    "addr": "4255445A00000000000000000000000000000000.r3fg9QJvsGc9vKFqVZfHP1PVQBM1Cktatt",
+    "referralLink": "https://t.me/XRP_test124_volume_bot?start=ref_84qaVH",
+    "__v": 17,
+    "limitOrderExpire": 3600,
+    "referralEarning": 0.03857771274204306
+  },
+  "tokenBalance": 0,
+  "walletBalance": 0.052149,
+  "xrpPrice": 2.17
+}
+2025-02-27T21:29:41.189Z - wallet balance => 0.052149
+2025-02-27T21:29:56.868Z - update User => {
+  "tokens": [
+    "50484E4958000000000000000000000000000000.rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN",
+    "5445535400000000000000000000000000000000.raYqPJfQYXPD3VnYUxwo6CRA9XBtXH5beZ",
+    "XOX.rGJbFqiLdh23e9WigQ5sxTfFqTENveLX21"
+  ],
+  "wallets": [
+    "sEdVr4zpebZcRt7arU9AX1Znd1e19pc",
+    "sEdS6dp55sSxpKAYbW1cFQdVVJssVtj",
+    "sEd7N5yxRxVjHsGct5z8LyXA331KZ4Z",
+    "sEdSjvqPsCB6T2chH2kVDG2PMPZoKC3"
+  ],
+  "chatid": "7400701379",
+  "username": "FMN271227",
+  "depositWallet": "sEdS6dp55sSxpKAYbW1cFQdVVJssVtj",
+  "addr": "50484E4958000000000000000000000000000000.rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN",
+  "referralLink": "https://t.me/XRP_test124_volume_bot?start=ref_84qaVH",
+  "limitOrderExpire": 3600,
+  "referralEarning": 0.03857771274204306,
+  "USD_addr": "USD.rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq",
+  "pairInfo": {
+    "dex": "xrpl",
+    "pair": "BUDZ / XRP",
+    "price": "0.007528",
+    "priceInXrp": "0.003446",
+    "lp": "2.7 K",
+    "mc": "1.88 K"
+  },
+  "tokenInfo": {
+    "address": "4255445A00000000000000000000000000000000.r3fg9QJvsGc9vKFqVZfHP1PVQBM1Cktatt",
+    "id": "4255445A00000000000000000000000000000000.r3fg9QJvsGc9vKFqVZfHP1PVQBM1Cktatt",
+    "name": "BUDZ",
+    "symbol": "BUDZ",
+    "totalSupply": 249939.9213845289,
+    "decimals": 0,
+    "description": null,
+    "iconUrl": null
+  },
+  "user": {
+    "_id": "67b4a05d607f0290e3a95b6f",
+    "tokens": [
+      "50484E4958000000000000000000000000000000.rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN",
+      "5445535400000000000000000000000000000000.raYqPJfQYXPD3VnYUxwo6CRA9XBtXH5beZ",
+      "XOX.rGJbFqiLdh23e9WigQ5sxTfFqTENveLX21",
+      "4255445A00000000000000000000000000000000.r3fg9QJvsGc9vKFqVZfHP1PVQBM1Cktatt"
+    ],
+    "wallets": [
+      "sEdVr4zpebZcRt7arU9AX1Znd1e19pc",
+      "sEdS6dp55sSxpKAYbW1cFQdVVJssVtj",
+      "sEd7N5yxRxVjHsGct5z8LyXA331KZ4Z",
+      "sEdSjvqPsCB6T2chH2kVDG2PMPZoKC3"
+    ],
+    "chatid": "7400701379",
+    "username": "FMN271227",
+    "depositWallet": "sEdS6dp55sSxpKAYbW1cFQdVVJssVtj",
+    "addr": "4255445A00000000000000000000000000000000.r3fg9QJvsGc9vKFqVZfHP1PVQBM1Cktatt",
+    "referralLink": "https://t.me/XRP_test124_volume_bot?start=ref_84qaVH",
+    "__v": 17,
+    "limitOrderExpire": 3600,
+    "referralEarning": 0.03857771274204306
+  },
+  "tokenBalance": 0,
+  "walletBalance": 0.052149,
+  "xrpPrice": 2.17
+}
+2025-02-27T21:29:58.316Z - wallet balance => 0.052149
+2025-02-27T21:31:28.733Z - wallet balance => 1.315087
+2025-02-27T21:31:32.452Z - Pending transactions for selling 166821.183365 tokens from wallet rHSWvZQXb7a3LMo5FmXYtTuUaxurKUbzLQ
+2025-02-27T21:31:39.772Z - Sent transaction for sell 166821.183365 tokens from wallet rHSWvZQXb7a3LMo5FmXYtTuUaxurKUbzLQ ===>  tesSUCCESS
+2025-02-27T21:31:39.772Z - ret => {"status":true,"tokenAmount":166821.183365,"txHash":"209FC28A9E7961CD1AB1184D318E49B591B9721C827991D160AB7668B7C4C87B"}
+2025-02-27T21:31:39.775Z - Sell taxFee: 0.006296923101118503, referFee: 0.0018890769303355507
+2025-02-27T21:31:40.145Z - Pending transaction for sending 0.006296923101118503 from rHSWvZQXb7a3LMo5FmXYtTuUaxurKUbzLQ to rGgu8gmgGJSkk3GEUXHbTF6KpsixupbQns
+2025-02-27T21:31:47.112Z - Sent transaction for sending 0.006296923101118503 from rHSWvZQXb7a3LMo5FmXYtTuUaxurKUbzLQ to rGgu8gmgGJSkk3GEUXHbTF6KpsixupbQns ===>  tesSUCCESS
+2025-02-27T21:31:47.477Z - Pending transaction for sending 0.0018890769303355507 from rHSWvZQXb7a3LMo5FmXYtTuUaxurKUbzLQ to rss2cwdWSUkGZQ5JABjbaHqdDyPhs7TLMr
+2025-02-27T21:31:54.425Z - Sent transaction for sending 0.0018890769303355507 from rHSWvZQXb7a3LMo5FmXYtTuUaxurKUbzLQ to rss2cwdWSUkGZQ5JABjbaHqdDyPhs7TLMr ===>  tesSUCCESS
+2025-02-27T21:31:54.426Z - update User => {
+  "_id": "67b4a05d607f0290e3a95b6f",
+  "tokens": [
+    "50484E4958000000000000000000000000000000.rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN",
+    "5445535400000000000000000000000000000000.raYqPJfQYXPD3VnYUxwo6CRA9XBtXH5beZ",
+    "XOX.rGJbFqiLdh23e9WigQ5sxTfFqTENveLX21",
+    "4255445A00000000000000000000000000000000.r3fg9QJvsGc9vKFqVZfHP1PVQBM1Cktatt"
+  ],
+  "wallets": [
+    "sEdVr4zpebZcRt7arU9AX1Znd1e19pc",
+    "sEdS6dp55sSxpKAYbW1cFQdVVJssVtj",
+    "sEd7N5yxRxVjHsGct5z8LyXA331KZ4Z",
+    "sEdSjvqPsCB6T2chH2kVDG2PMPZoKC3"
+  ],
+  "chatid": "7400701379",
+  "username": "FMN271227",
+  "depositWallet": "sEdS6dp55sSxpKAYbW1cFQdVVJssVtj",
+  "addr": "50484E4958000000000000000000000000000000.rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN",
+  "referralLink": "https://t.me/XRP_test124_volume_bot?start=ref_84qaVH",
+  "__v": 17,
+  "limitOrderExpire": 3600,
+  "referralEarning": 0.04046678967237861
+}
+2025-02-27T21:31:55.976Z - wallet balance => 1.9335829999999998
+2025-02-27T21:35:39.249Z - 50484E4958000000000000000000000000000000.rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN
+2025-02-27T21:35:40.078Z - 50484E4958000000000000000000000000000000.rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN
+2025-02-27T21:35:40.079Z - updated addr => 50484E4958000000000000000000000000000000.rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN
+2025-02-27T21:35:40.079Z - update User => {
+  "tokens": [
+    "50484E4958000000000000000000000000000000.rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN"
+  ],
+  "wallets": [
+    "sEdVQJwpPPxbE4gzJ63dvuMj8EMXm1U"
+  ],
+  "chatid": "7416621274",
+  "username": "SmartLancer",
+  "depositWallet": "sEdVQJwpPPxbE4gzJ63dvuMj8EMXm1U",
+  "addr": "50484E4958000000000000000000000000000000.rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN",
+  "limitOrderExpire": 3600,
+  "referralLink": "https://t.me/XRP_test124_volume_bot?start=ref_85vNzm",
+  "referredBy": "7400701379",
+  "referredTimestamp": 1740635752981,
+  "USD_addr": "USD.rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq",
+  "pairInfo": {
+    "dex": "xrpl",
+    "pair": "PHNIX / XRP",
+    "price": "0.000008191",
+    "priceInXrp": "0.000003771",
+    "lp": "539.82 K",
+    "mc": "4.82 M"
+  },
+  "tokenInfo": {
+    "address": "50484E4958000000000000000000000000000000.rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN",
+    "id": "50484E4958000000000000000000000000000000.rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN",
+    "name": "PHNIX",
+    "symbol": "PHNIX",
+    "totalSupply": 588990185828.8282,
+    "decimals": 0,
+    "description": null,
+    "iconUrl": null
+  },
+  "user": {
+    "_id": "67bffe6834680cb2d5fc34f6",
+    "tokens": [
+      "50484E4958000000000000000000000000000000.rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN"
+    ],
+    "wallets": [
+      "sEdVQJwpPPxbE4gzJ63dvuMj8EMXm1U"
+    ],
+    "chatid": "7416621274",
+    "username": "SmartLancer",
+    "depositWallet": "sEdVQJwpPPxbE4gzJ63dvuMj8EMXm1U",
+    "addr": "50484E4958000000000000000000000000000000.rDFXbW2ZZCG5WgPtqwNiA2xZokLMm9ivmN",
+    "limitOrderExpire": 3600,
+    "referralLink": "https://t.me/XRP_test124_volume_bot?start=ref_85vNzm",
+    "referredBy": "7400701379",
+    "referredTimestamp": 1740635752981,
+    "__v": 0
+  },
+  "tokenBalance": 0,
+  "walletBalance": 1.9335829999999998,
+  "xrpPrice": 2.17
+}
+2025-02-27T21:35:41.348Z - wallet balance => 1.933585
+2025-02-27T22:12:18.594Z - import wallet
+2025-02-27T22:12:25.620Z - 1234
+2025-02-27T22:12:29.371Z - update User => {
+  "tokens": [],
+  "wallets": [
+    "sEdS1icoNRJ8dYs8DoRzduHwvG8eHmh"
+  ],
+  "chatid": "5521963424",
+  "username": "GallantKnight",
+  "depositWallet": "sEdT266WX9BMbLNsH8HeKiAuodEjP4y",
+  "addr": "5852504F50000000000000000000000000000000.rNtHWQ3gS47KF8izJ5XDZHxwDi4hgwQSwH",
+  "limitOrderExpire": 3600,
+  "referralLink": "https://t.me/XRP_test124_volume_bot?start=ref_61hawC",
+  "referredBy": "7416621274",
+  "referredTimestamp": 1740682248616,
+  "USD_addr": "USD.rhub8VRN55s94qWKDv6jmDy1pUykJzF3wq",
+  "pairInfo": {
+    "dex": "xrpl",
+    "pair": "XRPOP / XRP",
+    "price": "0.001318",
+    "priceInXrp": "0.0006099",
+    "lp": "1.1 K",
+    "mc": "1.19 K"
+  },
+  "tokenInfo": {
+    "address": "5852504F50000000000000000000000000000000.rNtHWQ3gS47KF8izJ5XDZHxwDi4hgwQSwH",
+    "id": "5852504F50000000000000000000000000000000.rNtHWQ3gS47KF8izJ5XDZHxwDi4hgwQSwH",
+    "name": "XRPOP",
+    "symbol": "XRPOP",
+    "totalSupply": 898972.1130765468,
+    "decimals": 0,
+    "description": null,
+    "iconUrl": null
+  },
+  "user": {
+    "_id": "67c0b3a7aa268977557719ee",
+    "tokens": [
+      "5852504F50000000000000000000000000000000.rNtHWQ3gS47KF8izJ5XDZHxwDi4hgwQSwH"
+    ],
+    "wallets": [
+      "sEdS1icoNRJ8dYs8DoRzduHwvG8eHmh"
+    ],
+    "chatid": "5521963424",
+    "username": "GallantKnight",
+    "depositWallet": "sEdS1icoNRJ8dYs8DoRzduHwvG8eHmh",
+    "addr": "5852504F50000000000000000000000000000000.rNtHWQ3gS47KF8izJ5XDZHxwDi4hgwQSwH",
+    "limitOrderExpire": 3600,
+    "referralLink": "https://t.me/XRP_test124_volume_bot?start=ref_61hawC",
+    "__v": 1,
+    "referredBy": "7416621274",
+    "referredTimestamp": 1740682248616
+  },
+  "tokenBalance": 0,
+  "walletBalance": -1,
+  "xrpPrice": 2.17
+}
+2025-02-27T22:12:30.359Z - wallet balance => -1
+2025-02-27T22:12:40.208Z - Pending transactions for selling 0 tokens from wallet rKn8ddYhsT55JL6o4Yah9PDkG9J6jshmKE
+2025-02-27T22:12:40.597Z - Failed to sell 0 tokens from wallet rKn8ddYhsT55JL6o4Yah9PDkG9J6jshmKE
+2025-02-27T22:12:40.597Z - [RippledError(Account not found., {"account":"rKn8ddYhsT55JL6o4Yah9PDkG9J6jshmKE","api_version":2,"error":"actNotFound","error_code":19,"error_message":"Account not found.","id":231,"ledger_current_index":94440746,"request":{"account":"rKn8ddYhsT55JL6o4Yah9PDkG9J6jshmKE","api_version":2,"command":"account_info","id":231,"ledger_index":"current"},"status":"error","type":"response","validated":false,"forwarded":true,"warnings":[{"id":2001,"message":"This is a clio server. clio only serves validated data. If you want to talk to rippled, include 'ledger_index':'current' in your request"}]})]
+2025-02-27T22:12:40.597Z - ret => {"status":false}
+2025-02-27T22:12:41.575Z - wallet balance => -1
+2025-02-27T22:12:41.596Z - [31m%s[0m [error] [switchMenuWithTitle] Bad Request: message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message
+2025-02-27T22:13:55.780Z - [RippledError(accountNotFound, {"error":"actNotFound","error_code":19,"error_message":"accountNotFound","status":"error","type":"response","id":241,"api_version":2,"request":{"command":"account_lines","account":"rKn8ddYhsT55JL6o4Yah9PDkG9J6jshmKE","api_version":2,"id":241},"warnings":[{"id":2001,"message":"This is a clio server. clio only serves validated data. If you want to talk to rippled, include 'ledger_index':'current' in your request"}]})]
+2025-02-27T22:13:59.405Z - currency: 5852504F50000000000000000000000000000000, issuer: rNtHWQ3gS47KF8izJ5XDZHxwDi4hgwQSwH removing trustline...
+2025-02-27T22:14:00.739Z - wallet balance => -1
+2025-02-27T22:14:00.760Z - [31m%s[0m [error] [switchMenuWithTitle] Bad Request: message is not modified: specified new message content and reply markup are exactly the same as a current content and reply markup of the message
+2025-02-28T02:46:05.151Z - getTokenInfo->error: [NotConnectedError({"command":"account_lines","account":"rGJbFqiLdh23e9WigQ5sxTfFqTENveLX21","ledger_index":"validated","api_version":2}, {"command":"account_lines","account":"rGJbFqiLdh23e9WigQ5sxTfFqTENveLX21","ledger_index":"validated","api_version":2})]
+2025-02-28T02:46:05.499Z - Error
+2025-02-28T03:35:59.423Z - getTokenInfo->error: [NotConnectedError({"command":"account_lines","account":"rGJbFqiLdh23e9WigQ5sxTfFqTENveLX21","ledger_index":"validated","api_version":2}, {"command":"account_lines","account":"rGJbFqiLdh23e9WigQ5sxTfFqTENveLX21","ledger_index":"validated","api_version":2})]
+2025-02-28T03:35:59.901Z - Error
+2025-02-28T03:50:02.517Z - getTokenInfo->error: [NotConnectedError({"command":"account_lines","account":"rGJbFqiLdh23e9WigQ5sxTfFqTENveLX21","ledger_index":"validated","api_version":2}, {"command":"account_lines","account":"rGJbFqiLdh23e9WigQ5sxTfFqTENveLX21","ledger_index":"validated","api_version":2})]
+2025-02-28T03:50:03.006Z - Error
+2025-02-28T03:50:59.391Z - getTokenInfo->error: [NotConnectedError({"command":"account_lines","account":"rGJbFqiLdh23e9WigQ5sxTfFqTENveLX21","ledger_index":"validated","api_version":2}, {"command":"account_lines","account":"rGJbFqiLdh23e9WigQ5sxTfFqTENveLX21","ledger_index":"validated","api_version":2})]
+2025-02-28T03:50:59.820Z - Error
