@@ -5,7 +5,9 @@ dotenv.config()
 
 import * as bot from './bot';
 
-const logFilePath = path.join(process.cwd(), 'logs', `log_${Date.now()}.txt`);
+const date = new Date();
+const logFilePath = path.join(process.cwd(), 'logs', `log_${date.getFullYear()}_${String(date.getMonth() + 1).padStart(2, '0')}_${String(date.getDate()).padStart(2, '0')}_${String(date.getHours()).padStart(2, '0')}_${String(date.getMinutes()).padStart(2, '0')}_${String(date.getSeconds()).padStart(2, '0')}.txt`);
+
 
 console.log(`file path: ${logFilePath}`);
 const checkLogFileSize = () => {

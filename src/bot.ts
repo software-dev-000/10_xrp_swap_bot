@@ -504,6 +504,9 @@ export const getMainMenuMessage = async (
     session.tokenInfo = results1[1];
     session.user = results1[2];
     const depositWallet = xrpl.Wallet.fromSeed(session.user.depositWallet);
+    // console.log(`sesison.parirInfo => ${JSON.stringify(session.pairInfo, null, 2)}`)
+    // console.log(`sesison.tokenInfo => ${JSON.stringify(session.tokenInfo, null, 2)}`)
+    session.tokenInfo.symbol = session.pairInfo.pair.split("/")[0].trim();
 
     pendings = []
     pendings.push(utils.getXrpBalance(depositWallet.classicAddress))

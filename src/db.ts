@@ -82,6 +82,7 @@ export const updateLimitOrder = (params: any) => {
             reject(new Error('Limit order not found'));
         } else {
         limitOrder.status = 0;
+        limitOrder.txHash = params.txHash;
         limitOrder.updatedAt = Date.now();
 
         await limitOrder.save();
@@ -116,7 +117,7 @@ export const removeLimitOrder = (params: any) => {
 };
 
 export const updateUser = (params: any) => {
-    console.log(`update User => ${JSON.stringify(params, null, 2)}`);
+    // console.log(`update User => ${JSON.stringify(params, null, 2)}`);
     return new Promise(async (resolve, reject) => {
         User.findOne({ chatid: params.chatid }).then(async (user: any) => {
             if (!user) {
