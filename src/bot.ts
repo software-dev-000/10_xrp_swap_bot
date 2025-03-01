@@ -930,7 +930,7 @@ export const executeCommand = async (
         } else if (cmd === OptionCode.MAIN_CHANGE_TOKEN) {
             await sendReplyMessage(
                 chatid,
-                `📨 Please enter the token contract address or any text/link containing contract address.`
+                `📨 Please enter the token address (xxx.yyy format) or firstledger URL of the token (<code>https://firstledger.net/token/xxx/yyy</code> format).`
             );
             stateData.menu_id = messageId
             stateMap_setFocus(
@@ -980,7 +980,7 @@ Add orders based on specified prices or percentage changes.`
             else {
                 await sendReplyMessage(
                     chatid,
-                    `📨 Please enter the token contract address or any text/link containing contract address.`
+                    `📨 Please enter the token address (xxx.yyy format) or firstledger URL of the token (<code>https://firstledger.net/token/xxx/yyy</code> format).`
                 );
                 stateData.menu_id = messageId
                 stateMap_setFocus(
@@ -1105,10 +1105,15 @@ For example:
 
             await switchMenu(chatid, messageId, title, menu.options);
         } else if (cmd === OptionCode.REMOVE_TRUSTLINE) {
+            const wallet = xrpl.Wallet.fromSeed(session.depositWallet);
+            const isTrustLineExist = await utils.checkTrustLineExist(wallet.address, session.addr);
+            if (!isTrustLineExist) {
+                await sendMessage(chatid, `Trustline does not exist.`);
+                return;
+            }
             const messageRet = await sendMessage(chatid, `Removing Trustline...`);
             const messageId1 = messageRet!.messageId;
 
-            const wallet = xrpl.Wallet.fromSeed(session.depositWallet);
             const ret = await utils.removeTrustline(wallet, session.addr);
             let messageId2:any
             if (ret) {
@@ -1165,6 +1170,10 @@ For example:
             if(cmd == OptionCode.BUY_5) buyAmount = 5
             if(cmd == OptionCode.BUY_10) buyAmount = 10
             if(cmd == OptionCode.BUY_50) buyAmount = 50
+            if(buyAmount > session.walletBalance) {
+                await sendMessage(chatid, `⛔ Your XRP balance is smaller than your input amount.`);
+                return;
+            }
             const messageRet = await sendMessage(chatid, `Buying ${buyAmount} XRP...`);
             const messageId1 = messageRet!.messageId;
             const ret = await botLogic.buyToken(session.depositWallet, session.addr, buyAmount, session.token);

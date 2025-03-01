@@ -191,7 +191,7 @@ export const procMessage = async (message: any, database: any) => {
     } else {
         instance.openMessage(
             chatid, "", 0,
-            `😉 Welcome to XRP Prime Bot. To get started, please enter token address or valid firstledger url.`
+            `😉 Welcome to XRP Prime Bot. To get started, please enter token address (xxx.yyy format) or firstledger URL of the token (<code>https://firstledger.net/token/xxx/yyy</code> format).`
         );
     }
 };
@@ -340,6 +340,11 @@ const processSettings = async (msg: any, database: any) => {
             return;
         }
 
+        console.log(`input amount: ${value}, your balance: ${session.walletBalance}`)
+        if(value > session.walletBalance) {
+            await instance.sendMessage(chatid, `⛔ Your XRP balance is smaller than your input amount.`);
+            return;
+        }
         const messageRet = await instance.sendMessage(sessionId, `Buying ${value} XRP...`);
         const messageId1 = messageRet!.messageId;
         const ret = await botLogic.buyToken(session.depositWallet, session.addr, value, session.tokenInfo);
