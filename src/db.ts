@@ -29,6 +29,7 @@ export const LimitOrder = mongoose.model(
         tokenAddr: String,
         depositWallet: String,
         orderType: String,
+        intervalId: Number,
         txHash: String,
         targetPrice: String,
         orderAmount: String,
@@ -63,6 +64,7 @@ export const createLimitOrder = (params: any) => {
         limitOrder.tokenName = params.tokenName;
         limitOrder.depositWallet = params.depositWallet;
         limitOrder.orderType = params.orderType;
+        limitOrder.intervalId = params.intervalId;
         limitOrder.txHash = params.txHash;
         limitOrder.targetPrice = params.targetPrice;
         limitOrder.orderAmount = params.orderAmount;
@@ -83,6 +85,21 @@ export const updateLimitOrder = (params: any) => {
         } else {
         limitOrder.status = 0;
         limitOrder.txHash = params.txHash ?? "";
+        limitOrder.updatedAt = Date.now();
+
+        await limitOrder.save();
+            resolve(limitOrder);
+        }
+    });
+};
+
+export const setIntervalId = (params: any) => {
+    return new Promise(async (resolve, reject) => {
+        const limitOrder = await LimitOrder.findOne({ _id: params._id});
+        if (!limitOrder) {
+            reject(new Error('Limit order not found'));
+        } else {
+        limitOrder.intervalId = params.intervalId;
         limitOrder.updatedAt = Date.now();
 
         await limitOrder.save();

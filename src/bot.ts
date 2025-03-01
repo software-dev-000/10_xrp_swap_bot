@@ -512,6 +512,7 @@ export const getMainMenuMessage = async (
     pendings.push(utils.getXrpBalance(depositWallet.classicAddress))
     pendings.push(utils.getTokenBalance(depositWallet.classicAddress, session.addr))
     // pendings.push(utils.getTokenBalance(depositWallet.classicAddress, session.USD_addr))
+    console.log(`depositWallet => ${depositWallet.classicAddress}`)
     
     const results2 = await Promise.all(pendings)
     const walletBalance = results2[0];
@@ -942,8 +943,8 @@ export const executeCommand = async (
             const orders: any = await database.selectLimitOrders({ userid: session.user._id,  tokenAddr: session.tokenInfo.address})
             session.limitOrders = orders;
             const orderList = session.limitOrders && session.limitOrders.map((order:any) => `Type: ${order.orderType}, Target: ${order.targetPrice}, Order Amount: ${order.orderAmount}`).join('\n')
-            const title = orderList ? `How to use it:\n\nIf you want to create limit order, you have to (0.2 + buy amount) of XRP balance in your wallet. XRP chain will take 0.2 XRP for each limit order while your order is persisted on the chain and will return it when your order is executed, expired or cancelled.\n\nHere are your existing limit orders.\n${orderList}` 
-                : `How to use it:\n\nIf you want to create limit order, you have to (0.2 + buy amount) of XRP balance in your wallet. XRP chain will take 0.2 XRP for each limit order while your order is persisted on the chain and will return it when your order is executed, expired or cancelled.`
+            const title = orderList ? `How to use it:\n\nIf you want to create limit order, you have to keep buy amount of XRP balance in your wallet.\n\nHere are your existing limit orders.\n${orderList}` 
+                : `How to use it:\n\nIf you want to create limit order, you have to keep buy amount of XRP balance in your wallet.`
 
             const menu: any = await limit_order_menu(title, sessionId);
 
@@ -1001,6 +1002,7 @@ Add orders based on specified prices or percentage changes.`
             let pending:any = []
             for (const order of orders) {
                 database.updateLimitOrder({_id : order._id});
+                clearInterval(order.intervalId);
             }
 
             let res = await Promise.all(pending)
@@ -1171,7 +1173,7 @@ For example:
             if(cmd == OptionCode.BUY_10) buyAmount = 10
             if(cmd == OptionCode.BUY_50) buyAmount = 50
             if(buyAmount > session.walletBalance) {
-                await sendMessage(chatid, `⛔ Your XRP balance is smaller than your input amount.`);
+                await sendMessage(chatid, `⚠️ Your XRP balance is smaller than your input amount.`);
                 return;
             }
             const messageRet = await sendMessage(chatid, `Buying ${buyAmount} XRP...`);

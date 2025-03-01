@@ -335,14 +335,14 @@ const processSettings = async (msg: any, database: any) => {
         if (isNaN(value)) {
             instance.openMessage(
                 sessionId, "", 0,
-                `⛔ Sorry, the token amount you entered is invalid. Please try again`
+                `⚠️ Sorry, the token amount you entered is invalid. Please try again`
             );
             return;
         }
 
         console.log(`input amount: ${value}, your balance: ${session.walletBalance}`)
         if(value > session.walletBalance) {
-            await instance.sendMessage(chatid, `⛔ Your XRP balance is smaller than your input amount.`);
+            await instance.sendMessage(chatid, `⚠️ Your XRP balance is smaller than your input amount.`);
             return;
         }
         const messageRet = await instance.sendMessage(sessionId, `Buying ${value} XRP...`);
@@ -415,7 +415,7 @@ const processSettings = async (msg: any, database: any) => {
         if (isNaN(value) || value > 100) {
             instance.openMessage(
                 sessionId, "", 0,
-                `⛔ Sorry, the delay time you entered is invalid. Please try again`
+                `⚠️ Sorry, the delay time you entered is invalid. Please try again`
             );
             return;
         }
@@ -470,7 +470,7 @@ const processSettings = async (msg: any, database: any) => {
         if (!await utils.isValidTokenAddressOrUrl(value)) {
             instance.openMessage(
                 sessionId, "", 0,
-                `⛔ Sorry, the token address you entered is invalid. Please try again`
+                `⚠️ Sorry, the token address you entered is invalid. Please try again`
             );
             return;
         }
@@ -571,6 +571,28 @@ Add orders based on specified prices or percentage changes.`
         desiredPrice = desiredPrice.trim();
         orderAmount = orderAmount.trim();
 
+        // check if desiredPrice is valid
+        if (Number(desiredPrice) < 0) {
+            await instance.sendMessage(chatid, `⚠️ Desired price must be greater than 0...`);
+            return;
+        }
+
+        // check if enough XRP in the wallet for buy order
+        const userWallet = xrpl.Wallet.fromSeed(session.depositWallet);
+        const XRPBalance = await utils.getXrpBalance(userWallet.classicAddress);
+        const XRPPrice = await utils.getXrpPrice();
+        if(stateNode.state === StateCode.WAIT_LIMIT_ORDER_PRICE_BUY &&Number(desiredPrice) * Number(orderAmount) > Number(XRPBalance) * Number(XRPPrice)) {
+            await instance.sendMessage(chatid, `⚠️ You have to pay ${Number(desiredPrice) * Number(orderAmount)}$ for this order, but you only have ${Number(XRPBalance) * Number(XRPPrice)}$.`);
+            return;
+        }
+
+        // check if enough token in the wallet for sell order
+        const tokenBalance = await utils.getTokenBalance(userWallet.classicAddress, session.addr)
+        if(stateNode.state === StateCode.WAIT_LIMIT_ORDER_PRICE_SELL && Number(orderAmount) > Number(tokenBalance)) {
+            await instance.sendMessage(chatid, `⚠️ You want to sell ${orderAmount} ${session.tokenInfo.name} but you only have ${tokenBalance} ${session.tokenInfo.name} in your wallet. `);
+            return;
+        }
+
         const messageRet = await instance.sendMessage(chatid, `Creating Limit Order with a specific price...`);
         const messageId1 = messageRet!.messageId;
         
@@ -594,6 +616,7 @@ Add orders based on specified prices or percentage changes.`
             const tokenMint = session.addr;
             const depositWallet = session.depositWallet;
             
+            let isDBCreated = false;
             const limitOrder = await database.createLimitOrder({
                 userid: user._id,
                 tokenAddr: session.tokenInfo.address,
@@ -601,6 +624,7 @@ Add orders based on specified prices or percentage changes.`
                 depositWallet: session.depositWallet,
                 orderType: stateNode.state === StateCode.WAIT_LIMIT_ORDER_PRICE_BUY ? "price_buy" : "price_sell",
                 // sequenceNum: Date.now(),
+                intervalId: 0,
                 txHash: "",
                 targetPrice: value.split(",")[0].trim().replace('$', ''),
                 orderAmount: value.split(",")[1].trim(),
@@ -610,6 +634,11 @@ Add orders based on specified prices or percentage changes.`
             await instance.sendMessage(chatid, `✅ Success. Your order has been created!\nIt will be executed when the token price meets your need. `);
             
             let intervalId = setInterval(async () => {
+                if(!isDBCreated) {
+                    console.log(`[${user.username}] : setting interval id for limit order${limitOrder._id}`)
+                    await database.setIntervalId({_id : limitOrder._id, intervalId: intervalId});
+                    isDBCreated = true;
+                }
                 const tempInfo = await utils.getPairInfo(tokenMint)
                 console.log(`[${user.username}:${tempInfo.pair.split("/")[0].trim()}] Current Price => ${tempInfo.price}, Target Price => ${desiredPrice}`)
 
@@ -661,9 +690,6 @@ Add orders based on specified prices or percentage changes.`
             // instance.removeMessage(chatid, messageId2);
         });
     } else if (stateNode.state === StateCode.WAIT_LIMIT_ORDER_PERCENT_BUY || stateNode.state === StateCode.WAIT_LIMIT_ORDER_PERCENT_SELL) {
-        const messageRet = await instance.sendMessage(chatid, `Creating Limit Order with percentage...`);
-        const messageId1 = messageRet!.messageId;
-
         const value = msg.text.trim();
         let [desiredPercent, orderAmount] = value.split(",")
         desiredPercent = desiredPercent.trim();
@@ -675,6 +701,31 @@ Add orders based on specified prices or percentage changes.`
         const currentPrice = await utils.getPairInfo(session.addr);
         const desiredPrice = isNegative ? (Number(currentPrice.price) * (1 - parseFloat(desiredPercentAbs) / 100)) : Number(currentPrice.price) * (1 + parseFloat(desiredPercentAbs) / 100);
         
+        // check if desiredPrice is valid
+        if (Number(desiredPrice) < 0) {
+            await instance.sendMessage(chatid, `⚠️ Desired price must be greater than 0...`);
+            return;
+        }
+
+        // check if enough XRP in the wallet for buy order
+        const userWallet = xrpl.Wallet.fromSeed(session.depositWallet);
+        const XRPBalance = await utils.getXrpBalance(userWallet.classicAddress);
+        const XRPPrice = await utils.getXrpPrice();
+        if(stateNode.state === StateCode.WAIT_LIMIT_ORDER_PERCENT_BUY &&Number(desiredPrice) * Number(orderAmount) > Number(XRPBalance) * Number(XRPPrice)) {
+            await instance.sendMessage(chatid, `⚠️ You have to pay ${Number(desiredPrice) * Number(orderAmount)}$ for this order, but you only have ${Number(XRPBalance) * Number(XRPPrice)}$.`);
+            return;
+        }
+
+        // check if enough token in the wallet for sell order
+        const tokenBalance = await utils.getTokenBalance(userWallet.classicAddress, session.addr)
+        if(stateNode.state === StateCode.WAIT_LIMIT_ORDER_PERCENT_SELL && Number(orderAmount) > Number(tokenBalance)) {
+            await instance.sendMessage(chatid, `⚠️ You want to sell ${orderAmount} ${session.tokenInfo.name} but you only have ${tokenBalance} ${session.tokenInfo.name} in your wallet. `);
+            return;
+        }
+
+        const messageRet = await instance.sendMessage(chatid, `Creating Limit Order with percentage...`);
+        const messageId1 = messageRet!.messageId;
+
         let messageId2:any
         if (session.user && session.tokenInfo) {
             if (stateNode.state === StateCode.WAIT_LIMIT_ORDER_PERCENT_SELL && session.tokenBalance < orderAmount) {
@@ -696,6 +747,7 @@ Add orders based on specified prices or percentage changes.`
             const tokenMint = session.addr;
             const depositWallet = session.depositWallet;
             
+            let isDBCreated = false;
             const limitOrder = await database.createLimitOrder({
                 userid: user._id,
                 tokenAddr: session.tokenInfo.address,
@@ -703,6 +755,7 @@ Add orders based on specified prices or percentage changes.`
                 depositWallet: session.depositWallet,
                 orderType: stateNode.state === StateCode.WAIT_LIMIT_ORDER_PERCENT_BUY ? "percent_buy" : "percent_sell",
                 // sequenceNum: Date.now(),
+                intervalId: 0,
                 txHash: "",
                 targetPrice: value.split(",")[0].trim().replace('$', ''),
                 orderAmount: value.split(",")[1].trim(),
@@ -712,6 +765,11 @@ Add orders based on specified prices or percentage changes.`
             await instance.sendMessage(chatid, `✅ Success. Your order has been created!\nIt will be executed when the token price meets your need. `);
 
             let intervalId = setInterval(async () => {
+                if(!isDBCreated) {
+                    console.log(`[${user.username}] : setting interval id for limit order ${limitOrder._id}`)
+                    await database.setIntervalId({_id : limitOrder._id, intervalId: intervalId});
+                    isDBCreated = true;
+                }
                 const tempInfo = await utils.getPairInfo(tokenMint)
                 console.log(`[${user.username}:${tempInfo.pair.split("/")[0].trim()}] Current Price => ${tempInfo.price}, Target Price => ${desiredPrice}`)
 
