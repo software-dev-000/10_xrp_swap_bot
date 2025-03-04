@@ -1031,11 +1031,11 @@ Add orders based on specified prices or percentage changes.`
         } else if (cmd === OptionCode.LIMIT_ORDER_PRICE_BUY || cmd === OptionCode.LIMIT_ORDER_PRICE_SELL) {
             const title = cmd === OptionCode.LIMIT_ORDER_PRICE_BUY ? `Please enter the expected price and auto-buy amount, separated by a comma. 
 
-📍For example, entering 0.1,0.05 means buying automatically when the price reaches $0.1, and auto-buying 0.05 .
+📍For example, entering 0.1,0.5 means buying automatically when the price reaches $0.1, and auto-buying 0.5 XRP .
 Current Price: <code>${session.pairInfo.price}</code> (Click to Copy)` : 
 `Please enter the expected price and auto-sell amount, separated by a comma. 
 
-📍For example, entering 0.1,30 means selling automatically when the price reaches $0.1, and auto-selling 30 .
+📍For example, entering 0.1,30 means selling automatically when the price reaches $0.1, and auto-selling 30% token .
 Current Price: <code>${session.pairInfo.price}</code> (Click to Copy)`
             await sendReplyMessage(
                 chatid,
@@ -1051,14 +1051,14 @@ Current Price: <code>${session.pairInfo.price}</code> (Click to Copy)`
             const title = cmd === OptionCode.LIMIT_ORDER_PERCENT_BUY ? `Please enter the price change percentage and the automatic buy-in amount, separated by a comma. 
 A positive number indicates an increase(take profit), while a negative number indicates a decrease(stop loss). 
 For example:
-📍20,0.05 means a 20% increase, buy 0.05
-📍-20,0.05 means a 20% decrease, buy 0.05` 
+📍20,0.5 means a 20% increase, buy 0.5 XRP
+📍-20,0.5 means a 20% decrease, buy 0.5 XRP` 
             :
             `Please enter the price change percentage and the automatic sell-out amount, separated by a comma. 
 A positive number indicates an increase, while a negative number indicates a decrease. 
 For example:
-📍20,50 means a 20% increase, sell 50
-📍-20,50 means a 20% decrease, sell 50`;
+📍20,50 means a 20% increase, sell 50 %
+📍-20,50 means a 20% decrease, sell 50 %`;
 
             await sendReplyMessage(
                 chatid,

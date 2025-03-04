@@ -36,8 +36,9 @@ export const buyToken = async (seed: string, addr: string, buyAmount: number, _t
 export const sellToken = async (seed: string, addr: string, sellPercent: number) => {
     const wallet = xrpl.Wallet.fromSeed(seed);
     const tokenBalance = await utils.getTokenBalance(wallet.address, addr);
-    let sellTokenAmount = tokenBalance * sellPercent / 100;
-    return await utils.sellToken(wallet, addr, sellTokenAmount)
+    const sellTokenAmount = tokenBalance * sellPercent / 100;
+    const isRemoveTrustline =  sellPercent.toString() === '100'
+    return await utils.sellToken(wallet, addr, sellTokenAmount, isRemoveTrustline)
 }
 
 export const withdraw = async (chatid: string, value: string) => {

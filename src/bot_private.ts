@@ -231,25 +231,24 @@ const processSettings = async (msg: any, database: any) => {
             await utils.createTrustline(wallet, tokenMint, tokenInfo.totalSupply.toString())
         }
 
-        const xrpPrice = await utils.getXrpPrice();
         const tempInfo = await utils.getPairInfo(tokenMint);
 
-        let tempXRPAmount = Number(tempInfo.price) * Number(orderAmount) / Number(xrpPrice);
+        let maxTokenAmount = Number(orderAmount) / Number(tempInfo.priceInXrp);
         
-        console.log(`buy token amount ===> ${orderAmount}, needed XRP amount ===> ${tempXRPAmount}`) 
+        console.log(`buy token amount ===> ${maxTokenAmount}, needed XRP amount ===> ${orderAmount}`) 
 
-        const ret = await utils.buyToken(wallet, tokenMint, Number(orderAmount), tempXRPAmount)
+        const ret = await utils.buyToken(wallet, tokenMint, maxTokenAmount, Number(orderAmount))
 
         let messageId2:any
         if (ret.status) {           
             
             try {
                 // sending fee
-                let taxFee = tempXRPAmount * Number(process.env.FEE_PERCENT) / 100
+                let taxFee = Number(orderAmount) * Number(process.env.FEE_PERCENT) / 100
                 let referFee = 0
                 const referralUser: any = await database.selectUser({ chatid: user.referredBy })
                 if(referralUser) {
-                    referFee = tempXRPAmount * Number(process.env.REFERRAL_FEE_PERCENT) / 100
+                    referFee = Number(orderAmount) * Number(process.env.REFERRAL_FEE_PERCENT) / 100
                     taxFee -= referFee
                 }
 
@@ -281,14 +280,16 @@ const processSettings = async (msg: any, database: any) => {
 
     const limitOrderSellToken = async (seed: string, orderAmount: string, tokenMint:string) => {
         const wallet = xrpl.Wallet.fromSeed(seed);
-        const xrpPrice = await utils.getXrpPrice();
         const tempInfo = await utils.getPairInfo(tokenMint);
-
-        let tempXRPAmount = Number(tempInfo?.price) * Number(orderAmount) / Number(xrpPrice);
-        console.log(`sell token amount ===> ${orderAmount}, get XRP amount ===> ${tempXRPAmount}`) 
+        const tokenBalance = await utils.getTokenBalance(wallet.address, tokenMint);
+        const sellTokenAmount = tokenBalance * Number(orderAmount) / 100;
+        const tempXRPAmount = sellTokenAmount * Number(tempInfo.priceInXrp);
+        console.log(`sell token amount ===> ${sellTokenAmount}, get XRP amount ===> ${tempXRPAmount}`) 
         
-        const ret = await utils.sellToken(wallet, tokenMint, Number(orderAmount.trim()));
-
+        const ret = await utils.sellToken(wallet, tokenMint, sellTokenAmount);
+        if(orderAmount === '100') {
+            await utils.removeTrustline(wallet, tokenMint);
+        }
 
         let messageId2:any
         if (ret.status) {           
@@ -573,24 +574,32 @@ Add orders based on specified prices or percentage changes.`
 
         // check if desiredPrice is valid
         if (Number(desiredPrice) < 0) {
-            await instance.sendMessage(chatid, `⚠️ Desired price must be greater than 0...`);
+            await instance.sendMessage(chatid, `⚠️ Desired price must be greater than 0.`);
             return;
         }
 
         // check if enough XRP in the wallet for buy order
         const userWallet = xrpl.Wallet.fromSeed(session.depositWallet);
         const XRPBalance = await utils.getXrpBalance(userWallet.classicAddress);
-        const XRPPrice = await utils.getXrpPrice();
-        if(stateNode.state === StateCode.WAIT_LIMIT_ORDER_PRICE_BUY &&Number(desiredPrice) * Number(orderAmount) > Number(XRPBalance) * Number(XRPPrice)) {
-            await instance.sendMessage(chatid, `⚠️ You have to pay ${Number(desiredPrice) * Number(orderAmount)}$ for this order, but you only have ${Number(XRPBalance) * Number(XRPPrice)}$.`);
+        if(stateNode.state === StateCode.WAIT_LIMIT_ORDER_PRICE_BUY && Number(orderAmount) > Number(XRPBalance) ) {
+            await instance.sendMessage(chatid, `⚠️ You have to pay ${Number(orderAmount)} XRP for this order, but you only have ${Number(XRPBalance)} XRP.`);
             return;
         }
 
-        // check if enough token in the wallet for sell order
-        const tokenBalance = await utils.getTokenBalance(userWallet.classicAddress, session.addr)
-        if(stateNode.state === StateCode.WAIT_LIMIT_ORDER_PRICE_SELL && Number(orderAmount) > Number(tokenBalance)) {
-            await instance.sendMessage(chatid, `⚠️ You want to sell ${orderAmount} ${session.tokenInfo.name} but you only have ${tokenBalance} ${session.tokenInfo.name} in your wallet. `);
+        // check if percent is valid
+        if(stateNode.state === StateCode.WAIT_LIMIT_ORDER_PRICE_SELL && Number(orderAmount) > 100 ) {
+            await instance.sendMessage(chatid, `⚠️ Percent cannot be greater than 100.`);
             return;
+        }
+
+        // check if current token balance is not 0
+        if(stateNode.state === StateCode.WAIT_LIMIT_ORDER_PRICE_SELL) {
+            const wallet = xrpl.Wallet.fromSeed(session.depositWallet);
+            const tokenBalance = await utils.getTokenBalance(wallet.address, session.addr);
+            if(Number(tokenBalance) === 0) {
+                await instance.sendMessage(chatid, `⚠️ You don't have any token to sell.`);
+                return;
+            } 
         }
 
         const messageRet = await instance.sendMessage(chatid, `Creating Limit Order with a specific price...`);
@@ -600,17 +609,6 @@ Add orders based on specified prices or percentage changes.`
         if (session.user && session.tokenInfo) {
             console.log(`desiredPrice => ${desiredPrice}, orderAmount => ${orderAmount}`)
 
-            if (stateNode.state === StateCode.WAIT_LIMIT_ORDER_PRICE_SELL && session.tokenBalance < orderAmount) {
-                instance.removeMessage(chatid, messageId1)
-                const temp = await instance.sendMessage(
-                    chatid,
-                    `⚠️ Order creation Failed! You don't have enough amount of tokens in your wallet.\nYou want to sell ${orderAmount} ${session.tokenInfo.name}, but you only have ${session.tokenBalance} ${session.tokenInfo.name} in your wallet.`
-                );
-                utils.sleep(10000).then(() => {
-                    instance.removeMessage(chatid, temp!.messageId);
-                });
-                return;
-            }
 
             const tokenInfo = {...session.tokenInfo};
             const tokenMint = session.addr;
@@ -649,7 +647,7 @@ Add orders based on specified prices or percentage changes.`
                     if (res.status) {
                         try {
                             await database.updateLimitOrder({_id : limitOrder._id, txHash: res.txHash});
-                            await instance.sendMessage(chatid, `✅ Success. Your order has been executed!\n\nToken: ${tokenInfo.name}, Type: price_sell, Target Price: ${desiredPrice}, Bought Price: ${tempInfo.price}, Order Amount: ${orderAmount}\nTxHash: <code>${res.txHash}</code>`);
+                            await instance.sendMessage(chatid, `✅ Success. Your order has been executed!\n\nToken: ${tokenInfo.name}, Type: price_sell, Target Price: ${desiredPrice}, Bought Price: ${tempInfo.price}, Order Amount: ${orderAmount} XRP\nTxHash: <code>${res.txHash}</code>`);
                         } catch (error) {
                             console.log(error);
                         } 
@@ -667,7 +665,7 @@ Add orders based on specified prices or percentage changes.`
                         // update database
                         try {
                             await database.updateLimitOrder({_id : limitOrder._id, txHash: res.txHash});
-                            await instance.sendMessage(chatid, `✅ Success. Your order has been executed!\n\nToken: ${tokenInfo.name}, Type: price_sell, Target Price: ${desiredPrice}, Sold Price: ${tempInfo.price}, Order Amount: ${orderAmount}\nTxHash: <code>${res.txHash}</code>`);
+                            await instance.sendMessage(chatid, `✅ Success. Your order has been executed!\n\nToken: ${tokenInfo.name}, Type: price_sell, Target Price: ${desiredPrice}, Sold Price: ${tempInfo.price}, Order Amount: ${orderAmount} %\nTxHash: <code>${res.txHash}</code>`);
                         } catch (error) {
                             console.log(error);
                         }
@@ -703,44 +701,41 @@ Add orders based on specified prices or percentage changes.`
         
         // check if desiredPrice is valid
         if (Number(desiredPrice) < 0) {
-            await instance.sendMessage(chatid, `⚠️ Desired price must be greater than 0...`);
+            await instance.sendMessage(chatid, `⚠️ Desired price must be greater than 0.`);
             return;
         }
 
         // check if enough XRP in the wallet for buy order
         const userWallet = xrpl.Wallet.fromSeed(session.depositWallet);
         const XRPBalance = await utils.getXrpBalance(userWallet.classicAddress);
-        const XRPPrice = await utils.getXrpPrice();
-        if(stateNode.state === StateCode.WAIT_LIMIT_ORDER_PERCENT_BUY &&Number(desiredPrice) * Number(orderAmount) > Number(XRPBalance) * Number(XRPPrice)) {
-            await instance.sendMessage(chatid, `⚠️ You have to pay ${Number(desiredPrice) * Number(orderAmount)}$ for this order, but you only have ${Number(XRPBalance) * Number(XRPPrice)}$.`);
+        if(stateNode.state === StateCode.WAIT_LIMIT_ORDER_PERCENT_BUY && Number(orderAmount) > Number(XRPBalance)) {
+            await instance.sendMessage(chatid, `⚠️ You have to pay ${Number(desiredPrice)} XRP for this order, but you only have ${Number(XRPBalance)} XRP.`);
             return;
         }
 
-        // check if enough token in the wallet for sell order
-        const tokenBalance = await utils.getTokenBalance(userWallet.classicAddress, session.addr)
-        if(stateNode.state === StateCode.WAIT_LIMIT_ORDER_PERCENT_SELL && Number(orderAmount) > Number(tokenBalance)) {
-            await instance.sendMessage(chatid, `⚠️ You want to sell ${orderAmount} ${session.tokenInfo.name} but you only have ${tokenBalance} ${session.tokenInfo.name} in your wallet. `);
+        // check if percent is valid
+        if(stateNode.state === StateCode.WAIT_LIMIT_ORDER_PERCENT_SELL && Number(orderAmount) > 100 ) {
+            await instance.sendMessage(chatid, `⚠️ Percent cannot be greater than 100.`);
             return;
         }
+
+        // check if current token balance is not 0
+        if(stateNode.state === StateCode.WAIT_LIMIT_ORDER_PERCENT_SELL) {
+            const wallet = xrpl.Wallet.fromSeed(session.depositWallet);
+            const tokenBalance = await utils.getTokenBalance(wallet.address, session.addr);
+            if(Number(tokenBalance) === 0) {
+                await instance.sendMessage(chatid, `⚠️ You don't have any token to sell.`);
+                return;
+            } 
+        }
+
+
 
         const messageRet = await instance.sendMessage(chatid, `Creating Limit Order with percentage...`);
         const messageId1 = messageRet!.messageId;
 
         let messageId2:any
         if (session.user && session.tokenInfo) {
-            if (stateNode.state === StateCode.WAIT_LIMIT_ORDER_PERCENT_SELL && session.tokenBalance < orderAmount) {
-                instance.removeMessage(chatid, messageId1)
-                const temp = await instance.sendMessage(
-                    chatid,
-                    `⚠️ Order creation Failed! You don't have enough amount of tokens in your wallet.\nYou want to sell ${orderAmount} ${session.tokenInfo.name}, but you only have ${session.tokenBalance} ${session.tokenInfo.name} in your wallet.`
-                );
-                utils.sleep(10000).then(() => {
-                    instance.removeMessage(chatid, temp!.messageId);
-                });
-                return;
-            }
-            let messageId2:any
-            
             console.log(`desiredPrice => ${desiredPrice}, orderAmount => ${orderAmount}`)
 
             const tokenInfo = {...session.tokenInfo};
@@ -779,7 +774,7 @@ Add orders based on specified prices or percentage changes.`
                     const res = await limitOrderBuyToken(depositWallet, tokenInfo, orderAmount, tokenMint);
                     if (res) {
                         await database.updateLimitOrder({_id : limitOrder._id, txHash: res.txHash});
-                        await instance.sendMessage(chatid, `✅ Success. Your order has been executed!\n\nToken: ${tokenInfo.name}, Type: price_sell, Target Price: ${desiredPrice}, Bought Price: ${tempInfo.price}, Order Amount: ${orderAmount}\nTxHash: <code>${res.txHash}</code>`);
+                        await instance.sendMessage(chatid, `✅ Success. Your order has been executed!\n\nToken: ${tokenInfo.name}, Type: price_sell, Target Price: ${desiredPrice}, Bought Price: ${tempInfo.price}, Order Amount: ${orderAmount} XRP\nTxHash: <code>${res.txHash}</code>`);
 
                     } else {
                         const msRet = await instance.sendMessage(chatid, `⚠️ Failed`);
@@ -794,7 +789,7 @@ Add orders based on specified prices or percentage changes.`
                     if(res.status) {
                         // update database
                         await database.updateLimitOrder({_id : limitOrder._id, txHash: res.txHash});
-                        await instance.sendMessage(chatid, `✅ Success. Your order has been executed!\n\nToken: ${tokenInfo.name}, Type: price_sell, Target Price: ${desiredPrice}, Bought Price: ${tempInfo.price}, Order Amount: ${orderAmount}\nTxHash: <code>${res.txHash}</code>`);
+                        await instance.sendMessage(chatid, `✅ Success. Your order has been executed!\n\nToken: ${tokenInfo.name}, Type: price_sell, Target Price: ${desiredPrice}, Bought Price: ${tempInfo.price}, Order Amount: ${orderAmount} %\nTxHash: <code>${res.txHash}</code>`);
                         
                         clearInterval(intervalId);
                     } else {

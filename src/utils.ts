@@ -490,7 +490,7 @@ export const buyToken = async (
                 "value": tokenAmount > 10 ** 6 ? tokenAmount.toFixed(0) : tokenAmount.toFixed(6)
             },
             "Destination": wallet.classicAddress,
-            "SendMax": xrpl.xrpToDrops((sendMaxXRP * 1.05 ).toFixed(6)),
+            "SendMax": xrpl.xrpToDrops((sendMaxXRP).toFixed(6)),
             "Flags": 131072
         }, { autofill: true, wallet: wallet })
         console.log(`Sent transaction for buying token with ${sendMaxXRP} XRP from wallet ${wallet.address} ===> `, tx.result.meta.TransactionResult)
@@ -510,6 +510,7 @@ export const sellToken = async (
     wallet: xrpl.Wallet,
     addr: string,
     tokenAmount: number,
+    isRemoveTrustline?: boolean
 ): Promise<any | null> => {
     const [currency, issuer] = addr.split('.');
     try {
@@ -527,6 +528,13 @@ export const sellToken = async (
             "Flags": 0x00020000
         }, { autofill: true, wallet: wallet })
         console.log(`Sent transaction for sell ${tokenAmount} tokens from wallet ${wallet.address} ===> `, tx.result.meta.TransactionResult)
+        if(isRemoveTrustline) {
+            try {
+                await removeTrustline(wallet, addr)
+            } catch (error) {   
+                console.log(error)
+            }
+        }
         if (tx.result.meta?.TransactionResult == "tesSUCCESS")
             return {status: true, tokenAmount: tokenAmount, txHash: tx.result.hash};
         else
