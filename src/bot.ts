@@ -888,9 +888,10 @@ You can also export your wallet.
 Click on the 'withdraw' button and input your destination address. Then it will with all your balance to that address.
 Be sure to check destination address before withdraw.
 
-
-Additional questions or need support?
-Join our Telegram group @trojan and one of our admins can assist you`
+6. How to change token?
+You can change token simply by inputing token address in the input bot at any time, any place.
+Or you can click 'change token' button and then input token address in the reply message bog.
+`
 
     const json:any = [
         [
