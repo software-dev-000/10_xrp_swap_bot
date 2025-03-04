@@ -7,25 +7,30 @@ import * as privateBot from './bot_private';
 import * as database from './db';
 import * as afx from './global';
 import * as utils from './utils';
-import { createReadStream } from 'fs';
+import { createReadStream, stat } from 'fs';
 
 dotenv.config();
 
 export const COMMAND_START = "start";
 export const COMMAND_WALLETS = "wallets";
 export const COMMAND_TOKENS = "tokens";
+export const COMMAND_HELP = "help";
 
 export enum OptionCode {
     BACK = -100,
     LIMIT_ORDER_BACK,
     LIMIT_ORDER_ADD_BACK,
+    BUY_SELL_BACK,
     CLOSE,
     TITLE,
     WELCOME = 0,
     MAIN_MENU,
+    BUY_MENU,
+    SELL_MENU,
     CREATE_TRUSTLINE,
     REMOVE_TRUSTLINE,
     BUY_1,
+    BUY_2,
     BUY_5,
     BUY_10,
     BUY_50,
@@ -33,6 +38,7 @@ export enum OptionCode {
     SELL_10,
     SELL_25,
     SELL_50,
+    SELL_75,
     SELL_100,
     SELL_X,
     BUY_USD,
@@ -557,6 +563,8 @@ Please deposit xrp to deposit wallet. Enter the token address to message input.
     return MESSAGE;
 };
 
+
+
 export const json_main = (sessionId: string) => {
     const session = sessions.get(sessionId);
     if (!session) {
@@ -566,22 +574,8 @@ export const json_main = (sessionId: string) => {
     const itemData = `${sessionId}`;
     const json = [
         [
-            json_buttonItem(itemData, OptionCode.CREATE_TRUSTLINE, "Create TrustLine"),
-            json_buttonItem(itemData, OptionCode.REMOVE_TRUSTLINE, "Remove TrustLine"),
-        ],
-        [
-            json_buttonItem(itemData, OptionCode.BUY_1, "Buy 1XRP"),
-            json_buttonItem(itemData, OptionCode.BUY_5, "Buy 5XRP"),
-            json_buttonItem(itemData, OptionCode.BUY_10, "Buy 10XRP"),
-            json_buttonItem(itemData, OptionCode.BUY_50, "Buy 50XRP"),
-            json_buttonItem(itemData, OptionCode.BUY_X, "Buy X XRP"),
-        ],
-        [
-            json_buttonItem(itemData, OptionCode.SELL_10, "Sell 10%"),
-            json_buttonItem(itemData, OptionCode.SELL_25, "Sell 25%"),
-            json_buttonItem(itemData, OptionCode.SELL_50, "Sell 50%"),
-            json_buttonItem(itemData, OptionCode.SELL_100, "Sell 100%"),
-            json_buttonItem(itemData, OptionCode.SELL_X, "Sell X %"),
+            json_buttonItem(itemData, OptionCode.BUY_MENU, "Buy"),
+            json_buttonItem(itemData, OptionCode.SELL_MENU, "Sell"),
         ],
         // [
         //     json_buttonItem(itemData, OptionCode.BUY_USD, "Buy USD"),
@@ -607,6 +601,142 @@ export const json_main = (sessionId: string) => {
 
     return { title: "", options: json };
 };
+
+export const getBuySellMenuMessage = async (
+    sessionId: string
+): Promise<string> => {
+    const session = sessions.get(sessionId);
+    if (!session) {
+        return "";
+    }
+
+    console.log(`updating menu for ${session.addr}`)
+    const [currency, issuer] = session.addr.split(".");
+    let pendings = [];
+    pendings.push(utils.getPairInfo(session.addr));
+    pendings.push(utils.getTokenInfo(session.addr));
+    pendings.push(database.selectUser({ chatid: sessionId }));
+    const results1 = await Promise.all(pendings);
+    session.pairInfo = results1[0];
+    session.tokenInfo = results1[1];
+    session.user = results1[2];
+    const depositWallet = xrpl.Wallet.fromSeed(session.user.depositWallet);
+    session.tokenInfo.name = session.pairInfo.pair.split("/")[0].trim();
+
+    pendings = []
+    pendings.push(utils.getXrpBalance(depositWallet.classicAddress))
+    pendings.push(utils.getTokenBalance(depositWallet.classicAddress, session.addr))
+    
+    const results2 = await Promise.all(pendings)
+    const walletBalance = results2[0];
+    const tokenBalance = results2[1];
+
+
+    session.tokenBalance = tokenBalance;
+    session.walletBalance = walletBalance;
+
+    const MESSAGE = `🏅 Welcome to ${process.env.BOT_TITLE} 🏅.
+
+📌 Token: ${session.tokenInfo.name}
+<code>${session.tokenInfo.address}</code>
+💎 PRICE: ${session.pairInfo ? session.pairInfo.price +'$' : 'Unknown'}
+📊 LP: ${session.pairInfo ? session.pairInfo.lp : 'Unknown'}
+📊 MC: ${session.pairInfo ? session.pairInfo.mc : 'Unknown'}
+
+First Ledger Url:
+https://firstledger.net/token/${issuer}/${currency}
+
+💳: <code>${depositWallet.address}</code> 
+Token Balance: ${Number(tokenBalance).toFixed(3)}  
+XRP Balance: ${Number(walletBalance)} XRP
+
+`
+    return MESSAGE;
+};
+
+export const buy_menu = async (sessionId: string) => {
+    const session = sessions.get(sessionId);
+    if (!session) {
+        return null;
+    }
+
+    const title = `📌 Token: ${session.tokenInfo.name}
+<code>${session.tokenInfo.address}</code>
+💎 PRICE: ${session.pairInfo ? session.pairInfo.price +'$' : 'Unknown'}
+📊 LP: ${session.pairInfo ? session.pairInfo.lp : 'Unknown'}
+📊 MC: ${session.pairInfo ? session.pairInfo.mc : 'Unknown'}
+
+Token Balance: ${Number(session.tokenBalance).toFixed(3)}  
+XRP Balance: ${Number(session.walletBalance)} XRP`
+
+
+    const itemData = `${sessionId}`;
+
+    const json = [
+    
+        [
+            json_buttonItem(itemData, OptionCode.BUY_1, "Buy 1 XRP"),
+            json_buttonItem(itemData, OptionCode.BUY_2, "Buy 2 XRP"),
+        ],
+        [
+            json_buttonItem(itemData, OptionCode.BUY_5, "Buy 5 XRP"),
+            json_buttonItem(itemData, OptionCode.BUY_10, "Buy 10 XRP"),
+        ]
+        ,
+        [
+            json_buttonItem(itemData, OptionCode.BUY_50, "Buy 50 XRP"),
+            json_buttonItem(itemData, OptionCode.BUY_X, "Buy X XRP"),
+        ],
+        [
+            json_buttonItem(itemData, OptionCode.BUY_SELL_BACK , "Back")
+        ]
+        
+    ];
+
+    return { title: title, menu: json };
+}
+
+export const sell_menu = async (sessionId: string) => {
+    const session = sessions.get(sessionId);
+    if (!session) {
+        return null;
+    }
+
+    const title = `📌 Token: ${session.tokenInfo.name}
+<code>${session.tokenInfo.address}</code>
+💎 PRICE: ${session.pairInfo ? session.pairInfo.price +'$' : 'Unknown'}
+📊 LP: ${session.pairInfo ? session.pairInfo.lp : 'Unknown'}
+📊 MC: ${session.pairInfo ? session.pairInfo.mc : 'Unknown'}
+
+Token Balance: ${Number(session.tokenBalance).toFixed(3)}  
+XRP Balance: ${Number(session.walletBalance)} XRP`
+
+    const itemData = `${sessionId}`;
+
+    const json = [
+    
+        [
+            json_buttonItem(itemData, OptionCode.SELL_10, "Sell 10%"),
+            json_buttonItem(itemData, OptionCode.SELL_25, "Sell 25%"),
+            
+        ],
+        [
+            json_buttonItem(itemData, OptionCode.SELL_50, "Sell 50%"),
+            json_buttonItem(itemData, OptionCode.SELL_75, "Sell 75%"),
+            
+        ],
+        [
+            json_buttonItem(itemData, OptionCode.SELL_100, "Sell 100%"),
+            json_buttonItem(itemData, OptionCode.SELL_X, "Sell X %"),
+        ],
+        [
+            json_buttonItem(itemData, OptionCode.BUY_SELL_BACK , "Back")
+        ]
+        
+    ];
+
+    return { title: title, menu: json };
+}
 
 export const limit_order_menu = async (title:string, sessionId: string) => {
     const session = sessions.get(sessionId);
@@ -723,6 +853,54 @@ export const get_tokens_menu = async (sessionId: string) => {
     return { title, menu: json }
 }
 
+export const get_help_menu = async (sessionId: string) => {
+    const session = sessions.get(sessionId);
+    if (!session) {
+        return null;
+    }
+
+    const title = `How do I use <code>FIG Trade Bot - XRPL</code>?
+
+1. How to use referral?
+Open the /start menu and you can see your referral code in the main menu.
+Send it to your friend and so that he/she can join the bot with that link. If he/she joined the bot, then you will get 0.3% of fee from all transaction your referee.
+
+2. How to buy/sell token?
+On the main memu you can see 'buy' and 'sell' buttton. Before that you should input token address that you want to trade with. Input token address at any time in the input box the the bot will change it's main menu with that address
+ - important : the token address you input should be format of xxx.yyy or the correct firstledge url (https://firstledger.net/token/xxx/yyy format) of that token.
+
+3. How to use limit order?
+On the main memu you can see 'limit order' button. After click it, the bot will show you list of several limit order buttons that you can use for you trading.
+You can use price limit order or percent limit order
+    - price limit order
+    You will buy/sell when the token price reaches at a specific price.
+    - percent limit order
+    You will buy/sell when the token price changes by a specific percentage.
+    - expire limit order
+    If your desired price is not reached within the specified time, the order will be canceled automatically.
+    You can edit the expire time with 'Expire' button.
+
+4. How to use wallet?
+You can generate new wallet or import existing your wallet. Each user can generate up to 5 wallets. 
+You can also export your wallet.
+
+5. How to withdraw?
+Click on the 'withdraw' button and input your destination address. Then it will with all your balance to that address.
+Be sure to check destination address before withdraw.
+
+
+Additional questions or need support?
+Join our Telegram group @trojan and one of our admins can assist you`
+
+    const json:any = [
+        [
+            json_buttonItem(sessionId, OptionCode.MAIN_MENU, "Back"),
+        ],
+    ];
+
+    return { title, menu: json }
+}
+
 export const json_confirm = async (
     sessionId: string,
     msg: string,
@@ -825,7 +1003,8 @@ export async function init() {
         [
             { command: "start", description: "Start a bot" },
             { command: "wallets", description: "List your wallets" },
-            { command: "tokens", description: "List your tokens" }
+            { command: "tokens", description: "List your tokens" },
+            { command: "help", description: "help menu" }
         ]
     )
 
@@ -949,7 +1128,15 @@ export const executeCommand = async (
             const menu: any = await limit_order_menu(title, sessionId);
 
             await switchMenu(chatid, messageId, title, menu.menu);
-        } else if (cmd === OptionCode.LIMIT_ORDER_BACK) {
+        } else if (cmd === OptionCode.BUY_MENU) {
+            const menu: any = await buy_menu(sessionId);
+
+            await switchMenu(chatid, messageId, menu.title, menu.menu);
+        } else if (cmd === OptionCode.SELL_MENU) {
+            const menu: any = await sell_menu(sessionId);
+
+            await switchMenu(chatid, messageId, menu.title, menu.menu);
+        } else if (cmd === OptionCode.LIMIT_ORDER_BACK || cmd === OptionCode.BUY_SELL_BACK  ) {
             const menu: any = json_main(sessionId);
             let title: string = await getMainMenuMessage(sessionId);
 
@@ -1083,80 +1270,7 @@ For example:
             let title: string = await getMainMenuMessage(sessionId);
 
             await openMenu(chatid, cmd, title, menu.options);
-        } else if (cmd === OptionCode.CREATE_TRUSTLINE) {
-            const messageRet = await sendMessage(chatid, `Creating TrustLine...`);
-            const messageId1 = messageRet!.messageId;
-
-            const wallet = xrpl.Wallet.fromSeed(session.depositWallet);
-            const ret = await utils.createTrustline(wallet, session.addr, session.tokenInfo ? session.tokenInfo.totalSupply.toString() : "10000000000");
-            let messageId2:any
-            if (ret) {
-                const msRet = await sendMessage(chatid, `✅ Success`);
-                messageId2 = msRet!.messageId;
-            } else {
-                const msRet = await sendMessage(chatid, `⚠️ Failed`);
-                messageId2 = msRet!.messageId;
-            }
-            utils.sleep(1).then(() => {
-                removeMessage(chatid, messageId1)
-                //removeMessage(chatid, messageId2);
-            });
-
-            const menu: any = json_main(sessionId);
-            let title: string = await getMainMenuMessage(sessionId);
-
-            await switchMenu(chatid, messageId, title, menu.options);
-        } else if (cmd === OptionCode.REMOVE_TRUSTLINE) {
-            const wallet = xrpl.Wallet.fromSeed(session.depositWallet);
-            const isTrustLineExist = await utils.checkTrustLineExist(wallet.address, session.addr);
-            if (!isTrustLineExist) {
-                await sendMessage(chatid, `Trustline does not exist.`);
-                return;
-            }
-            const messageRet = await sendMessage(chatid, `Removing Trustline...`);
-            const messageId1 = messageRet!.messageId;
-
-            const ret = await utils.removeTrustline(wallet, session.addr);
-            let messageId2:any
-            if (ret) {
-                const msRet = await sendMessage(chatid, `✅ Success`);
-                messageId2 = msRet!.messageId;
-            } else {
-                const msRet = await sendMessage(chatid, `⚠️ Failed`);
-                messageId2 = msRet!.messageId;
-            }
-            utils.sleep(1).then(() => {
-                removeMessage(chatid, messageId1)
-                //removeMessage(chatid, messageId2);
-            });
-
-            const menu: any = json_main(sessionId);
-            let title: string = await getMainMenuMessage(sessionId);
-
-            await switchMenu(chatid, messageId, title, menu.options);
-        } else if (cmd === OptionCode.BUY_USD) {
-            await sendReplyMessage(
-                chatid,
-                `📨 Reply to this message with XRP amount you want to spend to buy USD.`
-            );
-            stateData.menu_id = messageId
-            stateMap_setFocus(
-                chatid,
-                StateCode.WAIT_SET_USD_BUY_AMOUNT,
-                stateData
-            );
-        } else if (cmd === OptionCode.SELL_USD) {
-            await sendReplyMessage(
-                chatid,
-                `📨 Reply to this message percent of USD to sell`
-            );
-            stateData.menu_id = messageId
-            stateMap_setFocus(
-                chatid,
-                StateCode.WAIT_SET_USD_SELL_AMOUNT,
-                stateData
-            );
-        } else if (cmd === OptionCode.BUY_X) {
+        }  else if (cmd === OptionCode.BUY_X) {
             await sendReplyMessage(
                 chatid,
                 `📨 Reply to this message with xrp amount to buy.`
@@ -1167,8 +1281,9 @@ For example:
                 StateCode.WAIT_SET_BUY_AMOUNT,
                 stateData
             );
-        } else if (cmd === OptionCode.BUY_1 || cmd === OptionCode.BUY_5 || cmd === OptionCode.BUY_10 || cmd === OptionCode.BUY_50) {
+        } else if (cmd === OptionCode.BUY_1 || cmd === OptionCode.BUY_2 || cmd === OptionCode.BUY_5 || cmd === OptionCode.BUY_10 || cmd === OptionCode.BUY_50) {
             let buyAmount = 1
+            if(cmd == OptionCode.BUY_2) buyAmount = 2
             if(cmd == OptionCode.BUY_5) buyAmount = 5
             if(cmd == OptionCode.BUY_10) buyAmount = 10
             if(cmd == OptionCode.BUY_50) buyAmount = 50
@@ -1216,10 +1331,11 @@ For example:
                 //removeMessage(chatid, messageId2);
             });
 
-            const menu: any = json_main(sessionId);
-            let title: string = await getMainMenuMessage(sessionId);
+            const title:string = await getBuySellMenuMessage(sessionId)
 
-            await switchMenu(chatid, messageId, title, menu.options);
+            const menu: any = await buy_menu(sessionId);
+
+            await switchMenu(chatid, messageId, title, menu.option);
         } else if (cmd === OptionCode.SELL_X) {
             await sendReplyMessage(
                 chatid,
@@ -1231,8 +1347,17 @@ For example:
                 StateCode.WAIT_SET_SELL_PERCENT,
                 stateData
             );
-        } else if (cmd === OptionCode.SELL_10 || cmd === OptionCode.SELL_25 || cmd === OptionCode.SELL_50 || cmd === OptionCode.SELL_100) {
-            const sellAmount = cmd === OptionCode.SELL_10 ? 10 : cmd === OptionCode.SELL_25 ? 25 : cmd === OptionCode.SELL_50 ? 50 : 100
+        } else if (cmd === OptionCode.SELL_10 || cmd === OptionCode.SELL_25 || cmd === OptionCode.SELL_50 || cmd === OptionCode.SELL_75 || cmd === OptionCode.SELL_100) {
+            const sellAmount = cmd === OptionCode.SELL_10 ? 10 
+                : cmd === OptionCode.SELL_25 ? 25 
+                : cmd === OptionCode.SELL_50 ? 50 
+                : cmd === OptionCode.SELL_75 ? 75 
+                : 100
+            
+            if(!(session.tokenBalance > 0)) {
+                await sendMessage(chatid, `⚠️ You don't have any token to sell.`);
+                return;
+            }
             const messageRet = await sendMessage(chatid, `Selling ${sellAmount}% token...`);
             const messageId1 = messageRet!.messageId;
             const ret = await botLogic.sellToken(session.depositWallet, session.addr, sellAmount);
@@ -1277,10 +1402,10 @@ For example:
                 // removeMessage(chatid, messageId2);
             });
 
-            const menu: any = json_main(sessionId);
-            let title: string = await getMainMenuMessage(sessionId);
+            const title:string = await getBuySellMenuMessage(sessionId)
+            const menu: any = await sell_menu(sessionId);
 
-            await switchMenu(chatid, messageId, title, menu.options);
+            await switchMenu(chatid, messageId, title, menu.option);
         } else if (cmd === OptionCode.MAIN_WITHDRAW) {
             await sendReplyMessage(
                 chatid,

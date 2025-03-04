@@ -161,6 +161,12 @@ export const procMessage = async (message: any, database: any) => {
                 if (menuInfo)
                     await instance.openMenu(chatid, 0, menuInfo.title, menuInfo.menu)
             }
+        } else if (command === instance.COMMAND_HELP) {
+            if (session.depositWallet) {
+                const menuInfo = await instance.get_help_menu(chatid);
+                if (menuInfo)
+                    await instance.openMenu(chatid, 0, menuInfo.title, menuInfo.menu)
+            }
         }
         // instance.stateMap_remove(chatid)
     } else if (message.reply_to_message) {
@@ -201,6 +207,7 @@ const processSettings = async (msg: any, database: any) => {
     const sessionId = msg.chat?.id.toString();
     let messageId = msg?.messageId;
 
+
     const session = instance.sessions.get(sessionId);
     if (!session) {
         return;
@@ -214,6 +221,7 @@ const processSettings = async (msg: any, database: any) => {
     }
 
     let stateNode = instance.stateMap_getFocus(sessionId);
+
     if (!stateNode) {
         instance.stateMap_setFocus(sessionId, StateCode.IDLE, {
             sessionId: sessionId,
@@ -222,6 +230,9 @@ const processSettings = async (msg: any, database: any) => {
 
         assert(stateNode);
     }
+
+    const stateData = stateNode.data;
+
 
     const limitOrderBuyToken = async (seed: string, tokenInfo:any, orderAmount: string, tokenMint:string) => {
         const wallet = xrpl.Wallet.fromSeed(seed);
@@ -329,7 +340,6 @@ const processSettings = async (msg: any, database: any) => {
         }
     }
 
-    const stateData = stateNode.data;
 
     if (stateNode.state === StateCode.WAIT_SET_BUY_AMOUNT) {
         const value = Number(msg.text.trim());
@@ -395,7 +405,7 @@ const processSettings = async (msg: any, database: any) => {
                     }
                 }
             }
-            console.log(`======= end ======== ${Date.now()}`)
+            
             const msRet = await instance.sendMessage(sessionId, `✅ Success. You have successfully bought ${ret.tokenAmount} tokens for ${ret.XRPAmount} XRP.\nTx Hash: <code>${ret.txHash}</code>`);
             messageId2 = msRet!.messageId;
         } else {
@@ -407,10 +417,11 @@ const processSettings = async (msg: any, database: any) => {
             // instance.removeMessage(sessionId, messageId2);
         });
 
-        const menu: any = instance.json_main(sessionId);
-        let title: string = await instance.getMainMenuMessage(sessionId);
+        const menu: any = instance.buy_menu(sessionId);
+        
+        const title:string = await instance.getBuySellMenuMessage(sessionId)
 
-        await instance.switchMenu(sessionId, stateData.message_id, title, menu.options);
+        await instance.switchMenu(chatid, stateData.menu_id, title, menu.option);
     } else if (stateNode.state === StateCode.WAIT_SET_SELL_PERCENT) {
         const value = Number(msg.text.trim());
         if (isNaN(value) || value > 100) {
@@ -418,6 +429,11 @@ const processSettings = async (msg: any, database: any) => {
                 sessionId, "", 0,
                 `⚠️ Sorry, the delay time you entered is invalid. Please try again`
             );
+            return;
+        }
+
+        if(!(session.tokenBalance > 0)) {
+            await instance.sendMessage(chatid, `⚠️ You don't have any token to sell.`);
             return;
         }
 
@@ -462,10 +478,11 @@ const processSettings = async (msg: any, database: any) => {
             // instance.removeMessage(sessionId, messageId2);
         });
 
-        const menu: any = instance.json_main(sessionId);
-        let title: string = await instance.getMainMenuMessage(sessionId);
+        const title:string = await instance.getBuySellMenuMessage(sessionId)
 
-        await instance.switchMenu(sessionId, stateData.message_id, title, menu.options);
+        const menu: any = instance.sell_menu(sessionId);
+
+        await instance.switchMenu(chatid, stateData.menu_id, title, menu.option);
     } else if (stateNode.state === StateCode.WAIT_TOKEN_CHANGE_ADRR) {
         const value = msg.text.trim();
         if (!await utils.isValidTokenAddressOrUrl(value)) {
@@ -630,13 +647,25 @@ Add orders based on specified prices or percentage changes.`
             })
 
             await instance.sendMessage(chatid, `✅ Success. Your order has been created!\nIt will be executed when the token price meets your need. `);
-            
+           
+            console.log(`session.user.limitOrderExpire = >${session.user.limitOrderExpire}`)
+            const expireTime = Date.now() + session.user.limitOrderExpire * 1000;
+
             let intervalId = setInterval(async () => {
                 if(!isDBCreated) {
                     console.log(`[${user.username}] : setting interval id for limit order${limitOrder._id}`)
                     await database.setIntervalId({_id : limitOrder._id, intervalId: intervalId});
                     isDBCreated = true;
                 }
+
+                if(Date.now() > expireTime) {
+                    console.log(`[${user.username}] : terminated monitoring offer for ${tokenInfo.name}`)
+                    clearInterval(intervalId);
+                    await database.updateLimitOrder({_id : limitOrder._id, txHash: "Expired"});
+                    await instance.sendMessage(chatid, `⚠️ Your order not executed and expired`);
+                    return;
+                }
+                
                 const tempInfo = await utils.getPairInfo(tokenMint)
                 console.log(`[${user.username}:${tempInfo.pair.split("/")[0].trim()}] Current Price => ${tempInfo.price}, Target Price => ${desiredPrice}`)
 
@@ -759,12 +788,22 @@ Add orders based on specified prices or percentage changes.`
 
             await instance.sendMessage(chatid, `✅ Success. Your order has been created!\nIt will be executed when the token price meets your need. `);
 
+            console.log(`session.user.limitOrderExpire = >${session.user.limitOrderExpire}`)
+            const expireTime = Date.now() + session.user.limitOrderExpire * 1000;
             let intervalId = setInterval(async () => {
                 if(!isDBCreated) {
                     console.log(`[${user.username}] : setting interval id for limit order ${limitOrder._id}`)
                     await database.setIntervalId({_id : limitOrder._id, intervalId: intervalId});
                     isDBCreated = true;
                 }
+
+                if(Date.now() > expireTime) {
+                    console.log(`[${user.username}] : terminated monitoring offer for ${tokenInfo.name}`)
+                    clearInterval(intervalId);
+                    await instance.sendMessage(chatid, `⚠️ Your order not executed and expired`);
+                    return;
+                }
+
                 const tempInfo = await utils.getPairInfo(tokenMint)
                 console.log(`[${user.username}:${tempInfo.pair.split("/")[0].trim()}] Current Price => ${tempInfo.price}, Target Price => ${desiredPrice}`)
 
