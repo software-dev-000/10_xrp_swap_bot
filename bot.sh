@@ -1,1 +1,0 @@
-pm2 start yarn --name XRP-bot -- start --
